@@ -80,12 +80,20 @@ const skills = [
   {
     name: "Backend",
     icon: Zap,
-    items: ["Node.js", "Python", "Java", "REST APIs", "Firebase"],
+    items: ["Node.js", "REST APIs", "Firebase"],
   },
   {
     name: "Tools & AI",
     icon: Palette,
-    items: ["Git/GitHub", "OpenAI API", "Figma", "VS Code", "jQuery"],
+    items: [
+      "Git/GitHub",
+      "OpenAI API",
+      "Python",
+      "Java",
+      "Figma",
+      "VS Code",
+      "jQuery",
+    ],
   },
 ];
 

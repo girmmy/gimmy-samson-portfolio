@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://gimmy-samson-portfolio.vercel.app"),
+  metadataBase: new URL("https://gimmy-sam.com"),
   alternates: {
     canonical: "/",
   },
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
       "Girmachew (Gimmy) Samson - Award-Winning Frontend Developer & Student Leader",
     description:
       "Portfolio of Gimmy Samson, freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, AI integration, and responsive web design.",
-    url: "https://gimmy-samson-portfolio.vercel.app",
+    url: "https://gimmy-sam.com",
     siteName: "Gimmy Samson Portfolio",
     images: [
       {
@@ -130,9 +130,8 @@ export default function RootLayout({
               jobTitle: "Frontend Developer",
               description:
                 "Award-winning frontend developer and high school student specializing in React, AI integration, and responsive web design.",
-              url: "https://gimmy-samson-portfolio.vercel.app",
-              image:
-                "https://gimmy-samson-portfolio.vercel.app/gimmy-tsa-headshot.JPG",
+              url: "https://gimmy-sam.com",
+              image: "https://gimmy-sam.com/gimmy-tsa-headshot.JPG",
               sameAs: [
                 "https://linkedin.com/in/girmachew-samson",
                 "https://github.com/girmmy",
@@ -171,7 +170,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               name: "Gimmy Samson Portfolio",
-              url: "https://gimmy-samson-portfolio.vercel.app",
+              url: "https://gimmy-sam.com",
               description:
                 "Portfolio website showcasing web development projects and skills",
               author: {
@@ -180,8 +179,7 @@ export default function RootLayout({
               },
               potentialAction: {
                 "@type": "SearchAction",
-                target:
-                  "https://gimmy-samson-portfolio.vercel.app?search={search_term_string}",
+                target: "https://gimmy-sam.com?search={search_term_string}",
                 "query-input": "required name=search_term_string",
               },
             }),
@@ -202,7 +200,7 @@ export default function RootLayout({
               },
               description:
                 "Portfolio showcasing web development projects and skills",
-              url: "https://gimmy-samson-portfolio.vercel.app",
+              url: "https://gimmy-sam.com",
               genre: "Portfolio",
               keywords:
                 "web development, frontend developer, React, JavaScript, portfolio",

@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://gimmy-samson-portfolio.vercel.app/sitemap.xml
+Sitemap: https://gimmy-sam.com/sitemap.xml
 
 # Disallow private areas
 Disallow: /private/
