@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/private/",
     },
-    sitemap: "https://gimmy-sam.com/sitemap.xml",
+    sitemap: "https://gimmy-samson.com/sitemap.xml",
   };
 }
