@@ -54,7 +54,7 @@ const projects = [
     description:
       "An advanced AI-powered assistant built with cutting-edge machine learning algorithms. Features natural language processing, context awareness, and seamless integration capabilities.",
     image: "/gimmyai-img.jpg",
-    tags: ["AI/ML", "React", "TypeScript", "Firebase", "OpenAI API"],
+    tags: ["AI/ML", "React", "Next.js", "TypeScript", "Firebase", "OpenAI API"],
     link: "https://gimmyai.com",
     featured: true,
     period: "2024 – Present",
@@ -75,25 +75,25 @@ const skills = [
   {
     name: "Frontend",
     icon: Code,
-    items: ["React", "HTML/CSS", "JavaScript", "Tailwind CSS", "Bootstrap"],
+    items: [
+      "React",
+      "Next.js",
+      "HTML/CSS",
+      "JavaScript",
+      "TypeScript",
+      "Tailwind CSS",
+      "Bootstrap",
+    ],
   },
   {
     name: "Backend",
     icon: Zap,
-    items: ["Node.js", "REST APIs", "Firebase"],
+    items: ["Node.js", "Python", "Java", "REST APIs", "Firebase"],
   },
   {
     name: "Tools & AI",
     icon: Palette,
-    items: [
-      "Git/GitHub",
-      "OpenAI API",
-      "Python",
-      "Java",
-      "Figma",
-      "VS Code",
-      "jQuery",
-    ],
+    items: ["Git/GitHub", "OpenAI API", "Figma", "VS Code", "jQuery"],
   },
 ];
 
