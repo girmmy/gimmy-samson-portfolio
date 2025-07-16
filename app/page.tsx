@@ -470,7 +470,7 @@ export default function Portfolio() {
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white transform hover:scale-105 transition-all duration-300 border-0"
               aria-label="Download my resume as PDF"
             >
-              <a href="/resume.pdf" download>
+              <a href="/Girmachew_Samson.pdf" download>
                 <Download className="mr-2" size={20} aria-hidden="true" />
                 Download Resume
               </a>
