@@ -98,6 +98,21 @@ const skills = [
 ];
 
 export default function Portfolio() {
+  // Add structured data for the portfolio
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Portfolio",
+    name: "Gimmy Samson Portfolio",
+    description: "Portfolio showcasing web development projects and skills",
+    url: "https://gimmy-samson.com",
+    author: {
+      "@type": "Person",
+      name: "Girmachew Samson",
+      alternateName: "Gimmy Samson",
+      jobTitle: "Frontend Developer",
+      description: "Award-winning frontend developer and high school student",
+    },
+  };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
@@ -108,7 +123,17 @@ export default function Portfolio() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <main
+      className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"
+      itemScope
+      itemType="https://schema.org/Portfolio"
+    >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
       {/* Navigation */}
       <header>
         <nav
@@ -192,6 +217,7 @@ export default function Portfolio() {
       <section
         className="relative min-h-screen flex items-center justify-center overflow-hidden"
         aria-labelledby="hero-heading"
+        role="banner"
       >
         {/* Animated Background Elements */}
         <div className="absolute inset-0" aria-hidden="true">
@@ -265,12 +291,13 @@ export default function Portfolio() {
                 ></div>
                 <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm">
                   <Image
-                    src="/gimmy-tsa-headshot.jpg"
+                    src="/gimmy-tsa-headshot.png"
                     alt="Gimmy Samson - Frontend Developer and Student Leader"
                     width={180}
                     height={180}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover scale-110"
                     priority
+                    itemProp="image"
                   />
                 </div>
               </div>
@@ -279,6 +306,7 @@ export default function Portfolio() {
             <h1
               id="hero-heading"
               className="text-5xl sm:text-7xl lg:text-8xl font-bold mb-6"
+              itemProp="name"
             >
               <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
                 Gimmy
@@ -292,6 +320,7 @@ export default function Portfolio() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-xl sm:text-2xl text-white/80 mb-8 max-w-2xl mx-auto"
+              itemProp="jobTitle"
             >
               Freelance Frontend Developer & High School Student
             </motion.p>
@@ -364,7 +393,10 @@ export default function Portfolio() {
             >
               About Me
             </h2>
-            <p className="text-lg text-white/80 max-w-3xl mx-auto leading-relaxed">
+            <p
+              className="text-lg text-white/80 max-w-3xl mx-auto leading-relaxed"
+              itemProp="description"
+            >
               Hi, I'm Girmachew Samson, but you can call me Gimmy! I'm a
               passionate high school student (Class of 2026) and freelance
               frontend developer with a deep love for creating innovative web
@@ -505,7 +537,11 @@ export default function Portfolio() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div
+            className="grid md:grid-cols-2 gap-8"
+            role="list"
+            aria-label="Featured projects"
+          >
             {projects.map((project, index) => (
               <motion.article
                 key={project.title}
@@ -514,6 +550,9 @@ export default function Portfolio() {
                 transition={{ duration: 0.8, delay: index * 0.2 }}
                 viewport={{ once: true }}
                 className="group"
+                role="listitem"
+                itemScope
+                itemType="https://schema.org/CreativeWork"
               >
                 <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 h-full overflow-hidden">
                   <div className="relative overflow-hidden">
@@ -530,7 +569,7 @@ export default function Portfolio() {
                     ></div>
                   </div>
                   <CardHeader>
-                    <CardTitle className="text-white text-xl">
+                    <CardTitle className="text-white text-xl" itemProp="name">
                       {project.title}
                     </CardTitle>
                     <CardDescription className="text-purple-300">
@@ -538,7 +577,10 @@ export default function Portfolio() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-white/80 text-sm leading-relaxed">
+                    <p
+                      className="text-white/80 text-sm leading-relaxed"
+                      itemProp="description"
+                    >
                       {project.description}
                     </p>
                     <div className="flex flex-wrap gap-2">

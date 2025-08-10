@@ -6,8 +6,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title:
-    "Girmachew (Gimmy) Samson - Award-Winning Frontend Developer & Student Leader",
+  title: "Gimmy Samson - Freelance Developer & Aspiring Software Engineer",
   description:
     "Portfolio of Gimmy Samson, freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, AI integration, and responsive web design. View projects and get in touch!",
   keywords: [
@@ -45,15 +44,14 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title:
-      "Girmachew (Gimmy) Samson - Award-Winning Frontend Developer & Student Leader",
+    title: "Gimmy Samson - Freelance Developer & Aspiring Software Engineer",
     description:
       "Portfolio of Gimmy Samson, freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, AI integration, and responsive web design.",
     url: "https://gimmy-samson.com",
     siteName: "Gimmy Samson Portfolio",
     images: [
       {
-        url: "/gimmy-tsa-headshot.JPG",
+        url: "/gimmy-tsa-headshot.png",
         width: 1200,
         height: 630,
         alt: "Gimmy Samson - Frontend Developer and Student Leader",
@@ -64,11 +62,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "Girmachew (Gimmy) Samson - Award-Winning Frontend Developer & Student Leader",
+    title: "Gimmy Samson - Freelance Developer & Aspiring Software Engineer",
     description:
       "Portfolio of Gimmy Samson, freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025.",
-    images: ["/gimmy-tsa-headshot.JPG"],
+    images: ["/gimmy-tsa-headshot.png"],
     creator: "@girmmy",
   },
   robots: {
@@ -127,11 +124,11 @@ export default function RootLayout({
               "@type": "Person",
               name: "Girmachew Samson",
               alternateName: "Gimmy Samson",
-              jobTitle: "Frontend Developer",
+              jobTitle: "Freelance Developer & Aspiring Software Engineer",
               description:
-                "Award-winning frontend developer and high school student specializing in React, AI integration, and responsive web design.",
+                "Freelance developer and high school student specializing in React, AI integration, and responsive web design.",
               url: "https://gimmy-samson.com",
-              image: "https://gimmy-samson.com/gimmy-tsa-headshot.JPG",
+              image: "https://gimmy-samson.com/gimmy-tsa-headshot.png",
               sameAs: [
                 "https://linkedin.com/in/girmachew-samson",
                 "https://github.com/girmmy",
