@@ -77,6 +77,7 @@ const skills = [
     icon: Code,
     items: [
       "React",
+      "React Native",
       "Next.js",
       "HTML/CSS",
       "JavaScript",
@@ -322,7 +323,15 @@ export default function Portfolio() {
               className="text-xl sm:text-2xl text-white/80 mb-8 max-w-2xl mx-auto"
               itemProp="jobTitle"
             >
-              Freelance Frontend Developer & High School Student
+              Freelance Frontend Developer & SWE Intern at{" "}
+              <a
+                href="https://sonaara.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-300 hover:text-purple-200 transition-colors"
+              >
+                Sonaara
+              </a>
             </motion.p>
 
             <motion.div
@@ -400,52 +409,141 @@ export default function Portfolio() {
               Hi, I'm Girmachew Samson, but you can call me Gimmy! I'm a
               passionate high school student (Class of 2026) and freelance
               frontend developer with a deep love for creating innovative web
-              solutions and AI applications. My journey into web development
-              began with curiosity about how websites work, and it quickly
-              evolved into a passion for crafting digital experiences that make
-              a difference. I specialize in building responsive, user-friendly
-              websites and have developed 15+ custom projects for various
-              clients, helping them achieve their digital goals through
-              cutting-edge technology. When I'm not coding, you'll find me
-              exploring the latest trends in AI and machine learning,
-              contributing to open-source projects, or brainstorming the next
-              big idea. I believe in the power of technology to solve real-world
-              problems and am always excited to take on new challenges that push
-              the boundaries of what's possible on the web.
+              solutions and AI applications. I specialize in building
+              responsive, user-friendly websites and have developed 15+ custom
+              projects for various clients, helping them achieve their digital
+              goals through cutting-edge technology.
             </p>
           </motion.div>
 
-          {/* Experience Cards */}
-          <div className="flex justify-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="max-w-md w-full"
-            >
-              <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 h-full">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
-                      aria-hidden="true"
-                    ></div>
-                    Freelance Frontend Developer
-                  </CardTitle>
-                  <CardDescription className="text-purple-300">
-                    Jan 2024 – Present • Self-Employed
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="text-white/80">
-                  <ul className="space-y-2 text-sm">
-                    <li>• Developed 15+ custom websites for clients</li>
-                    <li>• Achieved 17% increase in user engagement</li>
-                    <li>• Implemented tailored SEO strategies</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
+          {/* Experience Timeline */}
+          <div className="relative max-w-4xl mx-auto mb-16">
+            {/* Timeline line */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-400 via-pink-400 to-purple-400"></div>
+
+            {/* Timeline items */}
+            <div className="space-y-12">
+              {/* Sonaara Internship */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="relative flex items-start gap-8"
+              >
+                {/* Timeline dot */}
+                <div className="relative z-10 flex-shrink-0">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                      <div className="w-4 h-4 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 pt-2">
+                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+                      <h3 className="text-xl font-bold text-white">
+                        SWE Intern
+                      </h3>
+                      <span className="text-sm text-purple-300 font-medium">
+                        Aug 2024 – Present
+                      </span>
+                    </div>
+                    <div className="mb-4">
+                      <a
+                        href="https://sonaara.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-purple-300 hover:text-purple-200 transition-colors font-medium text-lg"
+                      >
+                        Sonaara
+                      </a>
+                    </div>
+                    <ul className="space-y-3 text-white/80">
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>
+                          Built and tested features on React Native mobile app
+                          with 500+ users
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>
+                          Developed messaging feature and identity verification
+                          with Persona
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>
+                          Implemented Firebase integration for backend services
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>
+                          Helped increase userbase by 73% since onboarding
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Freelance Work */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="relative flex items-start gap-8"
+              >
+                {/* Timeline dot */}
+                <div className="relative z-10 flex-shrink-0">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                      <div className="w-4 h-4 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 pt-2">
+                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+                      <h3 className="text-xl font-bold text-white">
+                        Freelance Frontend Developer
+                      </h3>
+                      <span className="text-sm text-purple-300 font-medium">
+                        Jan 2024 – Present
+                      </span>
+                    </div>
+                    <div className="mb-4">
+                      <span className="text-purple-300 font-medium text-lg">
+                        Self-Employed
+                      </span>
+                    </div>
+                    <ul className="space-y-3 text-white/80">
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Developed 15+ custom websites for clients</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Achieved 17% increase in user engagement</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Implemented tailored SEO strategies</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
 
           {/* Skills Grid */}
