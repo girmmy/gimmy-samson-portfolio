@@ -69,6 +69,16 @@ const projects = [
     featured: true,
     period: "2024 – Present",
   },
+  {
+    title: "Transvero",
+    description:
+      "A real-time live transcription app that allows you to transcript text between multiple languages in real-time. It has an account system and allows for users to download transcripts as a PDF for further use.",
+    image: "/transvero-img.jpg",
+    tags: ["React.js", "TypeScript", "Tailwind", "AssemblyAI"],
+    link: "#",
+    featured: true,
+    period: "2025 – Present",
+  },
 ];
 
 const skills = [
