@@ -65,7 +65,7 @@ const projects = [
       "A non-profit platform focused on providing essential medical equipment to people, hospitals, and clinics across Africa. Built with modern web technologies to connect donors with communities in need, building a healthier future together.",
     image: "/lurelib-img.jpg",
     tags: ["Next.js", "TypeScript", "Tailwind", "Stripe"],
-    link: "#",
+    link: "https://transvero.netlify.app/",
     featured: true,
     period: "2024 – Present",
   },
