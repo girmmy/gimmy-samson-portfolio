@@ -945,11 +945,11 @@ export default function Portfolio() {
                     <div className="flex flex-wrap gap-2 justify-center">
                       {skill.items.map((item) => (
                         <motion.div
+                          key={item}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.95 }}
                         >
                           <Badge
-                            key={item}
                             variant="secondary"
                             className="bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300"
                           >
