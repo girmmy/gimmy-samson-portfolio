@@ -30,9 +30,18 @@ When I'm not coding, you'll find me exploring the latest trends in AI and machin
 
 ## 💼 Professional Experience
 
+### Software Engineering Intern
+
+**Aug 2025 – Dec 2025** • Sonaara
+
+- Built and tested features on React Native mobile app with 500+ users
+- Developed messaging feature and identity verification with Persona
+- Implemented Firebase integration for backend services
+- Helped increase userbase by 73% since onboarding
+
 ### Freelance Frontend Developer
 
-**Jan 2024 – Present** • Self-Employed
+**Jan 2024 – Jan 2026** • Self-Employed
 
 - Developed 15+ custom websites for clients
 - Achieved 17% increase in user engagement
@@ -67,6 +76,14 @@ When I'm not coding, you'll find me exploring the latest trends in AI and machin
 
 ## 🚀 Featured Projects
 
+### [Transvero](https://transvero.netlify.app/)
+
+**Oct 2025 – Present**
+
+A real-time multilingual transcription application with live audio processing. Features user authentication, real-time transcription across multiple languages, and PDF export functionality.
+
+**Tech Stack:** React.js, TypeScript, Tailwind CSS, AssemblyAI
+
 ### [SymbioAI](https://symbioai.netlify.app)
 
 **Sep 2024 – Mar 2025**
@@ -91,13 +108,6 @@ An advanced AI-powered assistant built with cutting-edge machine learning algori
 
 **Tech Stack:** AI/ML, React, TypeScript, Firebase, OpenAI API
 
-### [Lurelib](https://lurelib.com)
-
-**2024 – Present**
-
-A non-profit platform focused on providing essential medical equipment to people, hospitals, and clinics across Africa. Built with modern web technologies to connect donors with communities in need, building a healthier future together.
-
-**Tech Stack:** Next.js, TypeScript, Tailwind, Stripe
 
 ## 🎓 Education
 

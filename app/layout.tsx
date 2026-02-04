@@ -6,9 +6,12 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gimmy Samson - Freelance Developer & Aspiring Software Engineer",
+  title: {
+    default: "Gimmy Samson - Freelance Frontend Developer | React & AI Specialist",
+    template: "%s | Gimmy Samson Portfolio"
+  },
   description:
-    "Portfolio of Gimmy Samson, freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, AI integration, and responsive web design. View projects and get in touch!",
+    "Award-winning freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, Next.js, TypeScript, AI integration, and responsive web design. 15+ custom projects delivered. View my work and get in touch!",
   keywords: [
     "Gimmy Samson",
     "Girmachew Samson",
@@ -44,28 +47,28 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Gimmy Samson - Freelance Developer & Aspiring Software Engineer",
+    title: "Gimmy Samson - Award-Winning Freelance Frontend Developer",
     description:
-      "Portfolio of Gimmy Samson, freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, AI integration, and responsive web design.",
+      "Award-winning freelance frontend developer. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, Next.js, TypeScript, and AI integration. 15+ custom projects delivered.",
     url: "https://gimmy-samson.com",
     siteName: "Gimmy Samson Portfolio",
     images: [
       {
-        url: "/gimmy-tsa-headshot.png",
+        url: "https://gimmy-samson.com/gimmy-tsa-headshot.png",
         width: 1200,
         height: 630,
-        alt: "Gimmy Samson - Frontend Developer and Student Leader",
+        alt: "Gimmy Samson - Award-Winning Frontend Developer and Student Leader",
       },
     ],
     locale: "en_US",
-    type: "website",
+    type: "profile",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gimmy Samson - Freelance Developer & Aspiring Software Engineer",
+    title: "Gimmy Samson - Award-Winning Freelance Frontend Developer",
     description:
-      "Portfolio of Gimmy Samson, freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025.",
-    images: ["/gimmy-tsa-headshot.png"],
+      "Award-winning freelance frontend developer. 3rd State Webmaster 2025, 5th State Software Development 2025. React, Next.js, TypeScript & AI specialist.",
+    images: ["https://gimmy-samson.com/gimmy-tsa-headshot.png"],
     creator: "@girmmy",
   },
   robots: {
@@ -95,6 +98,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="icon" href="/favicon/favicon.ico" />
         <link
           rel="apple-touch-icon"
@@ -122,13 +129,17 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
+              "@id": "https://gimmy-samson.com/#person",
               name: "Girmachew Samson",
               alternateName: "Gimmy Samson",
-              jobTitle: "Freelance Developer & Aspiring Software Engineer",
+              givenName: "Girmachew",
+              familyName: "Samson",
+              jobTitle: "Freelance Frontend Developer",
               description:
-                "Freelance developer and high school student specializing in React, AI integration, and responsive web design.",
+                "Award-winning freelance frontend developer and high school student specializing in React, Next.js, TypeScript, AI integration, and responsive web design. Winner of 3rd State Webmaster and 5th State Software Development 2025.",
               url: "https://gimmy-samson.com",
               image: "https://gimmy-samson.com/gimmy-tsa-headshot.png",
+              email: "gimmys943@gmail.com",
               sameAs: [
                 "https://linkedin.com/in/girmachew-samson",
                 "https://github.com/girmmy",
@@ -136,16 +147,38 @@ export default function RootLayout({
               knowsAbout: [
                 "Frontend Development",
                 "React",
+                "React Native",
                 "JavaScript",
                 "TypeScript",
                 "Next.js",
                 "AI Integration",
+                "OpenAI API",
+                "Firebase",
                 "Web Design",
                 "Responsive Design",
+                "Tailwind CSS",
+                "Node.js",
+                "REST APIs"
               ],
               award: [
-                "3rd Place State Webmaster 2025 - Technology Student Association",
-                "5th Place State Software Development 2025 - Technology Student Association",
+                {
+                  "@type": "Award",
+                  name: "3rd Place State Webmaster 2025",
+                  issuedBy: {
+                    "@type": "Organization",
+                    name: "Technology Student Association"
+                  },
+                  dateAwarded: "2025"
+                },
+                {
+                  "@type": "Award",
+                  name: "5th Place State Software Development 2025",
+                  issuedBy: {
+                    "@type": "Organization",
+                    name: "Technology Student Association"
+                  },
+                  dateAwarded: "2025"
+                }
               ],
               alumniOf: {
                 "@type": "EducationalOrganization",
@@ -154,6 +187,15 @@ export default function RootLayout({
               worksFor: {
                 "@type": "Organization",
                 name: "Self-Employed",
+              },
+              hasOccupation: {
+                "@type": "Occupation",
+                name: "Freelance Frontend Developer",
+                occupationLocation: {
+                  "@type": "Country",
+                  name: "United States"
+                },
+                skills: "React, Next.js, TypeScript, JavaScript, AI Integration, OpenAI API, Firebase, Tailwind CSS"
               },
             }),
           }}

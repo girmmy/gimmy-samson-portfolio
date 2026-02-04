@@ -111,20 +111,56 @@ const skills = [
 ];
 
 export default function Portfolio() {
-  // Add structured data for the portfolio
+  // Enhanced structured data for better SEO
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Portfolio",
-    name: "Gimmy Samson Portfolio",
-    description: "Portfolio showcasing web development projects and skills",
-    url: "https://gimmy-samson.com",
-    author: {
+    "@type": "ProfilePage",
+    mainEntity: {
       "@type": "Person",
+      "@id": "https://gimmy-samson.com/#person",
       name: "Girmachew Samson",
       alternateName: "Gimmy Samson",
-      jobTitle: "Frontend Developer",
-      description: "Award-winning frontend developer and high school student",
+      jobTitle: "Freelance Frontend Developer",
+      description: "Award-winning freelance developer and high school student specializing in React, Next.js, TypeScript, and AI integration. 3rd State Webmaster 2025, 5th State Software Development 2025.",
+      url: "https://gimmy-samson.com",
+      image: "https://gimmy-samson.com/gimmy-tsa-headshot.png",
+      sameAs: [
+        "https://linkedin.com/in/girmachew-samson",
+        "https://github.com/girmmy"
+      ],
+      email: "gimmys943@gmail.com",
+      knowsAbout: [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "Frontend Development",
+        "AI Integration",
+        "OpenAI API",
+        "Firebase",
+        "Tailwind CSS",
+        "Web Development"
+      ],
+      hasCredential: [
+        {
+          "@type": "EducationalOccupationalCredential",
+          credentialCategory: "award",
+          name: "3rd Place State Webmaster 2025 - Technology Student Association"
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          credentialCategory: "award",
+          name: "5th Place State Software Development 2025 - Technology Student Association"
+        }
+      ],
+      alumniOf: {
+        "@type": "EducationalOrganization",
+        name: "Parkview High School"
+      }
     },
+    name: "Gimmy Samson - Portfolio",
+    description: "Portfolio showcasing web development projects and skills",
+    url: "https://gimmy-samson.com"
   };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -139,7 +175,7 @@ export default function Portfolio() {
     <main
       className="min-h-screen bg-black relative overflow-hidden"
       itemScope
-      itemType="https://schema.org/Portfolio"
+      itemType="https://schema.org/ProfilePage"
     >
       {/* Animated gradient background */}
       <div
@@ -244,12 +280,12 @@ export default function Portfolio() {
               </div>
 
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-6">
+              <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
                 {["about", "projects", "connect"].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
-                    className="text-white/70 hover:text-white transition-colors capitalize font-medium text-sm"
+                    className="text-white/70 hover:text-white transition-colors capitalize font-medium text-sm whitespace-nowrap"
                     aria-label={`Navigate to ${item} section`}
                   >
                     {item}
@@ -475,7 +511,7 @@ export default function Portfolio() {
 
             <h1
               id="hero-heading"
-              className="text-5xl sm:text-7xl lg:text-8xl font-bold mb-6"
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 px-4"
               itemProp="name"
             >
               <motion.span
@@ -502,17 +538,17 @@ export default function Portfolio() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl sm:text-2xl text-white/80 mb-8 max-w-2xl mx-auto"
-              itemProp="jobTitle"
+              className="text-lg sm:text-xl md:text-2xl text-white/80 mb-8 max-w-2xl mx-auto px-4"
+              itemProp="description"
             >
-              Freelance Web Developer
+              Freelance Frontend Developer | React & AI Specialist
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4"
             >
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -534,7 +570,7 @@ export default function Portfolio() {
                 <Button
                   onClick={() => scrollToSection("projects")}
                   size="lg"
-                  className="relative bg-black text-white px-8 py-3 border-2 border-white/30 hover:border-white/60 transition-all duration-300"
+                  className="relative bg-black text-white px-6 sm:px-8 py-3 border-2 border-white/30 hover:border-white/60 transition-all duration-300 w-full sm:w-auto"
                   aria-label="View my projects and work"
                 >
                   View My Work
@@ -549,7 +585,7 @@ export default function Portfolio() {
                   onClick={() => scrollToSection("connect")}
                   variant="outline"
                   size="lg"
-                  className="border-2 border-white/30 hover:bg-white hover:text-black px-8 py-3 transform transition-all duration-300 text-white bg-transparent relative overflow-hidden group"
+                  className="border-2 border-white/30 hover:bg-white hover:text-black px-6 sm:px-8 py-3 transform transition-all duration-300 text-white bg-transparent relative overflow-hidden group w-full sm:w-auto"
                   aria-label="Get in touch with me"
                 >
                   <motion.div
@@ -603,36 +639,37 @@ export default function Portfolio() {
           >
             <h2
               id="about-heading"
-              className="text-4xl sm:text-5xl font-bold text-white mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6"
             >
               About Me
             </h2>
             <p
-              className="text-lg text-white/80 max-w-3xl mx-auto leading-relaxed"
+              className="text-base sm:text-lg text-white/80 max-w-3xl mx-auto leading-relaxed px-4"
               itemProp="description"
             >
               Hi, I'm Girmachew Samson, but you can call me Gimmy! I'm a
-              passionate high school student (Class of 2026) and freelance
+              passionate high school student (Class of 2026) and award-winning freelance
               frontend developer with a deep love for creating innovative web
-              solutions and AI applications. I specialize in building
-              responsive, user-friendly websites and have developed 15+ custom
-              projects for various clients, helping them achieve their digital
-              goals through cutting-edge technology.
+              solutions and AI applications. As a 3rd place State Webmaster and 5th place
+              State Software Development winner (2025), I specialize in building
+              responsive, user-friendly websites using React, Next.js, and TypeScript.
+              I've developed 15+ custom projects for various clients, helping them achieve
+              their digital goals through cutting-edge technology and modern web development practices.
             </p>
           </motion.div>
 
           {/* Experience Timeline */}
-          <div className="relative max-w-4xl mx-auto mb-16">
+          <div className="relative max-w-4xl mx-auto mb-16 px-4">
             {/* Timeline line */}
             <motion.div
-              className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-white via-gray-400 to-white"
+              className="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-white via-gray-400 to-white"
               initial={{ scaleY: 0 }}
               whileInView={{ scaleY: 1 }}
               transition={{ duration: 1.5 }}
               viewport={{ once: true }}
             />
             <motion.div
-              className="absolute left-8 top-0 w-0.5 h-20 bg-white"
+              className="absolute left-4 sm:left-8 top-0 w-0.5 h-20 bg-white"
               animate={{
                 y: [0, "calc(100% - 5rem)", 0],
               }}
@@ -651,12 +688,12 @@ export default function Portfolio() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
-                className="relative flex items-start gap-8"
+                className="relative flex items-start gap-4 sm:gap-8"
               >
                 {/* Timeline dot */}
                 <div className="relative z-10 flex-shrink-0">
                   <motion.div
-                    className="w-16 h-16 bg-gradient-to-r from-white via-gray-300 to-white rounded-full flex items-center justify-center relative overflow-hidden"
+                    className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-white via-gray-300 to-white rounded-full flex items-center justify-center relative overflow-hidden"
                     animate={{
                       rotate: 360,
                     }}
@@ -677,9 +714,9 @@ export default function Portfolio() {
                         ease: "linear",
                       }}
                     />
-                    <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center relative z-10">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-black rounded-full flex items-center justify-center relative z-10">
                       <motion.div
-                        className="w-4 h-4 bg-white rounded-full"
+                        className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-full"
                         animate={{
                           scale: [1, 1.2, 1],
                         }}
@@ -695,12 +732,12 @@ export default function Portfolio() {
 
                 {/* Content */}
                 <div className="flex-1 pt-2">
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
+                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-300">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-                      <h3 className="text-xl font-bold text-white">
+                      <h3 className="text-lg sm:text-xl font-bold text-white">
                         SWE Intern
                       </h3>
-                      <span className="text-sm text-white/70 font-medium">
+                      <span className="text-xs sm:text-sm text-white/70 font-medium">
                         Aug 2025 – Dec 2025
                       </span>
                     </div>
@@ -709,15 +746,16 @@ export default function Portfolio() {
                         href="https://sonaara.com/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-lg"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-base sm:text-lg inline-flex items-center gap-1"
                       >
                         Sonaara
+                        <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
                       </a>
                     </div>
-                    <ul className="space-y-3 text-white/80">
-                      <li className="flex items-start gap-3">
+                    <ul className="space-y-3 text-sm sm:text-base text-white/80">
+                      <li className="flex items-start gap-2 sm:gap-3">
                         <motion.div
-                          className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"
+                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
                           animate={{
                             scale: [1, 1.3, 1],
                             opacity: [0.7, 1, 0.7],
@@ -733,9 +771,9 @@ export default function Portfolio() {
                           with 500+ users
                         </span>
                       </li>
-                      <li className="flex items-start gap-3">
+                      <li className="flex items-start gap-2 sm:gap-3">
                         <motion.div
-                          className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"
+                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
                           animate={{
                             scale: [1, 1.3, 1],
                             opacity: [0.7, 1, 0.7],
@@ -751,9 +789,9 @@ export default function Portfolio() {
                           with Persona
                         </span>
                       </li>
-                      <li className="flex items-start gap-3">
+                      <li className="flex items-start gap-2 sm:gap-3">
                         <motion.div
-                          className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"
+                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
                           animate={{
                             scale: [1, 1.3, 1],
                             opacity: [0.7, 1, 0.7],
@@ -768,9 +806,9 @@ export default function Portfolio() {
                           Implemented Firebase integration for backend services
                         </span>
                       </li>
-                      <li className="flex items-start gap-3">
+                      <li className="flex items-start gap-2 sm:gap-3">
                         <motion.div
-                          className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"
+                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
                           animate={{
                             scale: [1, 1.3, 1],
                             opacity: [0.7, 1, 0.7],
@@ -801,7 +839,7 @@ export default function Portfolio() {
                 {/* Timeline dot */}
                 <div className="relative z-10 flex-shrink-0">
                   <motion.div
-                    className="w-16 h-16 bg-gradient-to-r from-white via-gray-300 to-white rounded-full flex items-center justify-center relative overflow-hidden"
+                    className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-white via-gray-300 to-white rounded-full flex items-center justify-center relative overflow-hidden"
                     animate={{
                       rotate: 360,
                     }}
@@ -822,9 +860,9 @@ export default function Portfolio() {
                         ease: "linear",
                       }}
                     />
-                    <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center relative z-10">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-black rounded-full flex items-center justify-center relative z-10">
                       <motion.div
-                        className="w-4 h-4 bg-white rounded-full"
+                        className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-full"
                         animate={{
                           scale: [1, 1.2, 1],
                         }}
@@ -840,24 +878,24 @@ export default function Portfolio() {
 
                 {/* Content */}
                 <div className="flex-1 pt-2">
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
+                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-300">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                       <h3 className="text-xl font-bold text-white">
                         Freelance Frontend Developer
                       </h3>
                       <span className="text-sm text-white/70 font-medium">
-                        Jan 2024 – Present
+                        Jan 2024 – Jan 2026
                       </span>
                     </div>
                     <div className="mb-4">
-                      <span className="text-white font-medium text-lg">
+                      <span className="text-white font-medium text-base sm:text-lg">
                         Self-Employed
                       </span>
                     </div>
-                    <ul className="space-y-3 text-white/80">
-                      <li className="flex items-start gap-3">
+                    <ul className="space-y-3 text-sm sm:text-base text-white/80">
+                      <li className="flex items-start gap-2 sm:gap-3">
                         <motion.div
-                          className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"
+                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
                           animate={{
                             scale: [1, 1.3, 1],
                             opacity: [0.7, 1, 0.7],
@@ -870,9 +908,9 @@ export default function Portfolio() {
                         />
                         <span>Developed 15+ custom websites for clients</span>
                       </li>
-                      <li className="flex items-start gap-3">
+                      <li className="flex items-start gap-2 sm:gap-3">
                         <motion.div
-                          className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"
+                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
                           animate={{
                             scale: [1, 1.3, 1],
                             opacity: [0.7, 1, 0.7],
@@ -885,9 +923,9 @@ export default function Portfolio() {
                         />
                         <span>Achieved 17% increase in user engagement</span>
                       </li>
-                      <li className="flex items-start gap-3">
+                      <li className="flex items-start gap-2 sm:gap-3">
                         <motion.div
-                          className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"
+                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
                           animate={{
                             scale: [1, 1.3, 1],
                             opacity: [0.7, 1, 0.7],
@@ -908,7 +946,7 @@ export default function Portfolio() {
           </div>
 
           {/* Skills Grid */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16">
             {skills.map((skill, index) => (
               <motion.div
                 key={skill.name}
@@ -1020,18 +1058,18 @@ export default function Portfolio() {
           >
             <h2
               id="projects-heading"
-              className="text-4xl sm:text-5xl font-bold text-white mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6"
             >
               Featured Projects
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-3xl mx-auto px-4">
               A showcase of my latest work, featuring innovative solutions and
               cutting-edge technologies
             </p>
           </motion.div>
 
           <div
-            className="grid md:grid-cols-2 gap-8"
+            className="grid sm:grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
             role="list"
             aria-label="Featured projects"
           >
@@ -1173,16 +1211,16 @@ export default function Portfolio() {
           >
             <h2
               id="connect-heading"
-              className="text-4xl sm:text-5xl font-bold text-white mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6"
             >
               Let's Connect
             </h2>
-            <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto px-4">
               Ready to bring your next project to life? I'd love to hear from
               you and discuss how we can work together.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-12 px-4">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -1282,8 +1320,8 @@ export default function Portfolio() {
 
             <Separator className="bg-white/20 mb-8" />
 
-            <p className="text-white/60">
-              © 2025 Girmachew (Gimmy) Samson. All rights reserved.
+            <p className="text-white/60 text-sm px-4">
+              © 2026 Girmachew (Gimmy) Samson. All rights reserved.
             </p>
           </motion.div>
         </div>
