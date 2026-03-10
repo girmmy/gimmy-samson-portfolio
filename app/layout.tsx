@@ -1,9 +1,21 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const syne = Syne({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -54,7 +66,7 @@ export const metadata: Metadata = {
     siteName: "Gimmy Samson Portfolio",
     images: [
       {
-        url: "https://gimmy-samson.com/gimmy-tsa-headshot.png",
+        url: "https://gimmy-samson.com/gimmy-headshot.jpg",
         width: 1200,
         height: 630,
         alt: "Gimmy Samson - Award-Winning Frontend Developer and Student Leader",
@@ -68,7 +80,7 @@ export const metadata: Metadata = {
     title: "Gimmy Samson - Award-Winning Freelance Frontend Developer",
     description:
       "Award-winning freelance frontend developer. 3rd State Webmaster 2025, 5th State Software Development 2025. React, Next.js, TypeScript & AI specialist.",
-    images: ["https://gimmy-samson.com/gimmy-tsa-headshot.png"],
+    images: ["https://gimmy-samson.com/gimmy-headshot.jpg"],
     creator: "@girmmy",
   },
   robots: {
@@ -99,7 +111,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#09090b" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
@@ -119,7 +131,7 @@ export default function RootLayout({
               description:
                 "Award-winning freelance frontend developer and high school student specializing in React, Next.js, TypeScript, AI integration, and responsive web design. Winner of 3rd State Webmaster and 5th State Software Development 2025.",
               url: "https://gimmy-samson.com",
-              image: "https://gimmy-samson.com/gimmy-tsa-headshot.png",
+              image: "https://gimmy-samson.com/gimmy-headshot.jpg",
               email: "gimmys943@gmail.com",
               sameAs: [
                 "https://linkedin.com/in/girmachew-samson",
@@ -228,7 +240,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${syne.variable} ${dmSans.variable} font-body`}>{children}</body>
     </html>
   );
 }

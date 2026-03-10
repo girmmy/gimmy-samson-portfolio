@@ -1,16 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { motion, AnimatePresence } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import {
   Github,
@@ -18,75 +9,96 @@ import {
   Mail,
   ExternalLink,
   Download,
-  Code,
-  Palette,
-  Zap,
   ChevronDown,
   Menu,
   X,
+  Code2,
+  Cpu,
+  Wrench,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+// Most recent first
 const projects = [
+  {
+    title: "Bantr",
+    description: [
+      "Founded and built a live debating platform in open beta with 150+ users, enabling real-time audio and video debates",
+      "Implemented live audience polling, real-time chat, and side-voting so viewers can engage as debates unfold",
+      "Architected the full product from the ground up — design, frontend, and backend",
+    ],
+    image: "/bantr-img.png",
+    tags: ["Next.js", "TypeScript", "LiveKit", "Supabase", "Tailwind"],
+    link: "https://bantr.online",
+    period: "Feb 2026 – Present",
+  },
+  {
+    title: "Scholarlink",
+    description: [
+      "Built a scholarship discovery platform connecting students with funding opportunities matching their goals",
+      "Designed search and filtering to help students find relevant scholarships quickly and efficiently",
+      "Submitted to TSA state competition as a full web development entry",
+    ],
+    image: "/scholarlink-img.png",
+    tags: ["React", "JavaScript", "Tailwind", "Netlify"],
+    link: "https://thescholarlink.netlify.app",
+    period: "2025 – 2026",
+  },
+  {
+    title: "Transvero",
+    description: [
+      "Developed real-time multilingual transcription app with live audio processing using React and AssemblyAI",
+      "Implemented user auth, multi-language transcription, and PDF export functionality",
+      "Built efficient state management and optimized performance for seamless UX",
+    ],
+    image: "/transvero-img.jpg",
+    tags: ["React.js", "TypeScript", "Tailwind", "AssemblyAI"],
+    link: "https://transvero.netlify.app/",
+    period: "Sep 2025 – Mar 2026",
+  },
+  {
+    title: "GimmyAI",
+    description: [
+      "Engineered full-stack AI-powered assistant serving 130+ active users using React, Next.js, and Firebase",
+      "Implemented real-time NLP with context-aware responses and seamless API integrations",
+      "Built robust authentication, state management, and scalable architecture",
+    ],
+    image: "/gimmyai-img.jpg",
+    tags: ["AI/ML", "React", "Next.js", "TypeScript", "Firebase", "OpenAI API"],
+    link: "https://gimmyai.com",
+    period: "Sep 2024 – Present",
+  },
   {
     title: "SymbioAI",
     description: [
-      "Architected and developed a full-stack AI chatbot application with a modular system of four specialized AI assistants using React, Node.js, and OpenAI API integration",
-      "Delivered personalized environmental advice for carbon emissions, recycling, electricity conservation, and water management",
-      "Implemented scalable backend services and responsive frontend interfaces with optimized performance",
+      "Architected full-stack AI chatbot with four specialized assistants using React, Node.js, and OpenAI API",
+      "Delivered personalized environmental advice for carbon, recycling, electricity, and water management",
+      "Implemented scalable backend services with optimized performance",
     ],
     image: "/symbioai-img.jpg",
     tags: ["React", "JavaScript", "Node.js", "OpenAI API", "Git", "GitHub"],
     link: "https://symbioai.netlify.app",
-    featured: true,
     period: "Sep 2024 – Mar 2025",
   },
   {
     title: "ParkviewTSA Website",
     description: [
-      "Developed and deployed a responsive frontend website using HTML, CSS, JavaScript, and Bootstrap for Parkview High School's Technology Student Association",
-      "Achieved 1k+ clicks and 18k+ total impressions, demonstrating strong user engagement and reach",
-      "Built a centralized platform for club information, events, and member engagement with modern web technologies",
+      "Developed responsive frontend website using HTML, CSS, JavaScript, and Bootstrap for Parkview TSA",
+      "Achieved 1k+ clicks and 18k+ total impressions demonstrating strong user engagement",
+      "Built centralized platform for club information, events, and member engagement",
     ],
     image: "/parkviewtsa-img.jpg",
     tags: ["HTML", "CSS", "JavaScript", "Bootstrap", "GitHub"],
     link: "https://parkviewtsa.org",
-    featured: true,
     period: "Jul 2024 – Sep 2024",
-  },
-  {
-    title: "GimmyAI",
-    description: [
-      "Engineered a full-stack AI-powered assistant application serving 130+ active users using React, Next.js, TypeScript, and Firebase",
-      "Implemented real-time natural language processing with context-aware responses and seamless API integrations",
-      "Built robust authentication, state management, and scalable architecture with optimized performance",
-    ],
-    image: "/gimmyai-img.jpg",
-    tags: ["AI/ML", "React", "Next.js", "TypeScript", "Firebase", "OpenAI API"],
-    link: "https://gimmyai.com",
-    featured: true,
-    period: "Sep 2024 – Present",
-  },
-  {
-    title: "Transvero",
-    description: [
-      "Developed a real-time multilingual transcription application with live audio processing using React, TypeScript, and AssemblyAI integration",
-      "Implemented user authentication, real-time transcription across multiple languages, and PDF export functionality",
-      "Built efficient state management and optimized performance for seamless user experience",
-    ],
-    image: "/transvero-img.jpg",
-    tags: ["React.js", "TypeScript", "Tailwind", "AssemblyAI"],
-    link: "https://transvero.netlify.app/",
-    featured: true,
-    period: "Oct 2025 – Present",
   },
 ];
 
 const skills = [
   {
     name: "Frontend",
-    icon: Code,
+    icon: Code2,
     items: [
       "React",
       "React Native",
@@ -100,18 +112,45 @@ const skills = [
   },
   {
     name: "Backend",
-    icon: Zap,
-    items: ["Node.js", "Python", "Java", "REST APIs", "Firebase"],
+    icon: Cpu,
+    items: ["Node.js", "Python", "Java", "REST APIs", "Firebase", "Supabase"],
   },
   {
     name: "Tools & AI",
-    icon: Palette,
+    icon: Wrench,
     items: ["Git/GitHub", "OpenAI API", "Figma", "VS Code", "jQuery"],
   },
 ];
 
+const sonaara = [
+  "Built and tested features on React Native mobile app with 500+ users",
+  "Developed messaging feature and identity verification with Persona",
+  "Implemented Firebase integration for backend services",
+  "Helped increase userbase by 73% since onboarding",
+];
+
+const freelance = [
+  "Developed 15+ custom websites for clients",
+  "Achieved 17% increase in user engagement across projects",
+  "Implemented tailored SEO strategies for improved discoverability",
+];
+
+const bantrExp = [
+  "Founded and launched a live debating platform, now in open beta with 150+ users",
+  "Built the entire product from scratch — design, frontend, and backend",
+  "Integrated real-time audio/video with WebRTC and live data with Supabase",
+];
+
+const fadeUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+};
+
+const staggerContainer = {
+  animate: { transition: { staggerChildren: 0.08 } },
+};
+
 export default function Portfolio() {
-  // Enhanced structured data for better SEO
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
@@ -120,13 +159,14 @@ export default function Portfolio() {
       "@id": "https://gimmy-samson.com/#person",
       name: "Girmachew Samson",
       alternateName: "Gimmy Samson",
-      jobTitle: "Freelance Frontend Developer",
-      description: "Award-winning freelance developer and high school student specializing in React, Next.js, TypeScript, and AI integration. 3rd State Webmaster 2025, 5th State Software Development 2025.",
+      jobTitle: "Startup Founder & Frontend Developer",
+      description:
+        "Startup founder and frontend developer. Founded Bantr, a live debating platform with 150+ users. Specializes in React, Next.js, TypeScript, and AI integration.",
       url: "https://gimmy-samson.com",
-      image: "https://gimmy-samson.com/gimmy-tsa-headshot.png",
+      image: "https://gimmy-samson.com/gimmy-headshot.jpg",
       sameAs: [
         "https://linkedin.com/in/girmachew-samson",
-        "https://github.com/girmmy"
+        "https://github.com/girmmy",
       ],
       email: "gimmys943@gmail.com",
       knowsAbout: [
@@ -138,33 +178,21 @@ export default function Portfolio() {
         "AI Integration",
         "OpenAI API",
         "Firebase",
+        "Supabase",
         "Tailwind CSS",
-        "Web Development"
-      ],
-      hasCredential: [
-        {
-          "@type": "EducationalOccupationalCredential",
-          credentialCategory: "award",
-          name: "3rd Place State Webmaster 2025 - Technology Student Association"
-        },
-        {
-          "@type": "EducationalOccupationalCredential",
-          credentialCategory: "award",
-          name: "5th Place State Software Development 2025 - Technology Student Association"
-        }
+        "Web Development",
       ],
       alumniOf: {
         "@type": "EducationalOrganization",
-        name: "Parkview High School"
-      }
+        name: "Parkview High School",
+      },
     },
     name: "Gimmy Samson - Portfolio",
     description: "Portfolio showcasing web development projects and skills",
-    url: "https://gimmy-samson.com"
+    url: "https://gimmy-samson.com",
   };
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
@@ -173,1154 +201,624 @@ export default function Portfolio() {
 
   return (
     <main
-      className="min-h-screen bg-black relative overflow-hidden"
+      className="min-h-screen bg-[#09090b] relative overflow-hidden"
       itemScope
       itemType="https://schema.org/ProfilePage"
     >
-      {/* Animated gradient background */}
-      <div
-        className="fixed inset-0 overflow-hidden pointer-events-none"
-        aria-hidden="true"
-      >
-        <motion.div
-          className="absolute inset-0"
-          animate={{
-            background: [
-              "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-              "radial-gradient(circle at 80% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-              "radial-gradient(circle at 50% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-              "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-            ],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "linear",
-          }}
-        />
-        <motion.div
-          className="absolute inset-0"
-          animate={{
-            background: [
-              "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 50%)",
-              "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 50%)",
-              "radial-gradient(circle at 50% 80%, rgba(255,255,255,0.05) 0%, transparent 50%)",
-              "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 50%)",
-            ],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "linear",
-            delay: 5,
-          }}
-        />
-      </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      {/* Navigation */}
+
+      {/* ─── Background ─────────────────────────────────────── */}
+      <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute inset-0 bg-dot-grid opacity-[0.18]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(800px,100vw)] h-[480px] bg-cyan-400/8 blur-[120px] rounded-full" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500/5 blur-[80px] rounded-full" />
+      </div>
+
+      {/* ─── Navigation ─────────────────────────────────────── */}
       <header>
         <nav
-          className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
+          className="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-[22rem] sm:max-w-none sm:w-auto"
           role="navigation"
           aria-label="Main navigation"
         >
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-black/90 backdrop-blur-xl rounded-full px-6 py-3 border border-white/20 relative overflow-hidden"
+            transition={{ duration: 0.5 }}
+            className="bg-[#09090b]/95 backdrop-blur-xl rounded-full px-4 sm:px-5 py-2.5 border border-white/10 flex items-center gap-4 sm:gap-6"
           >
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0"
-              animate={{
-                x: ["-100%", "200%"],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "linear",
-              }}
-            />
-            <div className="flex items-center space-x-6 relative z-10">
-              {/* Logo */}
-              <div className="flex items-center">
-                <motion.div
-                  className="w-8 h-8 bg-gradient-to-r from-white via-gray-300 to-white rounded-full flex items-center justify-center relative overflow-hidden"
-                  animate={{
-                    rotate: 360,
-                  }}
-                  transition={{
-                    duration: 10,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
-                  }}
-                >
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                    animate={{
-                      x: ["-100%", "200%"],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    }}
-                  />
-                  <span
-                    className="text-black font-bold text-sm relative z-10"
-                    aria-label="Gimmy Samson initials"
-                  >
-                    GS
-                  </span>
-                </motion.div>
+            <div className="flex items-center gap-2.5 flex-shrink-0">
+              <div className="w-7 h-7 rounded-full bg-cyan-400 flex items-center justify-center">
+                <span className="text-[#09090b] font-bold text-[11px] font-display" aria-label="Gimmy Samson initials">
+                  GS
+                </span>
               </div>
+              <span className="hidden sm:block text-zinc-300 text-sm font-medium font-display">
+                Gimmy Samson
+              </span>
+            </div>
 
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <div className="hidden md:flex items-center gap-5">
+              {["about", "projects", "connect"].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item)}
+                  className="text-zinc-500 hover:text-cyan-400 text-sm font-medium capitalize tracking-wide transition-colors"
+                  aria-label={`Navigate to ${item} section`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            <button
+              className="md:hidden text-zinc-400 hover:text-white transition-colors ml-auto p-0.5"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </motion.div>
+
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                id="mobile-menu"
+                initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                transition={{ duration: 0.15 }}
+                className="mt-2 bg-[#09090b]/97 backdrop-blur-xl rounded-2xl p-2 border border-white/10"
+                role="menu"
+              >
                 {["about", "projects", "connect"].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
-                    className="text-white/70 hover:text-white transition-colors capitalize font-medium text-sm whitespace-nowrap"
-                    aria-label={`Navigate to ${item} section`}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-
-              {/* Mobile Menu Button */}
-              <button
-                className="md:hidden text-white p-1"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                aria-expanded={isMenuOpen}
-                aria-controls="mobile-menu"
-              >
-                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <motion.div
-              id="mobile-menu"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="md:hidden mt-2 bg-black/90 backdrop-blur-xl rounded-2xl p-4 border border-white/20"
-              role="menu"
-            >
-              <div className="space-y-3">
-                {["about", "projects", "contact"].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => scrollToSection(item)}
-                    className="block w-full text-left text-white/70 hover:text-white transition-colors capitalize font-medium text-sm py-2"
+                    className="block w-full text-left px-4 py-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl transition-all text-sm font-medium capitalize"
                     role="menuitem"
                     aria-label={`Navigate to ${item} section`}
                   >
                     {item}
                   </button>
                 ))}
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
       </header>
 
-      {/* Hero Section */}
+      {/* ─── Hero ───────────────────────────────────────────── */}
       <section
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6"
         aria-labelledby="hero-heading"
         role="banner"
       >
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0" aria-hidden="true">
-          <motion.div
-            className="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-          />
-          <motion.div
-            className="absolute bottom-20 right-10 w-96 h-96 bg-white/5 rounded-full blur-3xl"
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.3, 0.6, 0.3],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-              delay: 2,
-            }}
-          />
-          <motion.div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-white/5 via-white/10 to-white/5 rounded-full blur-3xl"
-            animate={{
-              rotate: [0, 360],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              rotate: {
-                duration: 30,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "linear",
-              },
-              scale: {
-                duration: 15,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              },
-            }}
-          />
-        </div>
+        <div className="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center text-center">
 
-        {/* Floating Geometric Shapes */}
-        <div aria-hidden="true">
+          {/* Profile image */}
           <motion.div
-            animate={{
-              y: [0, -30, 0],
-              rotate: [0, 180, 360],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-            className="absolute top-1/4 left-1/4 w-4 h-4 bg-white/40 transform rotate-45"
-          />
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-8 flex justify-center"
+          >
+            <div className="relative w-28 h-28 sm:w-36 sm:h-36">
+              <div
+                className="absolute inset-0 rounded-full bg-cyan-400/20 blur-xl scale-125"
+                aria-hidden="true"
+              />
+              <div className="relative w-full h-full rounded-full overflow-hidden ring-2 ring-cyan-400/30 ring-offset-4 ring-offset-[#09090b]">
+                <Image
+                  src="/gimmy-headshot.jpg"
+                  alt="Gimmy Samson - Startup Founder and Frontend Developer"
+                  width={180}
+                  height={180}
+                  className="w-full h-full object-cover object-[center_15%]"
+                  priority
+                  itemProp="image"
+                />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Name */}
+          <motion.h1
+            id="hero-heading"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display font-bold leading-[0.92] tracking-tight text-zinc-50 mb-5"
+            style={{ fontSize: "clamp(2.6rem, 11vw, 6.5rem)" }}
+            itemProp="name"
+          >
+            Girmachew
+            <br />
+            <span
+              className="text-transparent bg-clip-text"
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, #67e8f9 0%, #22d3ee 40%, #06b6d4 100%)",
+              }}
+            >
+              Samson
+            </span>
+          </motion.h1>
+
+          {/* Role */}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="font-mono text-xs sm:text-sm text-zinc-500 mb-10 tracking-wide"
+            itemProp="description"
+          >
+            <span className="text-cyan-400" aria-hidden="true">{">"}</span>{" "}
+            Startup Founder · Frontend Developer
+          </motion.p>
+
+          {/* CTA buttons */}
           <motion.div
-            animate={{
-              y: [0, 40, 0],
-              x: [0, -15, 0],
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: 2,
-              ease: "easeInOut",
-            }}
-            className="absolute top-3/4 right-1/4 w-6 h-6 border-2 border-white/60 rounded-full"
-          />
-          <motion.div
-            animate={{
-              rotate: [0, -360],
-              scale: [1, 1.3, 1],
-              x: [0, 20, 0],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-            className="absolute bottom-1/4 left-1/3 w-8 h-8 bg-gradient-to-r from-white/30 via-white/60 to-white/30 transform rotate-12"
-          />
-          <motion.div
-            animate={{
-              y: [0, -25, 0],
-              rotate: [360, 0],
-            }}
-            transition={{
-              duration: 7,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: 1,
-              ease: "easeInOut",
-            }}
-            className="absolute top-1/2 right-1/3 w-3 h-3 bg-white/50 rounded-full"
-          />
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto"
+          >
+            <button
+              onClick={() => scrollToSection("projects")}
+              className="w-full sm:w-auto px-8 py-3.5 bg-cyan-400 text-[#09090b] font-semibold text-sm rounded-full hover:bg-cyan-300 active:scale-[0.98] transition-all duration-150 font-display tracking-wide"
+              aria-label="View my projects and work"
+            >
+              View My Work
+            </button>
+            <button
+              onClick={() => scrollToSection("connect")}
+              className="w-full sm:w-auto px-8 py-3.5 border border-white/12 text-zinc-300 font-semibold text-sm rounded-full hover:border-cyan-400/40 hover:text-cyan-400 active:scale-[0.98] transition-all duration-150 font-display tracking-wide"
+              aria-label="Get in touch with me"
+            >
+              Get In Touch
+            </button>
+          </motion.div>
         </div>
 
         <motion.div
-          style={{ y }}
-          className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5"
+          animate={{ y: [0, -7, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-zinc-700"
           aria-hidden="true"
-        />
+        >
+          <ChevronDown size={20} />
+        </motion.div>
+      </section>
 
-        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
+      {/* ─── About ──────────────────────────────────────────── */}
+      <section
+        id="about"
+        className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8"
+        aria-labelledby="about-heading"
+      >
+        <div className="max-w-5xl mx-auto">
+
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            {...fadeUp}
+            transition={{ duration: 0.6 }}
+            whileInView="animate"
+            initial="initial"
+            viewport={{ once: true }}
+            className="flex items-center gap-3 mb-12"
           >
-            {/* Profile Picture */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-8 pt-16 flex justify-center"
+            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">01</span>
+            <div className="h-px w-10 bg-white/10" aria-hidden="true" />
+            <h2
+              id="about-heading"
+              className="text-3xl sm:text-4xl font-bold font-display text-zinc-50"
             >
-              <div className="relative">
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-white via-gray-300 to-white rounded-full blur-xl opacity-50"
-                  animate={{
-                    rotate: [0, 360],
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{
-                    rotate: {
-                      duration: 8,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    },
-                    scale: {
-                      duration: 4,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    },
-                  }}
-                  aria-hidden="true"
-                />
-                <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-white/30 backdrop-blur-sm">
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    animate={{
-                      x: ["-100%", "200%"],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    }}
-                  />
-                  <Image
-                    src="/gimmy-tsa-headshot.png"
-                    alt="Gimmy Samson - Frontend Developer and Student Leader"
-                    width={180}
-                    height={180}
-                    className="w-full h-full object-cover scale-110 relative z-10"
-                    priority
-                    itemProp="image"
-                  />
+              About
+            </h2>
+          </motion.div>
+
+          {/* Bio */}
+          <motion.p
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            whileInView="animate"
+            initial="initial"
+            viewport={{ once: true }}
+            className="text-zinc-400 text-base sm:text-lg leading-relaxed max-w-3xl mb-14"
+            itemProp="description"
+          >
+            Hi, I&apos;m Girmachew — but call me{" "}
+            <span className="text-zinc-200 font-medium">Gimmy</span>. I&apos;m
+            a high school student (Class of 2026), startup founder, and frontend
+            developer building products people actually use. I founded{" "}
+            <span className="text-cyan-400 font-medium">Bantr</span>, a live
+            debating platform currently in open beta with{" "}
+            <span className="text-zinc-200 font-medium">150+ users</span>.
+            Outside of Bantr, I freelance and build AI-powered web apps using
+            React, Next.js, and TypeScript.
+          </motion.p>
+
+          {/* Experience Timeline */}
+          <div className="mb-14">
+
+            {/* Bantr — Founder */}
+            <motion.div
+              {...fadeUp}
+              transition={{ duration: 0.6, delay: 0.05 }}
+              whileInView="animate"
+              initial="initial"
+              viewport={{ once: true }}
+              className="flex gap-5 sm:gap-6"
+            >
+              <div className="flex flex-col items-center w-5 flex-shrink-0" aria-hidden="true">
+                <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 flex-shrink-0 mt-5" />
+                <div className="w-[2px] bg-white/10 flex-1 mt-1.5" />
+              </div>
+              <div className="flex-1 min-w-0 pb-6">
+                <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 sm:p-6 hover:border-white/12 transition-colors">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-1">
+                    <h3 className="text-base font-semibold text-zinc-100 font-display">Founder & CEO</h3>
+                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">Feb 2026 – Present</span>
+                  </div>
+                  <Link
+                    href="https://bantr.online"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300 mb-4 transition-colors"
+                  >
+                    Bantr <ExternalLink size={12} aria-hidden="true" />
+                  </Link>
+                  <ul className="space-y-2">
+                    {bantrExp.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed">
+                        <span className="text-cyan-400/60 mt-0.5 flex-shrink-0 font-mono" aria-hidden="true">›</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </motion.div>
 
-            <h1
-              id="hero-heading"
-              className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 px-4"
-              itemProp="name"
-            >
-              <motion.span
-                className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent relative"
-                animate={{
-                  backgroundPosition: ["0%", "200%"],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "linear",
-                }}
-                style={{
-                  backgroundSize: "200% 100%",
-                }}
-              >
-                Girmachew (Gimmy)
-              </motion.span>
-              <br />
-              <span className="text-white">Samson</span>
-            </h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg sm:text-xl md:text-2xl text-white/80 mb-8 max-w-2xl mx-auto px-4"
-              itemProp="description"
-            >
-              Freelance Frontend Developer | React & AI Specialist
-            </motion.p>
-
+            {/* Sonaara */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4"
-            >
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative overflow-hidden rounded-lg"
-              >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-white via-gray-200 to-white opacity-0"
-                  initial={{ x: "-100%" }}
-                  whileHover={{
-                    x: "200%",
-                    opacity: 1,
-                  }}
-                  transition={{
-                    duration: 0.6,
-                    ease: "easeInOut",
-                  }}
-                />
-                <Button
-                  onClick={() => scrollToSection("projects")}
-                  size="lg"
-                  className="relative bg-black text-white px-6 sm:px-8 py-3 border-2 border-white/30 hover:border-white/60 transition-all duration-300 w-full sm:w-auto"
-                  aria-label="View my projects and work"
-                >
-                  View My Work
-                </Button>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  onClick={() => scrollToSection("connect")}
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-white/30 hover:bg-white hover:text-black px-6 sm:px-8 py-3 transform transition-all duration-300 text-white bg-transparent relative overflow-hidden group w-full sm:w-auto"
-                  aria-label="Get in touch with me"
-                >
-                  <motion.div
-                    className="absolute inset-0 bg-white"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  <span className="relative z-10 text-white group-hover:text-black transition-colors duration-300">
-                    Get In Touch
-                  </span>
-                </Button>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        <motion.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          aria-hidden="true"
-        >
-          <ChevronDown className="text-white/60" size={32} />
-        </motion.div>
-      </section>
-
-      {/* About Section */}
-      <section
-        id="about"
-        className="py-20 px-4 sm:px-6 lg:px-8 relative"
-        aria-labelledby="about-heading"
-      >
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5" aria-hidden="true">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%23ffffff' fillOpacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}
-          />
-        </div>
-
-        <div className="max-w-6xl mx-auto relative">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2
-              id="about-heading"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6"
-            >
-              About Me
-            </h2>
-            <p
-              className="text-base sm:text-lg text-white/80 max-w-3xl mx-auto leading-relaxed px-4"
-              itemProp="description"
-            >
-              Hi, I'm Girmachew Samson, but you can call me Gimmy! I'm a
-              passionate high school student (Class of 2026) and award-winning freelance
-              frontend developer with a deep love for creating innovative web
-              solutions and AI applications. As a 3rd place State Webmaster and 5th place
-              State Software Development winner (2025), I specialize in building
-              responsive, user-friendly websites using React, Next.js, and TypeScript.
-              I've developed 15+ custom projects for various clients, helping them achieve
-              their digital goals through cutting-edge technology and modern web development practices.
-            </p>
-          </motion.div>
-
-          {/* Experience Timeline */}
-          <div className="relative max-w-4xl mx-auto mb-16 px-4">
-            {/* Timeline line */}
-            <motion.div
-              className="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-white via-gray-400 to-white"
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              transition={{ duration: 1.5 }}
+              {...fadeUp}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              whileInView="animate"
+              initial="initial"
               viewport={{ once: true }}
-            />
+              className="flex gap-5 sm:gap-6"
+            >
+              <div className="flex flex-col items-center w-5 flex-shrink-0" aria-hidden="true">
+                <div className="w-2.5 h-2.5 rounded-full bg-white/30 flex-shrink-0 mt-5" />
+                <div className="w-[2px] bg-white/10 flex-1 mt-1.5" />
+              </div>
+              <div className="flex-1 min-w-0 pb-6">
+                <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 sm:p-6 hover:border-white/12 transition-colors">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-1">
+                    <h3 className="text-base font-semibold text-zinc-100 font-display">SWE Intern</h3>
+                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">Aug 2025 – Dec 2025</span>
+                  </div>
+                  <a
+                    href="https://sonaara.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300 mb-4 transition-colors"
+                  >
+                    Sonaara <ExternalLink size={12} aria-hidden="true" />
+                  </a>
+                  <ul className="space-y-2">
+                    {sonaara.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed">
+                        <span className="text-cyan-400/60 mt-0.5 flex-shrink-0 font-mono" aria-hidden="true">›</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Freelance — last item, no line */}
             <motion.div
-              className="absolute left-4 sm:left-8 top-0 w-0.5 h-20 bg-white"
-              animate={{
-                y: [0, "calc(100% - 5rem)", 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* Timeline items */}
-            <div className="space-y-12">
-              {/* Sonaara Internship */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-                className="relative flex items-start gap-4 sm:gap-8"
-              >
-                {/* Timeline dot */}
-                <div className="relative z-10 flex-shrink-0">
-                  <motion.div
-                    className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-white via-gray-300 to-white rounded-full flex items-center justify-center relative overflow-hidden"
-                    animate={{
-                      rotate: 360,
-                    }}
-                    transition={{
-                      duration: 10,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    }}
-                  >
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
-                      animate={{
-                        x: ["-100%", "200%"],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "linear",
-                      }}
-                    />
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-black rounded-full flex items-center justify-center relative z-10">
-                      <motion.div
-                        className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-full"
-                        animate={{
-                          scale: [1, 1.2, 1],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Number.POSITIVE_INFINITY,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 pt-2">
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-300">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-                      <h3 className="text-lg sm:text-xl font-bold text-white">
-                        SWE Intern
-                      </h3>
-                      <span className="text-xs sm:text-sm text-white/70 font-medium">
-                        Aug 2025 – Dec 2025
-                      </span>
-                    </div>
-                    <div className="mb-4">
-                      <a
-                        href="https://sonaara.com/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-base sm:text-lg inline-flex items-center gap-1"
-                      >
-                        Sonaara
-                        <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
-                      </a>
-                    </div>
-                    <ul className="space-y-3 text-sm sm:text-base text-white/80">
-                      <li className="flex items-start gap-2 sm:gap-3">
-                        <motion.div
-                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
-                          animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0.7, 1, 0.7],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                          }}
-                        />
-                        <span>
-                          Built and tested features on React Native mobile app
-                          with 500+ users
-                        </span>
-                      </li>
-                      <li className="flex items-start gap-2 sm:gap-3">
-                        <motion.div
-                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
-                          animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0.7, 1, 0.7],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                          }}
-                        />
-                        <span>
-                          Developed messaging feature and identity verification
-                          with Persona
-                        </span>
-                      </li>
-                      <li className="flex items-start gap-2 sm:gap-3">
-                        <motion.div
-                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
-                          animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0.7, 1, 0.7],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                          }}
-                        />
-                        <span>
-                          Implemented Firebase integration for backend services
-                        </span>
-                      </li>
-                      <li className="flex items-start gap-2 sm:gap-3">
-                        <motion.div
-                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
-                          animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0.7, 1, 0.7],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                          }}
-                        />
-                        <span>
-                          Helped increase userbase by 73% since onboarding
-                        </span>
-                      </li>
-                    </ul>
+              {...fadeUp}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              whileInView="animate"
+              initial="initial"
+              viewport={{ once: true }}
+              className="flex gap-5 sm:gap-6"
+            >
+              <div className="flex flex-col items-center w-5 flex-shrink-0" aria-hidden="true">
+                <div className="w-2.5 h-2.5 rounded-full bg-white/20 flex-shrink-0 mt-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 sm:p-6 hover:border-white/12 transition-colors">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-1">
+                    <h3 className="text-base font-semibold text-zinc-100 font-display">Freelance Frontend Developer</h3>
+                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">Jan 2024 – Jan 2026</span>
                   </div>
-                </div>
-              </motion.div>
-
-              {/* Freelance Work */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true }}
-                className="relative flex items-start gap-8"
-              >
-                {/* Timeline dot */}
-                <div className="relative z-10 flex-shrink-0">
-                  <motion.div
-                    className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-white via-gray-300 to-white rounded-full flex items-center justify-center relative overflow-hidden"
-                    animate={{
-                      rotate: 360,
-                    }}
-                    transition={{
-                      duration: 10,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    }}
-                  >
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
-                      animate={{
-                        x: ["-100%", "200%"],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "linear",
-                      }}
-                    />
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-black rounded-full flex items-center justify-center relative z-10">
-                      <motion.div
-                        className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-full"
-                        animate={{
-                          scale: [1, 1.2, 1],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Number.POSITIVE_INFINITY,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 pt-2">
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-300">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-                      <h3 className="text-xl font-bold text-white">
-                        Freelance Frontend Developer
-                      </h3>
-                      <span className="text-sm text-white/70 font-medium">
-                        Jan 2024 – Jan 2026
-                      </span>
-                    </div>
-                    <div className="mb-4">
-                      <span className="text-white font-medium text-base sm:text-lg">
-                        Self-Employed
-                      </span>
-                    </div>
-                    <ul className="space-y-3 text-sm sm:text-base text-white/80">
-                      <li className="flex items-start gap-2 sm:gap-3">
-                        <motion.div
-                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
-                          animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0.7, 1, 0.7],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                          }}
-                        />
-                        <span>Developed 15+ custom websites for clients</span>
+                  <p className="text-sm text-zinc-600 mb-4">Self-Employed</p>
+                  <ul className="space-y-2">
+                    {freelance.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed">
+                        <span className="text-zinc-600 mt-0.5 flex-shrink-0 font-mono" aria-hidden="true">›</span>
+                        {item}
                       </li>
-                      <li className="flex items-start gap-2 sm:gap-3">
-                        <motion.div
-                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
-                          animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0.7, 1, 0.7],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                          }}
-                        />
-                        <span>Achieved 17% increase in user engagement</span>
-                      </li>
-                      <li className="flex items-start gap-2 sm:gap-3">
-                        <motion.div
-                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mt-2 flex-shrink-0"
-                          animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0.7, 1, 0.7],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                          }}
-                        />
-                        <span>Implemented tailored SEO strategies</span>
-                      </li>
-                    </ul>
-                  </div>
+                    ))}
+                  </ul>
                 </div>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           </div>
 
-          {/* Skills Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16">
-            {skills.map((skill, index) => (
+          {/* Skills */}
+          <motion.div
+            variants={staggerContainer}
+            whileInView="animate"
+            initial="initial"
+            viewport={{ once: true }}
+            className="grid sm:grid-cols-3 gap-4 mb-12"
+          >
+            {skills.map((skill) => (
               <motion.div
                 key={skill.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                viewport={{ once: true }}
+                variants={fadeUp}
+                className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 hover:border-white/12 transition-colors"
               >
-                <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 group">
-                  <CardHeader className="text-center">
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ duration: 0.3 }}
+                <div className="flex items-center gap-2.5 mb-4">
+                  <skill.icon size={15} className="text-cyan-400" aria-hidden="true" />
+                  <h3 className="text-sm font-semibold text-zinc-200 font-display">{skill.name}</h3>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {skill.items.map((item) => (
+                    <span
+                      key={item}
+                      className="text-[11px] sm:text-xs px-2.5 py-1 bg-white/[0.04] border border-white/8 rounded-full text-zinc-500 hover:border-cyan-400/25 hover:text-cyan-300/80 transition-colors cursor-default"
                     >
-                      <motion.div
-                        animate={{
-                          rotate: [0, 360],
-                        }}
-                        transition={{
-                          duration: 20,
-                          repeat: Number.POSITIVE_INFINITY,
-                          ease: "linear",
-                        }}
-                      >
-                        <skill.icon
-                          className="w-12 h-12 mx-auto mb-4 text-white group-hover:text-gray-300 transition-colors"
-                          aria-hidden="true"
-                        />
-                      </motion.div>
-                    </motion.div>
-                    <CardTitle className="text-white">{skill.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {skill.items.map((item) => (
-                        <motion.div
-                          key={item}
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Badge
-                            variant="secondary"
-                            className="bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300"
-                          >
-                            {item}
-                          </Badge>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
+          {/* Resume — centered */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            {...fadeUp}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            whileInView="animate"
+            initial="initial"
             viewport={{ once: true }}
-            className="text-center"
+            className="flex justify-center"
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative overflow-hidden rounded-lg"
+            <a
+              href="/Girmachew_Samson.pdf"
+              download
+              className="inline-flex items-center gap-2.5 px-6 py-3 border border-white/12 text-zinc-400 text-sm font-medium rounded-full hover:border-cyan-400/30 hover:text-cyan-400 transition-all duration-150 active:scale-[0.98]"
+              aria-label="Download my resume as PDF"
             >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-white via-gray-200 to-white opacity-0"
-                initial={{ x: "-100%" }}
-                whileHover={{
-                  x: "200%",
-                  opacity: 1,
-                }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeInOut",
-                }}
-              />
-              <Button
-                asChild
-                size="lg"
-                className="relative bg-black text-white border-2 border-white/30 hover:border-white/60 transform transition-all duration-300"
-                aria-label="Download my resume as PDF"
-              >
-                <a href="/Girmachew_Samson.pdf" download>
-                  <Download className="mr-2" size={20} aria-hidden="true" />
-                  Download Resume
-                </a>
-              </Button>
-            </motion.div>
+              <Download size={15} aria-hidden="true" />
+              Download Resume
+            </a>
           </motion.div>
         </div>
       </section>
 
-      {/* Projects Section */}
+      {/* ─── Projects ───────────────────────────────────────── */}
       <section
         id="projects"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-black/20"
+        className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8"
         aria-labelledby="projects-heading"
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
+
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            {...fadeUp}
+            transition={{ duration: 0.6 }}
+            whileInView="animate"
+            initial="initial"
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="flex items-center gap-3 mb-4"
           >
+            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">02</span>
+            <div className="h-px w-10 bg-white/10" aria-hidden="true" />
             <h2
               id="projects-heading"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6"
+              className="text-3xl sm:text-4xl font-bold font-display text-zinc-50"
             >
-              Featured Projects
+              Work
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-3xl mx-auto px-4">
-              A showcase of my latest work, featuring innovative solutions and
-              cutting-edge technologies
-            </p>
           </motion.div>
 
-          <div
-            className="grid sm:grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
+          <motion.p
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.08 }}
+            whileInView="animate"
+            initial="initial"
+            viewport={{ once: true }}
+            className="text-zinc-500 text-sm sm:text-base mb-10 max-w-xl"
+          >
+            A selection of recent projects — startups, AI apps, and web platforms.
+          </motion.p>
+
+          <motion.div
+            variants={staggerContainer}
+            whileInView="animate"
+            initial="initial"
+            viewport={{ once: true }}
+            className="grid sm:grid-cols-2 gap-4 sm:gap-5"
             role="list"
             aria-label="Featured projects"
           >
             {projects.map((project, index) => (
               <motion.article
                 key={project.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                viewport={{ once: true }}
-                className="group"
+                variants={fadeUp}
+                whileHover={{ y: -4, transition: { duration: 0.2, ease: "easeOut" } }}
+                className="group bg-white/[0.03] border border-white/8 rounded-xl overflow-hidden hover:border-cyan-400/25 hover:bg-white/[0.05] transition-colors duration-300 cursor-pointer"
                 role="listitem"
                 itemScope
                 itemType="https://schema.org/CreativeWork"
               >
-                <motion.div
-                  className="relative p-[1px] rounded-lg bg-gradient-to-r from-white/20 via-white/40 to-white/20 overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0"
-                    animate={{
-                      x: ["-100%", "200%"],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    }}
+                {/* Image */}
+                <div className="relative h-52 sm:h-56 overflow-hidden bg-zinc-900">
+                  <Image
+                    src={project.image}
+                    alt={`${project.title} project screenshot`}
+                    width={600}
+                    height={300}
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
-                  <Card className="bg-black/80 border-white/20 backdrop-blur-sm hover:bg-black/90 transition-all duration-300 h-full overflow-hidden relative z-10">
-                    <div className="relative overflow-hidden">
-                      <Image
-                        src={project.image}
-                        alt={`${project.title} project screenshot`}
-                        width={600}
-                        height={300}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div
-                        className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
-                        aria-hidden="true"
-                      ></div>
-                    </div>
-                    <CardHeader>
-                      <CardTitle className="text-white text-xl" itemProp="name">
-                        {project.title}
-                      </CardTitle>
-                      <CardDescription className="text-white/70">
-                        {project.period}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <ul
-                        className="text-white/80 text-sm leading-relaxed space-y-2 list-disc list-inside"
-                        itemProp="description"
+                  <div
+                    className="absolute inset-0 bg-gradient-to-t from-[#09090b]/90 via-[#09090b]/20 to-transparent"
+                    aria-hidden="true"
+                  />
+                  <div className="absolute top-3 left-4">
+                    <span className="font-mono text-[10px] text-cyan-400/60 select-none">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 left-4">
+                    <span className="font-mono text-[10px] text-zinc-500">{project.period}</span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-5 sm:p-6">
+                  <h3
+                    className="text-base sm:text-lg font-semibold text-zinc-100 font-display mb-3"
+                    itemProp="name"
+                  >
+                    {project.title}
+                  </h3>
+
+                  <ul className="space-y-2 mb-4" itemProp="description">
+                    {project.description.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                        <span className="text-cyan-400/40 mt-0.5 flex-shrink-0 font-mono" aria-hidden="true">›</span>
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[11px] px-2.5 py-0.5 bg-cyan-400/[0.06] border border-cyan-400/12 rounded-full text-cyan-300/60 font-mono"
                       >
-                        {project.description.map((point, idx) => (
-                          <li key={idx}>{point}</li>
-                        ))}
-                      </ul>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                          <motion.div
-                            key={tag}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <Badge
-                              variant="secondary"
-                              className="bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 text-xs"
-                            >
-                              {tag}
-                            </Badge>
-                          </motion.div>
-                        ))}
-                      </div>
-                      {project.link !== "#" && (
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="relative overflow-hidden rounded-md"
-                        >
-                          <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-white via-gray-200 to-white opacity-0"
-                            initial={{ x: "-100%" }}
-                            whileHover={{
-                              x: "200%",
-                              opacity: 1,
-                            }}
-                            transition={{
-                              duration: 0.6,
-                              ease: "easeInOut",
-                            }}
-                          />
-                          <Button
-                            asChild
-                            size="sm"
-                            className="relative bg-black text-white border-2 border-white/30 hover:border-white/60 transition-all duration-300"
-                            aria-label={`Visit ${project.title} project`}
-                          >
-                            <Link
-                              href={project.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <ExternalLink
-                                className="mr-2"
-                                size={16}
-                                aria-hidden="true"
-                              />
-                              View Project
-                            </Link>
-                          </Button>
-                        </motion.div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* View Project button */}
+                  <Link
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group/link flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-white/10 rounded-lg text-sm font-medium text-zinc-400 hover:border-cyan-400/30 hover:text-cyan-400 hover:bg-cyan-400/5 transition-all duration-150"
+                    aria-label={`Visit ${project.title} project`}
+                  >
+                    <ExternalLink
+                      size={14}
+                      className="transition-transform duration-200 group-hover/link:rotate-12"
+                      aria-hidden="true"
+                    />
+                    <span>View Project</span>
+                    <span
+                      className="ml-auto translate-x-0 group-hover/link:translate-x-1 transition-transform duration-200"
+                      aria-hidden="true"
+                    >
+                      →
+                    </span>
+                  </Link>
+                </div>
               </motion.article>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Connect Section */}
+      {/* ─── Connect ────────────────────────────────────────── */}
       <section
         id="connect"
-        className="py-20 px-4 sm:px-6 lg:px-8 relative"
+        className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8"
         aria-labelledby="connect-heading"
       >
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-2xl mx-auto">
+
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            {...fadeUp}
+            transition={{ duration: 0.6 }}
+            whileInView="animate"
+            initial="initial"
             viewport={{ once: true }}
+            className="flex items-center gap-3 mb-12"
           >
+            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">03</span>
+            <div className="h-px w-10 bg-white/10" aria-hidden="true" />
             <h2
               id="connect-heading"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6"
+              className="text-3xl sm:text-4xl font-bold font-display text-zinc-50"
             >
-              Let's Connect
+              Connect
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto px-4">
-              Ready to bring your next project to life? I'd love to hear from
-              you and discuss how we can work together.
+          </motion.div>
+
+          <motion.div
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            whileInView="animate"
+            initial="initial"
+            viewport={{ once: true }}
+          >
+            <p className="text-zinc-400 text-base sm:text-lg leading-relaxed mb-8">
+              Ready to bring your next project to life? I&apos;d love to hear
+              from you and discuss how we can work together.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-12 px-4">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative overflow-hidden rounded-lg"
-              >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-white via-gray-200 to-white opacity-0"
-                  initial={{ x: "-100%" }}
-                  whileHover={{
-                    x: "200%",
-                    opacity: 1,
-                  }}
-                  transition={{
-                    duration: 0.6,
-                    ease: "easeInOut",
-                  }}
-                />
-                <Button
-                  asChild
-                  size="lg"
-                  className="relative bg-black text-white border-2 border-white/30 hover:border-white/60 transition-all duration-300"
-                  aria-label="Send me an email"
-                >
-                  <Link href="mailto:gimmys943@gmail.com">
-                    <Mail className="mr-2" size={20} aria-hidden="true" />
-                    Email Me
-                  </Link>
-                </Button>
-              </motion.div>
+            <Link
+              href="mailto:gimmys943@gmail.com"
+              className="flex items-center justify-center gap-2.5 w-full px-6 py-4 bg-cyan-400 text-[#09090b] font-semibold text-sm rounded-xl hover:bg-cyan-300 active:scale-[0.99] transition-all duration-150 font-display mb-4"
+              aria-label="Send me an email"
+            >
+              <Mail size={17} aria-hidden="true" />
+              gimmys943@gmail.com
+            </Link>
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+            <div className="flex gap-3 mb-14">
+              <Link
+                href="https://linkedin.com/in/girmachew-samson"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 border border-white/10 text-zinc-500 text-sm font-medium rounded-xl hover:border-white/18 hover:text-zinc-300 active:scale-[0.99] transition-all duration-150"
+                aria-label="Visit my LinkedIn profile"
               >
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-white/30 text-white hover:bg-white hover:text-black bg-transparent transition-all duration-300 relative overflow-hidden group"
-                  aria-label="Visit my LinkedIn profile"
-                >
-                  <Link
-                    href="https://linkedin.com/in/girmachew-samson"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white group-hover:text-black relative z-10"
-                  >
-                    <motion.div
-                      className="absolute inset-0 bg-white"
-                      initial={{ x: "-100%" }}
-                      whileHover={{ x: 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                    <Linkedin
-                      className="mr-2 relative z-10"
-                      size={20}
-                      aria-hidden="true"
-                    />
-                    <span className="relative z-10">LinkedIn</span>
-                  </Link>
-                </Button>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                <Linkedin size={16} aria-hidden="true" />
+                <span>LinkedIn</span>
+              </Link>
+              <Link
+                href="https://github.com/girmmy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 border border-white/10 text-zinc-500 text-sm font-medium rounded-xl hover:border-white/18 hover:text-zinc-300 active:scale-[0.99] transition-all duration-150"
+                aria-label="Visit my GitHub profile"
               >
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-white/30 text-white hover:bg-white hover:text-black bg-transparent transition-all duration-300 relative overflow-hidden group"
-                  aria-label="Visit my GitHub profile"
-                >
-                  <Link
-                    href="https://github.com/girmmy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white group-hover:text-black relative z-10"
-                  >
-                    <motion.div
-                      className="absolute inset-0 bg-white"
-                      initial={{ x: "-100%" }}
-                      whileHover={{ x: 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                    <Github
-                      className="mr-2 relative z-10"
-                      size={20}
-                      aria-hidden="true"
-                    />
-                    <span className="relative z-10">GitHub</span>
-                  </Link>
-                </Button>
-              </motion.div>
+                <Github size={16} aria-hidden="true" />
+                <span>GitHub</span>
+              </Link>
             </div>
 
-            <Separator className="bg-white/20 mb-8" />
+            <Separator className="bg-white/8 mb-8" />
 
-            <p className="text-white/60 text-sm px-4">
+            <p className="text-zinc-700 text-xs text-center font-mono">
               © 2026 Girmachew (Gimmy) Samson. All rights reserved.
             </p>
           </motion.div>
