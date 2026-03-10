@@ -53,7 +53,7 @@ const nextConfig = {
         ],
       },
       {
-        source: "/resume.pdf",
+        source: "/Girmachew_Samson.pdf",
         headers: [
           {
             key: "Cache-Control",

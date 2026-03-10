@@ -19,11 +19,11 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Gimmy Samson - Freelance Frontend Developer | React & AI Specialist",
-    template: "%s | Gimmy Samson Portfolio"
+    default: "Gimmy Samson — Frontend Developer & Startup Founder",
+    template: "%s | Gimmy Samson"
   },
   description:
-    "Award-winning freelance frontend developer and high school student. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, Next.js, TypeScript, AI integration, and responsive web design. 15+ custom projects delivered. View my work and get in touch!",
+    "Award-winning frontend developer & startup founder. 3rd State Webmaster 2025. React, Next.js, TypeScript & AI specialist. 15+ projects delivered. Let's build together.",
   keywords: [
     "Gimmy Samson",
     "Girmachew Samson",
@@ -95,9 +95,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
-    yandex: "your-yandex-verification-code",
-    yahoo: "your-yahoo-verification-code",
+    google: "UpJJ0yd7oIKWSY-eVp2wVDkjK3xifMy1mUgYAhAN0XY",
   },
   category: "technology",
 };
@@ -127,7 +125,7 @@ export default function RootLayout({
               alternateName: "Gimmy Samson",
               givenName: "Girmachew",
               familyName: "Samson",
-              jobTitle: "Freelance Frontend Developer",
+              jobTitle: "Frontend Developer & Startup Founder",
               description:
                 "Award-winning freelance frontend developer and high school student specializing in React, Next.js, TypeScript, AI integration, and responsive web design. Winner of 3rd State Webmaster and 5th State Software Development 2025.",
               url: "https://gimmy-samson.com",
@@ -183,7 +181,7 @@ export default function RootLayout({
               },
               hasOccupation: {
                 "@type": "Occupation",
-                name: "Freelance Frontend Developer",
+                name: "Frontend Developer & Startup Founder",
                 occupationLocation: {
                   "@type": "Country",
                   name: "United States"
@@ -208,11 +206,6 @@ export default function RootLayout({
               author: {
                 "@type": "Person",
                 name: "Girmachew Samson",
-              },
-              potentialAction: {
-                "@type": "SearchAction",
-                target: "https://gimmy-samson.com?search={search_term_string}",
-                "query-input": "required name=search_term_string",
               },
             }),
           }}

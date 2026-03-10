@@ -159,7 +159,7 @@ export default function Portfolio() {
       "@id": "https://gimmy-samson.com/#person",
       name: "Girmachew Samson",
       alternateName: "Gimmy Samson",
-      jobTitle: "Startup Founder & Frontend Developer",
+      jobTitle: "Frontend Developer & Startup Founder",
       description:
         "Startup founder and frontend developer. Founded Bantr, a live debating platform with 150+ users. Specializes in React, Next.js, TypeScript, and AI integration.",
       url: "https://gimmy-samson.com",
