@@ -66,8 +66,8 @@ const projects = [
     ],
     image: "/gimmyai-img.jpg",
     tags: ["AI/ML", "React", "Next.js", "TypeScript", "Firebase", "OpenAI API"],
-    link: "https://gimmyai.com",
-    period: "Sep 2024 – Present",
+    link: "https://gimmyai.netlify.app",
+    period: "Sep 2024 – Jan 2026",
   },
   {
     title: "SymbioAI",
@@ -136,8 +136,8 @@ const freelance = [
 ];
 
 const bantrExp = [
-  "Founded and launched a live debating platform, now in open beta with 150+ users",
-  "Built the entire product from scratch — design, frontend, and backend",
+  "Founded and launched a live debating platform, now in open beta with 250+ users",
+  "Built the entire product from scratc, including design, frontend, and backend",
   "Integrated real-time audio/video with WebRTC and live data with Supabase",
 ];
 
@@ -232,7 +232,10 @@ export default function Portfolio() {
           >
             <div className="flex items-center gap-2.5 flex-shrink-0">
               <div className="w-7 h-7 rounded-full bg-cyan-400 flex items-center justify-center">
-                <span className="text-[#09090b] font-bold text-[11px] font-display" aria-label="Gimmy Samson initials">
+                <span
+                  className="text-[#09090b] font-bold text-[11px] font-display"
+                  aria-label="Gimmy Samson initials"
+                >
                   GS
                 </span>
               </div>
@@ -300,12 +303,15 @@ export default function Portfolio() {
         role="banner"
       >
         <div className="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center text-center">
-
           {/* Profile image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.88 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.6,
+              delay: 0.05,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="mb-8 flex justify-center"
           >
             <div className="relative w-28 h-28 sm:w-36 sm:h-36">
@@ -332,7 +338,11 @@ export default function Portfolio() {
             id="hero-heading"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.7,
+              delay: 0.15,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="font-display font-bold leading-[0.92] tracking-tight text-zinc-50 mb-5"
             style={{ fontSize: "clamp(2.6rem, 11vw, 6.5rem)" }}
             itemProp="name"
@@ -358,7 +368,9 @@ export default function Portfolio() {
             className="font-mono text-xs sm:text-sm text-zinc-500 mb-10 tracking-wide"
             itemProp="description"
           >
-            <span className="text-cyan-400" aria-hidden="true">{">"}</span>{" "}
+            <span className="text-cyan-400" aria-hidden="true">
+              {">"}
+            </span>{" "}
             Startup Founder · Frontend Developer
           </motion.p>
 
@@ -403,7 +415,6 @@ export default function Portfolio() {
         aria-labelledby="about-heading"
       >
         <div className="max-w-5xl mx-auto">
-
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.6 }}
@@ -412,7 +423,9 @@ export default function Portfolio() {
             viewport={{ once: true }}
             className="flex items-center gap-3 mb-12"
           >
-            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">01</span>
+            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">
+              01
+            </span>
             <div className="h-px w-10 bg-white/10" aria-hidden="true" />
             <h2
               id="about-heading"
@@ -433,8 +446,8 @@ export default function Portfolio() {
             itemProp="description"
           >
             Hi, I&apos;m Girmachew — but call me{" "}
-            <span className="text-zinc-200 font-medium">Gimmy</span>. I&apos;m
-            a high school student (Class of 2026), startup founder, and frontend
+            <span className="text-zinc-200 font-medium">Gimmy</span>. I&apos;m a
+            high school student (Class of 2026), startup founder, and frontend
             developer building products people actually use. I founded{" "}
             <span className="text-cyan-400 font-medium">Bantr</span>, a live
             debating platform currently in open beta with{" "}
@@ -445,7 +458,6 @@ export default function Portfolio() {
 
           {/* Experience Timeline */}
           <div className="mb-14">
-
             {/* Bantr — Founder */}
             <motion.div
               {...fadeUp}
@@ -455,15 +467,22 @@ export default function Portfolio() {
               viewport={{ once: true }}
               className="flex gap-5 sm:gap-6"
             >
-              <div className="flex flex-col items-center w-5 flex-shrink-0" aria-hidden="true">
+              <div
+                className="flex flex-col items-center w-5 flex-shrink-0"
+                aria-hidden="true"
+              >
                 <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 flex-shrink-0 mt-5" />
                 <div className="w-[2px] bg-white/10 flex-1 mt-1.5" />
               </div>
               <div className="flex-1 min-w-0 pb-6">
                 <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 sm:p-6 hover:border-white/12 transition-colors">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-1">
-                    <h3 className="text-base font-semibold text-zinc-100 font-display">Founder & CEO</h3>
-                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">Feb 2026 – Present</span>
+                    <h3 className="text-base font-semibold text-zinc-100 font-display">
+                      Founder & CEO
+                    </h3>
+                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">
+                      Feb 2026 – Present
+                    </span>
                   </div>
                   <Link
                     href="https://bantr.online"
@@ -475,8 +494,16 @@ export default function Portfolio() {
                   </Link>
                   <ul className="space-y-2">
                     {bantrExp.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed">
-                        <span className="text-cyan-400/60 mt-0.5 flex-shrink-0 font-mono" aria-hidden="true">›</span>
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed"
+                      >
+                        <span
+                          className="text-cyan-400/60 mt-0.5 flex-shrink-0 font-mono"
+                          aria-hidden="true"
+                        >
+                          ›
+                        </span>
                         {item}
                       </li>
                     ))}
@@ -494,15 +521,22 @@ export default function Portfolio() {
               viewport={{ once: true }}
               className="flex gap-5 sm:gap-6"
             >
-              <div className="flex flex-col items-center w-5 flex-shrink-0" aria-hidden="true">
+              <div
+                className="flex flex-col items-center w-5 flex-shrink-0"
+                aria-hidden="true"
+              >
                 <div className="w-2.5 h-2.5 rounded-full bg-white/30 flex-shrink-0 mt-5" />
                 <div className="w-[2px] bg-white/10 flex-1 mt-1.5" />
               </div>
               <div className="flex-1 min-w-0 pb-6">
                 <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 sm:p-6 hover:border-white/12 transition-colors">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-1">
-                    <h3 className="text-base font-semibold text-zinc-100 font-display">SWE Intern</h3>
-                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">Aug 2025 – Dec 2025</span>
+                    <h3 className="text-base font-semibold text-zinc-100 font-display">
+                      SWE Intern
+                    </h3>
+                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">
+                      Aug 2025 – Dec 2025
+                    </span>
                   </div>
                   <a
                     href="https://sonaara.com/"
@@ -514,8 +548,16 @@ export default function Portfolio() {
                   </a>
                   <ul className="space-y-2">
                     {sonaara.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed">
-                        <span className="text-cyan-400/60 mt-0.5 flex-shrink-0 font-mono" aria-hidden="true">›</span>
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed"
+                      >
+                        <span
+                          className="text-cyan-400/60 mt-0.5 flex-shrink-0 font-mono"
+                          aria-hidden="true"
+                        >
+                          ›
+                        </span>
                         {item}
                       </li>
                     ))}
@@ -533,20 +575,35 @@ export default function Portfolio() {
               viewport={{ once: true }}
               className="flex gap-5 sm:gap-6"
             >
-              <div className="flex flex-col items-center w-5 flex-shrink-0" aria-hidden="true">
+              <div
+                className="flex flex-col items-center w-5 flex-shrink-0"
+                aria-hidden="true"
+              >
                 <div className="w-2.5 h-2.5 rounded-full bg-white/20 flex-shrink-0 mt-5" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 sm:p-6 hover:border-white/12 transition-colors">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-1">
-                    <h3 className="text-base font-semibold text-zinc-100 font-display">Freelance Frontend Developer</h3>
-                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">Jan 2024 – Jan 2026</span>
+                    <h3 className="text-base font-semibold text-zinc-100 font-display">
+                      Freelance Frontend Developer
+                    </h3>
+                    <span className="text-[11px] text-zinc-600 font-mono flex-shrink-0">
+                      Jan 2024 – Jan 2026
+                    </span>
                   </div>
                   <p className="text-sm text-zinc-600 mb-4">Self-Employed</p>
                   <ul className="space-y-2">
                     {freelance.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed">
-                        <span className="text-zinc-600 mt-0.5 flex-shrink-0 font-mono" aria-hidden="true">›</span>
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-sm text-zinc-400 leading-relaxed"
+                      >
+                        <span
+                          className="text-zinc-600 mt-0.5 flex-shrink-0 font-mono"
+                          aria-hidden="true"
+                        >
+                          ›
+                        </span>
                         {item}
                       </li>
                     ))}
@@ -571,8 +628,14 @@ export default function Portfolio() {
                 className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 hover:border-white/12 transition-colors"
               >
                 <div className="flex items-center gap-2.5 mb-4">
-                  <skill.icon size={15} className="text-cyan-400" aria-hidden="true" />
-                  <h3 className="text-sm font-semibold text-zinc-200 font-display">{skill.name}</h3>
+                  <skill.icon
+                    size={15}
+                    className="text-cyan-400"
+                    aria-hidden="true"
+                  />
+                  <h3 className="text-sm font-semibold text-zinc-200 font-display">
+                    {skill.name}
+                  </h3>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {skill.items.map((item) => (
@@ -617,7 +680,6 @@ export default function Portfolio() {
         aria-labelledby="projects-heading"
       >
         <div className="max-w-5xl mx-auto">
-
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.6 }}
@@ -626,7 +688,9 @@ export default function Portfolio() {
             viewport={{ once: true }}
             className="flex items-center gap-3 mb-4"
           >
-            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">02</span>
+            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">
+              02
+            </span>
             <div className="h-px w-10 bg-white/10" aria-hidden="true" />
             <h2
               id="projects-heading"
@@ -644,7 +708,8 @@ export default function Portfolio() {
             viewport={{ once: true }}
             className="text-zinc-500 text-sm sm:text-base mb-10 max-w-xl"
           >
-            A selection of recent projects — startups, AI apps, and web platforms.
+            A selection of recent projects — startups, AI apps, and web
+            platforms.
           </motion.p>
 
           <motion.div
@@ -660,7 +725,10 @@ export default function Portfolio() {
               <motion.article
                 key={project.title}
                 variants={fadeUp}
-                whileHover={{ y: -4, transition: { duration: 0.2, ease: "easeOut" } }}
+                whileHover={{
+                  y: -4,
+                  transition: { duration: 0.2, ease: "easeOut" },
+                }}
                 className="group bg-white/[0.03] border border-white/8 rounded-xl overflow-hidden hover:border-cyan-400/25 hover:bg-white/[0.05] transition-colors duration-300 cursor-pointer"
                 role="listitem"
                 itemScope
@@ -685,7 +753,9 @@ export default function Portfolio() {
                     </span>
                   </div>
                   <div className="absolute bottom-3 left-4">
-                    <span className="font-mono text-[10px] text-zinc-500">{project.period}</span>
+                    <span className="font-mono text-[10px] text-zinc-500">
+                      {project.period}
+                    </span>
                   </div>
                 </div>
 
@@ -700,8 +770,16 @@ export default function Portfolio() {
 
                   <ul className="space-y-2 mb-4" itemProp="description">
                     {project.description.map((point, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                        <span className="text-cyan-400/40 mt-0.5 flex-shrink-0 font-mono" aria-hidden="true">›</span>
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-xs sm:text-sm text-zinc-400 leading-relaxed"
+                      >
+                        <span
+                          className="text-cyan-400/40 mt-0.5 flex-shrink-0 font-mono"
+                          aria-hidden="true"
+                        >
+                          ›
+                        </span>
                         {point}
                       </li>
                     ))}
@@ -753,7 +831,6 @@ export default function Portfolio() {
         aria-labelledby="connect-heading"
       >
         <div className="max-w-2xl mx-auto">
-
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.6 }}
@@ -762,7 +839,9 @@ export default function Portfolio() {
             viewport={{ once: true }}
             className="flex items-center gap-3 mb-12"
           >
-            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">03</span>
+            <span className="font-mono text-[11px] text-cyan-400 tracking-[0.2em] select-none">
+              03
+            </span>
             <div className="h-px w-10 bg-white/10" aria-hidden="true" />
             <h2
               id="connect-heading"
