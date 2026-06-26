@@ -1,239 +1,100 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Syne, DM_Sans } from "next/font/google";
+import { Inter, DM_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
-const syne = Syne({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-inter",
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const dmMono = DM_Mono({
   subsets: ["latin"],
-  variable: "--font-body",
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-mono",
+  weight: ["400", "500"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Gimmy Samson — Frontend Developer & Startup Founder",
-    template: "%s | Gimmy Samson"
+    default: "Girmachew Samson — CS @ Georgia Tech",
+    template: "%s | Girmachew Samson",
   },
   description:
-    "Award-winning frontend developer & startup founder. 3rd State Webmaster 2025. React, Next.js, TypeScript & AI specialist. 15+ projects delivered. Let's build together.",
+    "Incoming CS student at Georgia Tech and founder of Bantr, a live debating platform with 250+ users. Building at the intersection of AI, product, and code.",
   keywords: [
-    "Gimmy Samson",
-    "Girmachew Samson",
-    "Frontend Developer",
-    "React Developer",
-    "Web Developer",
-    "Freelance Developer",
-    "Student Developer",
-    "TSA Webmaster",
-    "Parkview High School",
-    "AI Developer",
-    "JavaScript Developer",
-    "TypeScript Developer",
-    "Next.js Developer",
-    "Portfolio Website",
-    "Web Development",
-    "UI/UX Design",
-    "Responsive Design",
-    "OpenAI API",
-    "Firebase",
-    "Tailwind CSS",
+    "Gimmy Samson", "Girmachew Samson", "Georgia Tech", "CS Student",
+    "Startup Founder", "Bantr", "AI Trainer", "React Developer",
+    "Web Developer", "TypeScript Developer", "Next.js Developer", "Portfolio",
   ].join(", "),
   authors: [{ name: "Girmachew (Gimmy) Samson" }],
   creator: "Girmachew (Gimmy) Samson",
   publisher: "Girmachew (Gimmy) Samson",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
+  formatDetection: { email: false, address: false, telephone: false },
   metadataBase: new URL("https://gimmy-samson.com"),
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Gimmy Samson - Award-Winning Freelance Frontend Developer",
+    title: "Girmachew Samson — CS @ Georgia Tech · Founder of Bantr",
     description:
-      "Award-winning freelance frontend developer. 3rd State Webmaster 2025, 5th State Software Development 2025. Specializing in React, Next.js, TypeScript, and AI integration. 15+ custom projects delivered.",
+      "Incoming CS student at Georgia Tech and founder of Bantr, a live debating platform with 250+ users.",
     url: "https://gimmy-samson.com",
-    siteName: "Gimmy Samson Portfolio",
-    images: [
-      {
-        url: "https://gimmy-samson.com/gimmy-headshot.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Gimmy Samson - Award-Winning Frontend Developer and Student Leader",
-      },
-    ],
+    siteName: "Girmachew Samson",
+    images: [{ url: "https://gimmy-samson.com/gimmy-headshot.png", width: 1200, height: 630, alt: "Girmachew Samson" }],
     locale: "en_US",
     type: "profile",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gimmy Samson - Award-Winning Freelance Frontend Developer",
+    title: "Girmachew Samson — CS @ Georgia Tech",
     description:
-      "Award-winning freelance frontend developer. 3rd State Webmaster 2025, 5th State Software Development 2025. React, Next.js, TypeScript & AI specialist.",
-    images: ["https://gimmy-samson.com/gimmy-headshot.jpg"],
+      "Incoming CS student at Georgia Tech and founder of Bantr.",
+    images: ["https://gimmy-samson.com/gimmy-headshot.png"],
     creator: "@girmmy",
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
-  verification: {
-    google: "UpJJ0yd7oIKWSY-eVp2wVDkjK3xifMy1mUgYAhAN0XY",
-  },
+  verification: { google: "UpJJ0yd7oIKWSY-eVp2wVDkjK3xifMy1mUgYAhAN0XY" },
   category: "technology",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-        <meta name="theme-color" content="#09090b" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-        {/* Structured Data for Person */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+        <meta name="theme-color" content="#F8F8F6" />
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap"
+          rel="stylesheet"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
+              "@context": "https://schema.org", "@type": "Person",
               "@id": "https://gimmy-samson.com/#person",
-              name: "Girmachew Samson",
-              alternateName: "Gimmy Samson",
-              givenName: "Girmachew",
-              familyName: "Samson",
-              jobTitle: "Frontend Developer & Startup Founder",
-              description:
-                "Award-winning freelance frontend developer and high school student specializing in React, Next.js, TypeScript, AI integration, and responsive web design. Winner of 3rd State Webmaster and 5th State Software Development 2025.",
+              name: "Girmachew Samson", alternateName: "Gimmy Samson",
+              jobTitle: "CS Student & Startup Founder",
               url: "https://gimmy-samson.com",
-              image: "https://gimmy-samson.com/gimmy-headshot.jpg",
+              image: "https://gimmy-samson.com/gimmy-headshot.png",
               email: "gimmys943@gmail.com",
-              sameAs: [
-                "https://linkedin.com/in/girmachew-samson",
-                "https://github.com/girmmy",
-              ],
-              knowsAbout: [
-                "Frontend Development",
-                "React",
-                "React Native",
-                "JavaScript",
-                "TypeScript",
-                "Next.js",
-                "AI Integration",
-                "OpenAI API",
-                "Firebase",
-                "Web Design",
-                "Responsive Design",
-                "Tailwind CSS",
-                "Node.js",
-                "REST APIs"
-              ],
-              award: [
-                {
-                  "@type": "Award",
-                  name: "3rd Place State Webmaster 2025",
-                  issuedBy: {
-                    "@type": "Organization",
-                    name: "Technology Student Association"
-                  },
-                  dateAwarded: "2025"
-                },
-                {
-                  "@type": "Award",
-                  name: "5th Place State Software Development 2025",
-                  issuedBy: {
-                    "@type": "Organization",
-                    name: "Technology Student Association"
-                  },
-                  dateAwarded: "2025"
-                }
-              ],
-              alumniOf: {
-                "@type": "EducationalOrganization",
-                name: "Parkview High School",
-              },
-              worksFor: {
-                "@type": "Organization",
-                name: "Self-Employed",
-              },
-              hasOccupation: {
-                "@type": "Occupation",
-                name: "Frontend Developer & Startup Founder",
-                occupationLocation: {
-                  "@type": "Country",
-                  name: "United States"
-                },
-                skills: "React, Next.js, TypeScript, JavaScript, AI Integration, OpenAI API, Firebase, Tailwind CSS"
-              },
-            }),
-          }}
-        />
-
-        {/* Structured Data for WebSite */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: "Gimmy Samson Portfolio",
-              url: "https://gimmy-samson.com",
-              description:
-                "Portfolio website showcasing web development projects and skills",
-              author: {
-                "@type": "Person",
-                name: "Girmachew Samson",
-              },
-            }),
-          }}
-        />
-
-        {/* Structured Data for CreativeWork - Portfolio */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "CreativeWork",
-              name: "Gimmy Samson Portfolio",
-              author: {
-                "@type": "Person",
-                name: "Girmachew Samson",
-              },
-              description:
-                "Portfolio showcasing web development projects and skills",
-              url: "https://gimmy-samson.com",
-              genre: "Portfolio",
-              keywords:
-                "web development, frontend developer, React, JavaScript, portfolio",
+              sameAs: ["https://linkedin.com/in/girmachew-samson", "https://github.com/girmmy"],
+              memberOf: { "@type": "EducationalOrganization", name: "Georgia Institute of Technology" },
             }),
           }}
         />
       </head>
-      <body className={`${syne.variable} ${dmSans.variable} font-body`}>{children}</body>
+      <body className={`${inter.variable} ${dmMono.variable} font-inter`} suppressHydrationWarning>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange={false}>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
