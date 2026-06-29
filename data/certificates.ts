@@ -18,4 +18,10 @@ export const certificates: Certificate[] = [
     date: "2025",
     file: "/certificates/claude-101-certificate.pdf",
   },
+  {
+    name: "Claude Code 101",
+    issuer: "Anthropic",
+    date: "2026",
+    file: "/certificates/claude-code-101-certificate.pdf",
+  },
 ]
