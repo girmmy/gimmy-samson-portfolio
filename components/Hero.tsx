@@ -195,6 +195,26 @@ export default function Hero() {
           >
             View Work
           </button>
+          <a
+            href="/Girmachew_Samson.pdf"
+            download
+            className="font-inter font-medium text-base px-8 py-3 rounded-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              background: "var(--color-accent)",
+              color: "var(--color-bg)",
+              border: "1.5px solid var(--color-accent)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--color-accent)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--color-accent)";
+              e.currentTarget.style.color = "var(--color-bg)";
+            }}
+          >
+            Download Resume
+          </a>
           <button
             onClick={() => scrollTo("connect")}
             className="font-inter text-base transition-colors duration-150"

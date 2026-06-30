@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const navLinks = [
@@ -14,8 +14,9 @@ const navLinks = [
 ];
 
 export default function Nav() {
-  const [isOpen, setIsOpen]     = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen]           = useState(false);
+  const [scrolled, setScrolled]       = useState(false);
+  const [resumeTip, setResumeTip]     = useState(false);
   const shouldReduce             = useReducedMotion();
 
   useEffect(() => {
@@ -62,8 +63,41 @@ export default function Nav() {
             ))}
           </div>
 
-          {/* Right side: theme toggle + mobile toggle */}
+          {/* Right side: resume download + theme toggle + mobile toggle */}
           <div className="flex items-center gap-3 ml-auto">
+            <div className="relative hidden md:block">
+              <a
+                href="/Girmachew_Samson.pdf"
+                download
+                aria-label="Download Resume"
+                className="p-1 transition-colors duration-150 block"
+                style={{ color: "var(--color-muted)" }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-accent)";
+                  setResumeTip(true);
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-muted)";
+                  setResumeTip(false);
+                }}
+              >
+                <Download size={18} aria-hidden="true" />
+              </a>
+              {resumeTip && (
+                <div
+                  className="absolute top-full left-1/2 pointer-events-none whitespace-nowrap font-inter text-xs px-2 py-1 rounded"
+                  style={{
+                    transform: "translateX(-50%)",
+                    marginTop: "6px",
+                    background: "var(--color-surface)",
+                    color: "var(--color-text)",
+                    border: "1px solid var(--color-border)",
+                  }}
+                >
+                  Download Resume
+                </div>
+              )}
+            </div>
             <ThemeToggle />
             <button
               className="md:hidden p-1 transition-colors duration-150"
