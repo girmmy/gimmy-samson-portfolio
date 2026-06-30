@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { Github, Linkedin } from "lucide-react";
 import { useReducedMotion, motion } from "framer-motion";
 import FloatingIcons from "@/components/FloatingIcons";
 
@@ -38,16 +40,38 @@ export default function Hero() {
       <FloatingIcons />
 
       <div className="container-site relative z-10 pt-28 pb-28 md:pt-36 md:pb-36">
-        {/* "or Gimmy Samson" label */}
-        <motion.p
+        {/* Social icons — above name */}
+        <motion.div
           initial={shouldReduce ? {} : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="font-inter text-lg mb-4 tracking-wide"
-          style={{ color: "var(--color-muted)" }}
+          className="flex items-center gap-4 mb-4"
         >
-          or Gimmy...
-        </motion.p>
+          <Link
+            href="https://linkedin.com/in/girmachew-samson"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+            className="transition-colors duration-150"
+            style={{ color: "var(--color-muted)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
+          >
+            <Linkedin size={20} aria-hidden="true" />
+          </Link>
+          <Link
+            href="https://github.com/girmmy"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile"
+            className="transition-colors duration-150"
+            style={{ color: "var(--color-muted)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
+          >
+            <Github size={20} aria-hidden="true" />
+          </Link>
+        </motion.div>
 
         {/* Name — character stagger */}
         <h1

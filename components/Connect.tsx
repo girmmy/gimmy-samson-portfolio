@@ -1,16 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { Linkedin, Github, Mail } from "lucide-react";
+import { Linkedin, Github, Mail, Check } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
+
+const EMAIL = "gimmys943@gmail.com";
 
 export default function Connect() {
   const shouldReduce = useReducedMotion();
+  const [copied, setCopied] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   const fadeUp = (delay = 0) =>
     shouldReduce
       ? {}
       : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] } };
+
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText(EMAIL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <section id="connect" className="section-divider py-28 md:py-40">
@@ -31,18 +42,42 @@ export default function Connect() {
           Have a project in mind? I&apos;d love to hear about it.
         </motion.p>
 
-        {/* Email CTA */}
+        {/* Email CTA — click to copy */}
         <motion.div {...fadeUp(0.14)} className="mb-12">
-          <Link
-            href="mailto:gimmys943@gmail.com"
-            className="inline-flex items-center gap-3 font-inter font-medium transition-all duration-150 group"
-            style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)", color: "var(--color-body)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-body)")}
-          >
-            <Mail size={22} aria-hidden="true" />
-            gimmys943@gmail.com
-          </Link>
+          <div className="relative inline-flex flex-col items-center">
+            {/* Tooltip */}
+            <div
+              className="absolute font-code text-xs tracking-wide px-3 py-1.5 rounded pointer-events-none whitespace-nowrap transition-all duration-150"
+              style={{
+                bottom: "calc(100% + 8px)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-border)",
+                color: copied ? "var(--color-accent)" : "var(--color-muted)",
+                opacity: hovered ? 1 : 0,
+              }}
+            >
+              {copied ? "copied!" : "click to copy"}
+            </div>
+
+            <button
+              onClick={copyEmail}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              aria-label="Copy email address"
+              className="inline-flex items-center gap-3 font-inter font-medium transition-all duration-150"
+              style={{
+                fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
+                color: copied ? "var(--color-accent)" : hovered ? "var(--color-accent)" : "var(--color-body)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              {copied ? <Check size={22} aria-hidden="true" /> : <Mail size={22} aria-hidden="true" />}
+              {copied ? "Copied!" : EMAIL}
+            </button>
+          </div>
         </motion.div>
 
         {/* Social links — centered, bigger icons */}
