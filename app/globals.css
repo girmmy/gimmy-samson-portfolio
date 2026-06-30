@@ -13,8 +13,9 @@
   --color-accent:     #C47B0C;
   --color-accent-dim: rgba(196, 123, 12, 0.08);
   --color-glow:       rgba(196, 123, 12, 0.12);
+  --color-nav-scrolled-bg: rgba(248, 248, 246, 0.97);
 
-  --text-display: clamp(3.5rem, 8vw, 7rem);
+  --text-display: clamp(2.8rem, 8vw, 7rem);
   --text-h1:      clamp(2rem, 4vw, 3.5rem);
   --text-h2:      clamp(1.25rem, 2vw, 1.875rem);
   --text-body:    1.0625rem;
@@ -52,6 +53,7 @@
   --color-accent:     #F5A623;
   --color-accent-dim: rgba(245, 166, 35, 0.1);
   --color-glow:       rgba(245, 166, 35, 0.15);
+  --color-nav-scrolled-bg: rgba(10, 10, 10, 0.97);
 
   --background: 0 0% 4%;
   --foreground: 0 0% 94%;

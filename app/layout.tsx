@@ -23,11 +23,12 @@ export const metadata: Metadata = {
     template: "%s | Girmachew Samson",
   },
   description:
-    "Incoming CS student at Georgia Tech and founder of Bantr, a live debating platform with 250+ users. Building at the intersection of AI, product, and code.",
+    "CS student at Georgia Tech and founder of Bantr, a live debating platform with 250+ users. Building at the intersection of AI, product, and code.",
   keywords: [
     "Gimmy Samson", "Girmachew Samson", "Georgia Tech", "CS Student",
-    "Startup Founder", "Bantr", "AI Trainer", "React Developer",
+    "Startup Founder", "Bantr", "AI Engineer", "React Developer",
     "Web Developer", "TypeScript Developer", "Next.js Developer", "Portfolio",
+    "LinkedIn Future Possibilities Scholar", "Gates Scholarship",
   ].join(", "),
   authors: [{ name: "Girmachew (Gimmy) Samson" }],
   creator: "Girmachew (Gimmy) Samson",
@@ -38,10 +39,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Girmachew Samson — CS @ Georgia Tech · Founder of Bantr",
     description:
-      "Incoming CS student at Georgia Tech and founder of Bantr, a live debating platform with 250+ users.",
+      "CS student at Georgia Tech and founder of Bantr, a live debating platform with 250+ users.",
     url: "https://gimmy-samson.com",
     siteName: "Girmachew Samson",
-    images: [{ url: "https://gimmy-samson.com/gimmy-headshot.png", width: 1200, height: 630, alt: "Girmachew Samson" }],
+    images: [{ url: "https://gimmy-samson.com/opengraph-image", width: 1200, height: 630, alt: "Girmachew Samson" }],
     locale: "en_US",
     type: "profile",
   },
@@ -49,8 +50,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Girmachew Samson — CS @ Georgia Tech",
     description:
-      "Incoming CS student at Georgia Tech and founder of Bantr.",
-    images: ["https://gimmy-samson.com/gimmy-headshot.png"],
+      "CS student at Georgia Tech and founder of Bantr.",
+    images: ["https://gimmy-samson.com/opengraph-image"],
     creator: "@girmmy",
   },
   robots: {
@@ -67,7 +68,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <meta name="theme-color" content="#F8F8F6" />
+        <meta name="theme-color" content="#F8F8F6" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link
           href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap"
@@ -86,6 +88,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               email: "gimmys943@gmail.com",
               sameAs: ["https://linkedin.com/in/girmachew-samson", "https://github.com/girmmy"],
               memberOf: { "@type": "EducationalOrganization", name: "Georgia Institute of Technology" },
+              founder: { "@type": "Organization", name: "Bantr", description: "Live debating platform with 250+ users", url: "https://bantr.app" },
+              knowsAbout: ["Artificial Intelligence", "React", "Next.js", "TypeScript", "Python", "Startup Founding", "Product Development"],
+              award: ["LinkedIn Future Possibilities in Tech Scholar", "Teamsters Scholarship Fund Recipient", "Gates Scholarship Semi-Finalist", "AP Scholar with Distinction"],
             }),
           }}
         />

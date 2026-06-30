@@ -7,9 +7,15 @@ export type Certificate = {
 
 export const certificates: Certificate[] = [
   {
+    name: "AI Fluency: Framework & Foundations",
+    issuer: "Anthropic",
+    date: "2026",
+    url: "https://verify.skilljar.com/c/dp5w7hmff5kz",
+  },
+  {
     name: "Claude 101",
     issuer: "Anthropic",
-    date: "2025",
+    date: "2026",
     url: "https://verify.skilljar.com/c/dp5w7hmff5kz",
   },
   {

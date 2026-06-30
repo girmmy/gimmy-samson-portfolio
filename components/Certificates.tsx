@@ -44,7 +44,7 @@ export default function Certificates() {
         <div className="mt-16 pt-10" style={{ borderTop: "1px solid var(--color-border)" }}>
           <p
             className="font-code text-xs tracking-[0.2em] uppercase mb-6"
-            style={{ color: "var(--color-muted)" }}
+            style={{ color: "var(--color-accent)" }}
           >
             awards &amp; honors
           </p>

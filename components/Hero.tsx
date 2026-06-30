@@ -57,7 +57,7 @@ export default function Hero() {
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
           >
-            <Linkedin size={20} aria-hidden="true" />
+            <Linkedin size={24} aria-hidden="true" />
           </Link>
           <Link
             href="https://github.com/girmmy"
@@ -69,7 +69,7 @@ export default function Hero() {
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
           >
-            <Github size={20} aria-hidden="true" />
+            <Github size={24} aria-hidden="true" />
           </Link>
         </motion.div>
 

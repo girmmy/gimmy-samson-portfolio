@@ -32,11 +32,10 @@ export default function Nav() {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50"
         style={{
-          background: scrolled
-            ? "rgba(var(--color-bg-raw, 248,248,246), 0.97)"
-            : "transparent",
+          transition: "border-color 300ms ease, backdrop-filter 300ms ease",
+          background: scrolled ? "var(--color-nav-scrolled-bg)" : "transparent",
           backdropFilter: scrolled ? "blur(12px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
           borderBottom: scrolled ? "1px solid var(--color-border)" : "1px solid transparent",

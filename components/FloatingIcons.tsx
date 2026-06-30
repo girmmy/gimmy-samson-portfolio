@@ -40,7 +40,7 @@ export default function FloatingIcons() {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 pointer-events-none overflow-hidden"
+      className="hidden md:block absolute inset-0 pointer-events-none overflow-hidden"
     >
       {ICONS.map((item) => (
         <motion.div
