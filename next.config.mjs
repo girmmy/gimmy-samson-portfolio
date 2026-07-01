@@ -44,7 +44,7 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://*.fontshare.com; style-src-elem 'self' 'unsafe-inline' https://*.fontshare.com; font-src 'self' data: https://*.fontshare.com; img-src 'self' data: https:; connect-src 'self' https: ws: wss:; frame-src https:; frame-ancestors 'none';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; connect-src 'self' https: ws: wss:; frame-src https:; frame-ancestors 'none';",
           },
           {
             key: "Strict-Transport-Security",

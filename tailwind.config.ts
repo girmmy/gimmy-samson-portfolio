@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        clash: ["Clash Display", "sans-serif"],
+        clash: ["var(--font-clash)", "Clash Display", "sans-serif"],
         inter: ["var(--font-inter)", "sans-serif"],
         code: ["var(--font-mono)", "DM Mono", "monospace"],
       },

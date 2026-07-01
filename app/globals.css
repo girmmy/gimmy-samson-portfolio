@@ -101,7 +101,7 @@
 }
 
 /* ─── Typography utilities ──────────────────────────────────── */
-.font-clash { font-family: 'Clash Display', sans-serif; }
+.font-clash { font-family: var(--font-clash), 'Clash Display', sans-serif; }
 .font-code  { font-family: var(--font-mono), 'DM Mono', monospace; }
 .font-inter { font-family: var(--font-inter), Inter, sans-serif; }
 

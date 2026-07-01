@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Github, Linkedin } from "lucide-react";
 import { useReducedMotion, motion } from "framer-motion";
 import FloatingIcons from "@/components/FloatingIcons";
+import DeferredMount from "@/components/DeferredMount";
 
 const WORDS = ["Girmachew", "Samson"];
 const FULL_NAME = WORDS.join(" ");
@@ -36,8 +37,10 @@ export default function Hero() {
         }}
       />
 
-      {/* Floating tech icons (right side) */}
-      <FloatingIcons />
+      {/* Floating tech icons (right side) — deferred so they don't block initial paint */}
+      <DeferredMount>
+        <FloatingIcons />
+      </DeferredMount>
 
       <div className="container-site relative z-10 pt-28 pb-28 md:pt-36 md:pb-36">
         {/* Social icons — above name */}
