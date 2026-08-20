@@ -12,6 +12,19 @@ export type Project = {
 export const projects: Project[] = [
   {
     index: '01',
+    title: 'Agent Opportunity Tracker',
+    year: '2026',
+    link: 'https://gimmy-tracker.vercel.app',
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind', 'Claude Agent'],
+    description: [
+      'Built an open-source, self-hosted tracker for internships, jobs, and programs that doubles as a Claude/Codex agent skill',
+      'Agent sweeps the inbox on a schedule, updates application status, rates fit against postings, and tailors a résumé per listing',
+      'Architected the full stack — Next.js 16 App Router, Supabase/Postgres, and a bearer-token agent API — with password-gated single-user auth',
+    ],
+    image: '/agent-opportunity-tracker-img.webp',
+  },
+  {
+    index: '02',
     title: 'Bantr',
     year: '2026',
     link: 'https://bantr.online',
@@ -25,7 +38,7 @@ export const projects: Project[] = [
     image: '/bantr-img.png',
   },
   {
-    index: '02',
+    index: '03',
     title: 'Scholarlink',
     year: '2025',
     link: 'https://thescholarlink.netlify.app',
@@ -38,7 +51,7 @@ export const projects: Project[] = [
     image: '/scholarlink-img.png',
   },
   {
-    index: '03',
+    index: '04',
     title: 'Transvero',
     year: '2025',
     link: 'https://transvero.netlify.app/',
@@ -51,7 +64,7 @@ export const projects: Project[] = [
     image: '/transvero-img.jpg',
   },
   {
-    index: '04',
+    index: '05',
     title: 'GimmyAI',
     year: '2024',
     link: 'https://gimmyai.netlify.app',
@@ -64,7 +77,7 @@ export const projects: Project[] = [
     image: '/gimmyai-img.jpg',
   },
   {
-    index: '05',
+    index: '06',
     title: 'SymbioAI',
     year: '2024',
     link: 'https://symbioai.netlify.app',
@@ -77,7 +90,7 @@ export const projects: Project[] = [
     image: '/symbioai-img.jpg',
   },
   {
-    index: '06',
+    index: '07',
     title: 'ParkviewTSA Website',
     year: '2024',
     link: 'https://parkviewtsa.org',
