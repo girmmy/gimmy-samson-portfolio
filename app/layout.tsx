@@ -84,20 +84,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org", "@type": "Person",
-              "@id": "https://gimmy-samson.com/#person",
-              name: "Girmachew Samson", alternateName: "Gimmy Samson",
-              jobTitle: "CS Student & Startup Founder",
-              url: "https://gimmy-samson.com",
-              image: "https://gimmy-samson.com/gimmy-headshot.png",
-              email: "gimmys943@gmail.com",
-              sameAs: ["https://linkedin.com/in/girmachew-samson", "https://github.com/girmmy"],
-              memberOf: { "@type": "EducationalOrganization", name: "Georgia Institute of Technology" },
-              founder: { "@type": "Organization", name: "Bantr", description: "Live debating platform with 250+ users", url: "https://bantr.app" },
-              knowsAbout: ["Artificial Intelligence", "React", "Next.js", "TypeScript", "Python", "Startup Founding", "Product Development"],
-              award: ["LinkedIn Future Possibilities in Tech Scholar", "Teamsters Scholarship Fund Recipient", "Gates Scholarship Semi-Finalist", "AP Scholar with Distinction"],
-            }),
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org", "@type": "Person",
+                "@id": "https://gimmy-samson.com/#person",
+                name: "Girmachew Samson", alternateName: "Gimmy Samson",
+                jobTitle: "CS Student & Startup Founder",
+                url: "https://gimmy-samson.com",
+                image: "https://gimmy-samson.com/gimmy-headshot.png",
+                email: "gimmys943@gmail.com",
+                sameAs: ["https://linkedin.com/in/girmachew-samson", "https://github.com/girmmy"],
+                memberOf: { "@type": "EducationalOrganization", name: "Georgia Institute of Technology" },
+                founder: { "@type": "Organization", name: "Bantr", description: "Live debating platform with 250+ users", url: "https://bantr.app" },
+                knowsAbout: ["Artificial Intelligence", "React", "Next.js", "TypeScript", "Python", "Startup Founding", "Product Development"],
+                award: ["LinkedIn Future Possibilities in Tech Scholar", "Teamsters Scholarship Fund Recipient", "Gates Scholarship Semi-Finalist", "AP Scholar with Distinction"],
+              },
+              {
+                "@context": "https://schema.org", "@type": "WebSite",
+                "@id": "https://gimmy-samson.com/#website",
+                url: "https://gimmy-samson.com",
+                name: "Girmachew Samson",
+                description: "Portfolio of Girmachew (Gimmy) Samson — CS student at Georgia Tech and founder of Bantr.",
+                inLanguage: "en-US",
+                about: { "@id": "https://gimmy-samson.com/#person" },
+              },
+            ]),
           }}
         />
       </head>

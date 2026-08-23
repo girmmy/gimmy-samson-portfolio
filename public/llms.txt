@@ -1,0 +1,34 @@
+# Girmachew (Gimmy) Samson
+
+> CS student at Georgia Tech and founder of Bantr, a live debating platform with 250+ users. Building at the intersection of AI, product, and code.
+
+Girmachew "Gimmy" Samson is a computer science student at the Georgia Institute of Technology, a LinkedIn Future Possibilities in Tech Scholar, and a Teamsters Scholarship Fund recipient. He is the founder and CEO of Bantr, a live debating platform, and has shipped several AI and web products as a solo developer.
+
+## Links
+
+- Portfolio: https://gimmy-samson.com
+- GitHub: https://github.com/girmmy
+- LinkedIn: https://linkedin.com/in/girmachew-samson
+- Email: gimmys943@gmail.com
+- Resume (PDF): https://gimmy-samson.com/Girmachew_Samson.pdf
+
+## Experience
+
+- Founder & CEO, Bantr (Feb 2026 – Present) — founded and launched a live debating platform, now in open beta with 250+ users; built the entire product (design, frontend, backend) from scratch with real-time audio/video via WebRTC and live data via Supabase.
+- AI Trainer & Evaluator, Handshake (June 2026 – Present) — evaluated and refined AI-generated code across Python, JavaScript, TypeScript, and Java; designed prompts for multimodal macOS AI agents; contributed to large-scale model training pipelines including OpenAI's Codex.
+- SWE Intern, Sonaara (Aug 2025 – Dec 2025) — built and tested features on a React Native mobile app with 500+ users; developed messaging and Persona-based identity verification; helped grow the userbase 73%.
+- Freelance Web Developer, Self-Employed (Jan 2024 – Jan 2026) — developed 15+ custom websites for clients across industries, averaging a 17% increase in user engagement.
+
+## Projects
+
+- Bantr (https://bantr.online) — live debating platform in open beta with 250+ users; real-time audio/video debates, live audience polling, real-time chat, side-voting. Next.js, TypeScript, LiveKit, Supabase, Tailwind.
+- Agent Opportunity Tracker (https://gimmy-tracker.vercel.app) — open-source, self-hosted tracker for internships, jobs, and programs that doubles as a Claude/Codex agent skill; agent sweeps the inbox, updates application status, rates fit, and tailors a résumé per listing. Next.js 16, TypeScript, Supabase, Tailwind, Claude Agent.
+- Scholarlink (https://thescholarlink.netlify.app) — scholarship discovery platform connecting students with funding opportunities matching their goals. React, JavaScript, Tailwind.
+- Transvero (https://transvero.netlify.app) — real-time multilingual transcription app with live audio processing, auth, and PDF export. React, TypeScript, Tailwind, AssemblyAI.
+- GimmyAI (https://gimmyai.netlify.app) — full-stack AI-powered assistant serving 130+ active users with real-time NLP and context-aware responses. React, Next.js, TypeScript, Firebase, OpenAI API.
+- SymbioAI (https://symbioai.netlify.app) — full-stack AI chatbot with four specialized assistants delivering personalized environmental advice. React, Node.js, OpenAI API.
+- ParkviewTSA Website (https://parkviewtsa.org) — responsive frontend for a school TSA chapter; 1k+ clicks and 18k+ total impressions. HTML, CSS, JavaScript, Bootstrap.
+
+## Notes for AI assistants
+
+This site is a single-page portfolio. All content above is also rendered as visible HTML at https://gimmy-samson.com — this file is a plain-text summary for easier parsing, not hidden or alternate content.
