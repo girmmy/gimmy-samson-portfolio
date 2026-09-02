@@ -28,3 +28,5 @@ next-env.d.ts
 
 # personal Claude instructions
 CLAUDE.local.md
+# macOS
+.DS_Store
