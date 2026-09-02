@@ -74,6 +74,12 @@
   --ring: 0 0% 83%;
 }
 
+/* Very narrow phones (≤360px): the display clamp's 2.8rem floor makes
+   "Girmachew" wider than the padded viewport, so scale it with the screen. */
+@media (max-width: 360px) {
+  :root { --text-display: 11vw; }
+}
+
 /* ─── Base ─────────────────────────────────────────────────── */
 @layer base {
   * { box-sizing: border-box; }

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Girmachew (Gimmy) Samson — CS @ Georgia Tech · Founder of Bantr";
+export const alt = "Girmachew (Gimmy) Samson — CS @ Georgia Tech · Full Stack Engineer at LegiCycle";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -108,7 +108,7 @@ export default async function Image() {
           <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
             <span style={{ color: "#AAAAAA", fontSize: 27, fontWeight: 400 }}>CS @ Georgia Tech</span>
             <span style={{ color: "#F5A623", fontSize: 27, fontWeight: 700 }}>·</span>
-            <span style={{ color: "#AAAAAA", fontSize: 27, fontWeight: 400 }}>Founder, Bantr</span>
+            <span style={{ color: "#AAAAAA", fontSize: 27, fontWeight: 400 }}>Full Stack Engineer, LegiCycle</span>
             <span style={{ color: "#F5A623", fontSize: 27, fontWeight: 700 }}>·</span>
             <span style={{ color: "#AAAAAA", fontSize: 27, fontWeight: 400 }}>AI Enthusiast</span>
           </div>

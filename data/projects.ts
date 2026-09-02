@@ -12,6 +12,19 @@ export type Project = {
 export const projects: Project[] = [
   {
     index: '01',
+    title: 'Google Tasks MCP Server',
+    year: '2026',
+    link: 'https://github.com/girmmy/google-tasks-mcp-server',
+    tags: ['TypeScript', 'MCP', 'Node.js', 'Google API', 'OAuth'],
+    description: [
+      'Published the open-source MCP server for Google Tasks to npm and the MCP registry, filling the gap left by the lack of an official one',
+      'Shipped 14 tools covering full CRUD on task lists and tasks, plus reordering, re-parenting, cross-list moves, and real due dates',
+      'Built a local OAuth installed-app flow so credentials never leave the user\'s machine — no third-party backend, Zod-validated schemas throughout',
+    ],
+    image: '/google-tasks-mcp-img.webp',
+  },
+  {
+    index: '02',
     title: 'Agent Opportunity Tracker',
     year: '2026',
     link: 'https://gimmy-tracker.vercel.app',
@@ -24,7 +37,7 @@ export const projects: Project[] = [
     image: '/agent-opportunity-tracker-img.webp',
   },
   {
-    index: '02',
+    index: '03',
     title: 'Bantr',
     year: '2026',
     link: 'https://bantr.online',
@@ -38,7 +51,7 @@ export const projects: Project[] = [
     image: '/bantr-img.png',
   },
   {
-    index: '03',
+    index: '04',
     title: 'Scholarlink',
     year: '2025',
     link: 'https://thescholarlink.netlify.app',
@@ -51,7 +64,7 @@ export const projects: Project[] = [
     image: '/scholarlink-img.png',
   },
   {
-    index: '04',
+    index: '05',
     title: 'Transvero',
     year: '2025',
     link: 'https://transvero.netlify.app/',
@@ -64,7 +77,7 @@ export const projects: Project[] = [
     image: '/transvero-img.jpg',
   },
   {
-    index: '05',
+    index: '06',
     title: 'GimmyAI',
     year: '2024',
     link: 'https://gimmyai.netlify.app',
@@ -77,7 +90,7 @@ export const projects: Project[] = [
     image: '/gimmyai-img.jpg',
   },
   {
-    index: '06',
+    index: '07',
     title: 'SymbioAI',
     year: '2024',
     link: 'https://symbioai.netlify.app',
@@ -90,7 +103,7 @@ export const projects: Project[] = [
     image: '/symbioai-img.jpg',
   },
   {
-    index: '07',
+    index: '08',
     title: 'ParkviewTSA Website',
     year: '2024',
     link: 'https://parkviewtsa.org',

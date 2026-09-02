@@ -7,16 +7,20 @@ import { useState } from "react";
 
 const skills = [
   {
-    label: "Frontend",
-    items: ["React", "React Native", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS", "HTML & CSS", "Bootstrap"],
+    label: "Languages",
+    items: ["Python", "TypeScript", "JavaScript", "Java", "SQL"],
   },
   {
-    label: "Backend",
-    items: ["Node.js", "Python", "Java", "REST APIs", "Firebase", "Supabase"],
+    label: "Frameworks & Tools",
+    items: ["React", "React Native", "Next.js", "Node.js", "Django / DRF", "PostgreSQL", "Redis", "Supabase"],
   },
   {
-    label: "AI & Tools",
-    items: ["OpenAI API", "Claude API", "Figma", "Git & GitHub", "VS Code", "jQuery"],
+    label: "Cloud & Infrastructure",
+    items: ["AWS (ECS, Cognito, RDS)", "Terraform", "Docker", "Doppler", "Vercel"],
+  },
+  {
+    label: "AI/ML & Security",
+    items: ["Claude API", "OpenAI API", "RAG", "Model Context Protocol", "NIST 800-53", "OWASP"],
   },
 ];
 
@@ -71,15 +75,16 @@ export default function About() {
               className="font-inter text-lg leading-relaxed mb-12"
               style={{ color: "var(--color-body)" }}
             >
-              Hi, I&apos;m Girmachew — Gimmy for short. I&apos;m an incoming CS student at Georgia Tech
-              and the founder of Bantr, a live debating platform with 250+ users.
-              I&apos;m currently deep in the AI space as a trainer and evaluator, working on
-              model alignment and prompt engineering across real production pipelines.
+              Hi, I&apos;m Girmachew — Gimmy for short. I&apos;m a CS student at Georgia Tech
+              and a full stack engineer at LegiCycle, where I work on the AI platform legislators
+              use to research, draft, and stress-test bills — hardening a live AWS deployment and
+              expanding its RAG research assistant across state and federal law. Before that I
+              founded Bantr, a live debating platform that grew to 250+ users in open beta.
               I build things.
             </motion.p>
 
             {/* Skills — bigger */}
-            <motion.div {...fadeUp(0.18)} className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
+            <motion.div {...fadeUp(0.18)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
               {skills.map((group) => (
                 <div key={group.label}>
                   <p className="font-code text-[11px] tracking-[0.25em] uppercase mb-4" style={{ color: "var(--color-muted)" }}>

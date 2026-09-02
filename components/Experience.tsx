@@ -101,6 +101,7 @@ function ExperienceItem({ exp, index, shouldReduce }: { exp: ExpType; index: num
         <p className="font-inter text-sm mb-5" style={{ color: "var(--color-muted)" }}>{exp.company}</p>
       )}
 
+      {exp.bullets.length > 0 && (
       <ul className="space-y-3">
         {exp.bullets.map((bullet, j) => (
           <li key={j} className="font-inter text-base leading-relaxed flex items-start gap-3"
@@ -110,6 +111,7 @@ function ExperienceItem({ exp, index, shouldReduce }: { exp: ExpType; index: num
           </li>
         ))}
       </ul>
+      )}
     </motion.div>
   );
 }

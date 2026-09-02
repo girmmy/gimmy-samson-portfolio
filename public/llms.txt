@@ -1,8 +1,8 @@
 # Girmachew (Gimmy) Samson
 
-> CS student at Georgia Tech and founder of Bantr, a live debating platform with 250+ users. Building at the intersection of AI, product, and code.
+> CS student at Georgia Tech and full stack engineer at LegiCycle, an AI platform for legislative research and drafting. Building at the intersection of AI, product, and code.
 
-Girmachew "Gimmy" Samson is a computer science student at the Georgia Institute of Technology, a LinkedIn Future Possibilities in Tech Scholar, and a Teamsters Scholarship Fund recipient. He is the founder and CEO of Bantr, a live debating platform, and has shipped several AI and web products as a solo developer.
+Girmachew "Gimmy" Samson is a computer science student at the Georgia Institute of Technology, a LinkedIn Future Possibilities in Tech Scholar, and a Teamsters Scholarship Fund recipient. He is a full stack engineer at LegiCycle, where he works on the AI platform legislators use to research, draft, and stress-test bills, and has shipped several AI and web products as a solo developer.
 
 ## Links
 
@@ -14,13 +14,16 @@ Girmachew "Gimmy" Samson is a computer science student at the Georgia Institute 
 
 ## Experience
 
-- Founder & CEO, Bantr (Feb 2026 – Present) — founded and launched a live debating platform, now in open beta with 250+ users; built the entire product (design, frontend, backend) from scratch with real-time audio/video via WebRTC and live data via Supabase.
-- AI Trainer & Evaluator, Handshake (June 2026 – Present) — evaluated and refined AI-generated code across Python, JavaScript, TypeScript, and Java; designed prompts for multimodal macOS AI agents; contributed to large-scale model training pipelines including OpenAI's Codex.
-- SWE Intern, Sonaara (Aug 2025 – Dec 2025) — built and tested features on a React Native mobile app with 500+ users; developed messaging and Persona-based identity verification; helped grow the userbase 73%.
-- Freelance Web Developer, Self-Employed (Jan 2024 – Jan 2026) — developed 15+ custom websites for clients across industries, averaging a 17% increase in user engagement.
+- Full Stack Engineer, LegiCycle (Aug 2026 – Present) — building on the AI platform legislators use to research, draft, and stress-test bills; audits a live AWS deployment against NIST 800-53 and OWASP (30+ high-severity vulnerabilities closed, secrets migrated to Doppler across Dockerized services) and expanded its PostgreSQL/Redis-backed RAG research assistant from Georgia-only to Georgia, Delaware, and federal law.
+- Member, ColorStack (Aug 2026 – Present) — member of the non-profit connecting Black and Latinx students to opportunities in computer science.
+- AI Trainer & Evaluator, Handshake (June 2026 – July 2026) — evaluated and refined AI-generated code across Python, JavaScript, TypeScript, and Java; designed prompts for multimodal macOS AI agents; contributed to large-scale model training pipelines including OpenAI's Codex.
+- Founder & CEO, Bantr (Feb 2026 – Aug 2026) — founded and launched a live debating platform that reached open beta with 250+ users; built the entire product (design, frontend, backend) from scratch with real-time audio/video via WebRTC and live data via Supabase.
+- Software Engineer Intern, Sonaara (Aug 2025 – Dec 2025) — shipped React Native features to a production app with 600+ users; built messaging and Persona-based identity verification; helped grow the userbase 73%.
+- Freelance Web Developer, Self-Employed (Jan 2023 – Jan 2026) — built 20+ full-stack websites for clients across industries with Next.js, React, and Node.js, averaging a 17% increase in user engagement.
 
 ## Projects
 
+- Google Tasks MCP Server (https://github.com/girmmy/google-tasks-mcp-server) — open-source Model Context Protocol server for Google Tasks, published to npm as @girmmy/google-tasks-mcp-server and listed in the MCP registry; 14 tools for full read/write access to task lists and tasks (create, update, complete, delete, move, real due dates) from Claude Desktop, Claude Code, Codex, Cursor, or any MCP client, with a local OAuth flow and no third-party backend. TypeScript, Node.js, Google Tasks API, OAuth.
 - Bantr (https://bantr.online) — live debating platform in open beta with 250+ users; real-time audio/video debates, live audience polling, real-time chat, side-voting. Next.js, TypeScript, LiveKit, Supabase, Tailwind.
 - Agent Opportunity Tracker (https://gimmy-tracker.vercel.app) — open-source, self-hosted tracker for internships, jobs, and programs that doubles as a Claude/Codex agent skill; agent sweeps the inbox, updates application status, rates fit, and tailors a résumé per listing. Next.js 16, TypeScript, Supabase, Tailwind, Claude Agent.
 - Scholarlink (https://thescholarlink.netlify.app) — scholarship discovery platform connecting students with funding opportunities matching their goals. React, JavaScript, Tailwind.

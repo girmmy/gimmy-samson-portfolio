@@ -20,7 +20,7 @@ export default function Page() {
       </DeferredMount>
       <Nav />
 
-      <main id="main-content" style={{ background: "var(--color-bg)", minHeight: "100vh" }}>
+      <main id="main-content" style={{ background: "var(--color-bg)", minHeight: "100dvh" }}>
         <Hero />
         <About />
         <Experience />

@@ -19,7 +19,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden"
+      className="relative min-h-[100dvh] flex items-center overflow-hidden"
       aria-labelledby="hero-heading"
     >
       {/* Ambient background glow */}
@@ -42,7 +42,7 @@ export default function Hero() {
         <FloatingIcons />
       </DeferredMount>
 
-      <div className="container-site relative z-10 pt-28 pb-28 md:pt-36 md:pb-36">
+      <div className="container-site w-full min-w-0 relative z-10 pt-28 pb-28 md:pt-36 md:pb-36">
         {/* Social icons — above name */}
         <motion.div
           initial={shouldReduce ? {} : { opacity: 0 }}
@@ -160,7 +160,7 @@ export default function Hero() {
           >
             ·
           </motion.span>
-          <span>Founder, Bantr</span>
+          <span>Full Stack Engineer, LegiCycle</span>
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
