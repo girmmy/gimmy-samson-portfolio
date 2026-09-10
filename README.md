@@ -100,7 +100,7 @@ Frontend website for Parkview High School's Technology Student Association. Boos
 
 **Tech Stack:** HTML, CSS, JavaScript, Bootstrap, GitHub
 
-### [GimmyAI](https://gimmyai.com)
+### [GimmyAI](https://gimmyai.netlify.app)
 
 **2024 – Present**
 
