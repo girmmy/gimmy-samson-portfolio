@@ -1,147 +1,150 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { Menu, X, Download } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { gsap, useGSAP, MQ } from "@/lib/gsap";
 
-const LINKS = [
-  { id: "about", label: "Profile" },
-  { id: "experience", label: "Experience" },
-  { id: "work", label: "Work" },
-  { id: "credentials", label: "Credentials" },
-  { id: "connect", label: "Contact" },
+const navLinks = [
+  { label: "home",         href: "hero" },
+  { label: "about",        href: "about" },
+  { label: "work",         href: "work" },
+  { label: "certificates", href: "certificates" },
+  { label: "connect",      href: "connect" },
 ];
 
 export default function Nav() {
-  const root = useRef<HTMLElement>(null);
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen]           = useState(false);
+  const [scrolled, setScrolled]       = useState(false);
+  const [resumeTip, setResumeTip]     = useState(false);
+  const shouldReduce             = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 32);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.removeProperty("overflow");
-    };
-  }, [open]);
-
-  useGSAP(
-    () => {
-      if (!open) return;
-      const mm = gsap.matchMedia();
-      mm.add(MQ.isMotionOk, () => {
-        const tl = gsap.timeline();
-        tl.fromTo(".sheet-item", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05 });
-        return () => tl.kill();
-      });
-      return () => mm.revert();
-    },
-    { scope: root, dependencies: [open] },
-  );
-
-  const go = (id: string) => {
-    setOpen(false);
+  const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setIsOpen(false);
   };
 
   return (
     <>
       <header
-        ref={root}
-        className="fixed top-0 inset-x-0 z-50"
+        className="fixed top-0 left-0 right-0 z-50"
         style={{
-          background: scrolled ? "color-mix(in srgb, var(--paper) 92%, transparent)" : "transparent",
-          backdropFilter: scrolled ? "blur(8px)" : "none",
-          borderBottom: `1px solid ${scrolled ? "var(--rule)" : "transparent"}`,
-          transition: "background-color 0.25s ease, border-color 0.25s ease",
+          transition: "border-color 300ms ease, backdrop-filter 300ms ease",
+          background: scrolled ? "var(--color-nav-scrolled-bg)" : "transparent",
+          backdropFilter: scrolled ? "blur(12px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
+          borderBottom: scrolled ? "1px solid var(--color-border)" : "1px solid transparent",
         }}
       >
-        <div className="container-site flex items-center justify-between h-16">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-display"
-            style={{
-              fontSize: "var(--t-base)",
-              color: "var(--ink)",
-              background: "none",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-            }}
-            aria-label="Back to top"
-          >
-            G.&nbsp;Samson
-          </button>
-
-          <nav className="hidden md:flex items-center gap-8" aria-label="Sections">
-            {LINKS.map((l) => (
+        <nav
+          className="container-site flex items-center justify-between h-14"
+          role="navigation"
+          aria-label="Main navigation"
+        >
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
               <button
-                key={l.id}
-                onClick={() => go(l.id)}
-                className="label"
-                style={{ color: "var(--ink-3)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-3)")}
+                key={link.href}
+                onClick={() => scrollTo(link.href)}
+                className="font-inter text-[1.05rem] transition-colors duration-150 lowercase"
+                style={{ color: "var(--color-muted)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
               >
-                {l.label}
+                {link.label}
               </button>
             ))}
-            <ThemeToggle />
-          </nav>
-
-          <div className="flex md:hidden items-center gap-6">
-            <ThemeToggle />
-            <button
-              className="label"
-              style={{ color: "var(--ink)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-            >
-              {open ? "Close" : "Menu"}
-            </button>
           </div>
-        </div>
-      </header>
 
-      {open && (
-        <div
-          className="fixed inset-0 z-40 md:hidden flex flex-col justify-center px-6"
-          style={{ background: "var(--paper)" }}
-        >
-          <nav className="flex flex-col" aria-label="Sections">
-            {LINKS.map((l, i) => (
-              <button
-                key={l.id}
-                onClick={() => go(l.id)}
-                className="sheet-item font-display text-left py-4 flex items-baseline gap-5"
-                style={{
-                  fontSize: "var(--t-2xl)",
-                  color: "var(--ink)",
-                  background: "none",
-                  border: "none",
-                  borderTop: i === 0 ? "none" : "1px solid var(--rule)",
-                  cursor: "pointer",
+          {/* Right side: resume download + theme toggle + mobile toggle */}
+          <div className="flex items-center gap-3 ml-auto">
+            <div className="relative hidden md:block">
+              <a
+                href="/Girmachew_Samson.pdf"
+                download
+                aria-label="Download Resume"
+                className="p-1 transition-colors duration-150 block"
+                style={{ color: "var(--color-muted)" }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-accent)";
+                  setResumeTip(true);
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-muted)";
+                  setResumeTip(false);
                 }}
               >
-                <span className="label tnum" style={{ color: "var(--ink-3)" }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                {l.label}
-              </button>
-            ))}
-          </nav>
-        </div>
-      )}
+                <Download size={18} aria-hidden="true" />
+              </a>
+              {resumeTip && (
+                <div
+                  className="absolute top-full left-1/2 pointer-events-none whitespace-nowrap font-inter text-xs px-2 py-1 rounded"
+                  style={{
+                    transform: "translateX(-50%)",
+                    marginTop: "6px",
+                    background: "var(--color-surface)",
+                    color: "var(--color-text)",
+                    border: "1px solid var(--color-border)",
+                  }}
+                >
+                  Download Resume
+                </div>
+              )}
+            </div>
+            <ThemeToggle />
+            <button
+              className="md:hidden p-1 transition-colors duration-150"
+              style={{ color: "var(--color-muted)" }}
+              onClick={() => setIsOpen((v) => !v)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={shouldReduce ? { opacity: 0 } : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center md:hidden"
+            style={{ background: "var(--color-bg)", backdropFilter: "blur(16px)" }}
+            role="dialog"
+            aria-label="Mobile navigation"
+          >
+            <div className="flex flex-col items-center gap-9">
+              {navLinks.map((link, i) => (
+                <motion.button
+                  key={link.href}
+                  initial={shouldReduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.06, duration: 0.22 }}
+                  onClick={() => scrollTo(link.href)}
+                  className="font-clash lowercase"
+                  style={{ fontSize: "clamp(2rem, 8vw, 3rem)", color: "var(--color-text)" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text)")}
+                >
+                  {link.label}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

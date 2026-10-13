@@ -1,52 +1,63 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { gsap, useGSAP, MQ, EASE } from "@/lib/gsap";
 import Link from "next/link";
 import Image from "next/image";
-import { gsap, ScrollTrigger, useGSAP, MQ, EASE } from "@/lib/gsap";
-import { projects, type Project } from "@/data/projects";
-import SectionHeading from "@/components/SectionHeading";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { ExternalLink, Youtube } from "lucide-react";
+import { projects } from "@/data/projects";
 
 export default function Projects() {
-  const root = useRef<HTMLElement>(null);
-  const preview = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState<Project | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const shouldReduce = useReducedMotion();
+  const root = useRef<HTMLDivElement>(null);
 
+  // Magnetic hover on the desktop rows. quickTo reuses one tween per
+  // property instead of allocating a new one per event, which is what
+  // keeps this smooth rather than stuttery. Framer Motion still owns the
+  // rows' entrance, and it never touches these child transforms, so the
+  // two engines stay out of each other's way.
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
-      mm.add(MQ.isMotionOk, () => {
-        const rows = gsap.utils.toArray<HTMLElement>(".w-row");
-        gsap.set(rows, { autoAlpha: 0, y: 18 });
-        const triggers = ScrollTrigger.batch(rows, {
-          start: "top 92%",
-          onEnter: (b) =>
-            gsap.to(b, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.06, ease: EASE, overwrite: true }),
-        });
-        return () => {
-          triggers.forEach((t) => t.kill());
-          gsap.set(rows, { clearProps: "all" });
-        };
-      });
-
-      /* The preview plate trails the cursor across the index. It is not
-         decoration — it is how you see the work without leaving the list.
-         Pointer-driven, so it is desktop-only by nature. */
       mm.add(MQ.isDesktop, () => {
-        const plate = preview.current;
-        if (!plate) return;
+        const rows = gsap.utils.toArray<HTMLElement>(".project-row");
 
-        const xTo = gsap.quickTo(plate, "x", { duration: 0.55, ease: "power3.out" });
-        const yTo = gsap.quickTo(plate, "y", { duration: 0.55, ease: "power3.out" });
+        const disposers = rows.map((row) => {
+          const title = row.querySelector<HTMLElement>(".project-title");
+          const bar = row.querySelector<HTMLElement>(".project-bar");
+          if (!title || !bar) return () => {};
 
-        const onMove = (e: PointerEvent) => {
-          xTo(e.clientX + 28);
-          yTo(e.clientY - 110);
-        };
+          const slide = gsap.quickTo(title, "x", { duration: 0.45, ease: EASE });
+          const grow = gsap.quickTo(bar, "scaleY", { duration: 0.35, ease: EASE });
 
-        window.addEventListener("pointermove", onMove, { passive: true });
-        return () => window.removeEventListener("pointermove", onMove);
+          const enter = () => {
+            slide(12);
+            grow(1);
+          };
+          const leave = () => {
+            slide(0);
+            grow(0);
+          };
+
+          row.addEventListener("mouseenter", enter);
+          row.addEventListener("mouseleave", leave);
+          // Keyboard users get the same affordance.
+          row.addEventListener("focusin", enter);
+          row.addEventListener("focusout", leave);
+
+          return () => {
+            row.removeEventListener("mouseenter", enter);
+            row.removeEventListener("mouseleave", leave);
+            row.removeEventListener("focusin", enter);
+            row.removeEventListener("focusout", leave);
+            gsap.set([title, bar], { clearProps: "all" });
+          };
+        });
+
+        return () => disposers.forEach((d) => d());
       });
 
       return () => mm.revert();
@@ -54,206 +65,264 @@ export default function Projects() {
     { scope: root },
   );
 
-  // Fade the plate in and out as the hovered row changes.
-  useGSAP(
-    () => {
-      if (!preview.current) return;
-      gsap.to(preview.current, {
-        autoAlpha: active ? 1 : 0,
-        scale: active ? 1 : 0.96,
-        duration: 0.35,
-        ease: EASE,
-      });
-    },
-    { dependencies: [active] },
-  );
+  const toggle = (i: number) => setActiveIndex((prev) => (prev === i ? null : i));
 
   return (
-    <section id="work" ref={root} className="py-20 md:py-28">
-      <div className="container-site">
-        <SectionHeading
-          index="03"
-          standfirst="Eleven things, newest first. Hover a title to see it."
-          className="mb-14 md:mb-20"
+    <section id="work" className="section-divider py-24 md:py-32">
+      <div className="container-site" ref={root}>
+        <motion.p
+          initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="font-code text-xs tracking-[0.2em] uppercase mb-3"
+          style={{ color: "var(--color-accent)" }}
         >
-          Selected work
-        </SectionHeading>
+          work
+        </motion.p>
+        <motion.h2
+          initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className="font-clash font-bold mb-10 md:mb-14"
+          style={{ fontSize: "var(--text-h1)", color: "var(--color-text)" }}
+        >
+          Selected Work
+        </motion.h2>
 
-        {/* Desktop: the index */}
-        <div className="hidden md:block" onMouseLeave={() => setActive(null)}>
-          {projects.map((p) => (
-            <Row key={p.index} project={p} onEnter={() => setActive(p)} />
-          ))}
-          <div style={{ borderTop: "1px solid var(--rule)" }} />
-          <p className="label mt-8" style={{ color: "var(--ink-3)" }}>
-            More at{" "}
-            <Link href="https://github.com/girmmy" target="_blank" rel="noopener noreferrer" className="link">
-              github.com/girmmy
-            </Link>
-          </p>
-        </div>
-
-        {/* Mobile: the same content, read rather than hovered */}
-        <div className="md:hidden">
-          {projects.map((p) => (
-            <MobileEntry key={p.index} project={p} />
-          ))}
-          <p className="label mt-10" style={{ color: "var(--ink-3)" }}>
-            More at{" "}
-            <Link href="https://github.com/girmmy" target="_blank" rel="noopener noreferrer" className="link">
-              github.com/girmmy
-            </Link>
-          </p>
-        </div>
-      </div>
-
-      {/* The trailing plate. aria-hidden: everything in it is already in
-          the list, and a cursor-follower is meaningless to a screen reader. */}
-      <div
-        ref={preview}
-        aria-hidden="true"
-        className="hidden md:block fixed top-0 left-0 pointer-events-none"
-        style={{ zIndex: 30, width: "340px", opacity: 0, willChange: "transform" }}
-      >
-        <div style={{ border: "1px solid var(--rule-strong)", background: "var(--paper-2)" }}>
-          <div style={{ aspectRatio: "16/10", overflow: "hidden" }}>
-            {active?.image ? (
-              <Image
-                src={active.image}
-                alt=""
-                width={680}
-                height={425}
-                className="w-full h-full object-cover object-top"
+        {/* Desktop: editorial rows */}
+        <div className="hidden md:block" style={{ borderTop: "1px solid var(--color-border)" }}>
+          {projects.map((project, i) => (
+            <motion.div
+              key={project.index}
+              initial={shouldReduce ? {} : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              className="project-row relative"
+              style={{ borderBottom: "1px solid var(--color-border)" }}
+            >
+              <span
+                aria-hidden="true"
+                className="project-bar absolute left-0 top-0 bottom-0"
+                style={{
+                  width: "2px",
+                  background: "var(--color-accent)",
+                  transform: "scaleY(0)",
+                  transformOrigin: "50% 50%",
+                }}
               />
-            ) : (
-              <div
-                className="w-full h-full grid place-items-center"
-                style={{ background: "var(--paper-3)" }}
+              <button
+                className="w-full flex items-center gap-6 py-6 px-3 group text-left transition-colors duration-200"
+                style={{ background: activeIndex === i ? "var(--color-surface)" : "transparent" }}
+                onClick={() => toggle(i)}
+                aria-expanded={activeIndex === i}
               >
-                <span className="label" style={{ color: "var(--ink-3)" }}>
-                  No preview
+                <span className="font-code text-xs w-7 flex-shrink-0" style={{ color: "var(--color-muted)" }}>
+                  {project.index}
                 </span>
+                <span
+                  className="project-title font-clash font-medium flex-1 text-left transition-colors duration-150 group-hover:opacity-80"
+                  style={{ fontSize: "var(--text-h2)", color: activeIndex === i ? "var(--color-accent)" : "var(--color-text)" }}
+                >
+                  {project.title}
+                </span>
+                <span className="font-code text-sm flex-shrink-0" style={{ color: "var(--color-muted)" }}>
+                  {project.year}
+                </span>
+                <div className="hidden lg:flex flex-wrap gap-1.5 flex-shrink-0 max-w-xs justify-end">
+                  {project.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="font-code text-[11px] rounded px-2.5 py-1"
+                      style={{ border: "1px solid var(--color-border)", color: "var(--color-muted)" }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <span
+                  className="font-clash text-lg flex-shrink-0 ml-2 transition-transform duration-200"
+                  style={{
+                    color: "var(--color-muted)",
+                    transform: activeIndex === i ? "rotate(45deg)" : "rotate(0deg)",
+                    display: "inline-block",
+                  }}
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </button>
+
+              <AnimatePresence>
+                {activeIndex === i && (
+                  <motion.div
+                    initial={shouldReduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                    animate={shouldReduce ? { opacity: 1 } : { height: "auto", opacity: 1 }}
+                    exit={shouldReduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ overflow: "hidden", background: "var(--color-surface)" }}
+                  >
+                    <div className="px-3 pb-8 pl-16 grid md:grid-cols-[1fr_320px] gap-8 items-start">
+                      {/* Left: bullets + actions */}
+                      <div>
+                        <ul className="space-y-3 mb-6 mt-4">
+                          {project.description.map((point, j) => (
+                            <li key={j} className="font-inter text-base leading-relaxed flex items-start gap-3"
+                              style={{ color: "var(--color-body)" }}>
+                              <span className="flex-shrink-0 mt-1 text-xs" style={{ color: "var(--color-accent)" }}>·</span>
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="flex items-center gap-4">
+                          <Link
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 font-inter text-sm transition-colors duration-150"
+                            style={{ color: "var(--color-accent)" }}
+                          >
+                            <ExternalLink size={14} /> View Project
+                          </Link>
+                          {project.video && (
+                            <Link
+                              href={project.video}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 font-inter text-sm transition-colors duration-150"
+                              style={{ color: "var(--color-muted)" }}
+                              onMouseEnter={(e) => (e.currentTarget.style.color = "#FF0000")}
+                              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
+                            >
+                              <Youtube size={14} /> Watch Demo
+                            </Link>
+                          )}
+                        </div>
+                      </div>
+                      {/* Right: project screenshot */}
+                      <div
+                        className="hidden md:block rounded overflow-hidden mt-4"
+                        style={{ border: "1px solid var(--color-border)", aspectRatio: "16/9" }}
+                      >
+                        {project.image ? (
+                          <Image
+                            src={project.image}
+                            alt={`${project.title} screenshot`}
+                            width={320}
+                            height={180}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        ) : (
+                          <NoPreview />
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Mobile: stacked cards */}
+        <div className="md:hidden space-y-4">
+          {projects.map((project, i) => (
+            <motion.div
+              key={project.index}
+              initial={shouldReduce ? {} : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              className="rounded overflow-hidden"
+              style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
+            >
+              {/* Screenshot */}
+              <div style={{ aspectRatio: "16/9", overflow: "hidden" }}>
+                {project.image ? (
+                  <Image
+                    src={project.image}
+                    alt={`${project.title} screenshot`}
+                    width={600}
+                    height={338}
+                    className="w-full h-full object-cover object-top"
+                  />
+                ) : (
+                  <NoPreview />
+                )}
               </div>
-            )}
-          </div>
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div>
+                    <span className="font-code text-xs block mb-1" style={{ color: "var(--color-muted)" }}>{project.index}</span>
+                    <h3 className="font-clash font-medium" style={{ fontSize: "var(--text-h2)", color: "var(--color-text)" }}>
+                      {project.title}
+                    </h3>
+                  </div>
+                  <span className="font-code text-sm flex-shrink-0 mt-1" style={{ color: "var(--color-muted)" }}>{project.year}</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {project.tags.slice(0, 4).map((tag) => (
+                    <span key={tag} className="font-code text-[11px] rounded px-2.5 py-0.5"
+                      style={{ border: "1px solid var(--color-border)", color: "var(--color-muted)" }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <ul className="space-y-2.5 mb-5">
+                  {project.description.map((point, j) => (
+                    <li key={j} className="font-inter text-[15px] leading-relaxed flex items-start gap-3"
+                      style={{ color: "var(--color-body)" }}>
+                      <span className="flex-shrink-0 mt-1 text-xs" style={{ color: "var(--color-accent)" }}>·</span>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center gap-4">
+                  <Link href={project.link} target="_blank" rel="noopener noreferrer"
+                    className="font-inter text-sm inline-flex items-center gap-2"
+                    style={{ color: "var(--color-accent)" }}>
+                    <ExternalLink size={13} /> View Project
+                  </Link>
+                  {project.video && (
+                    <Link href={project.video} target="_blank" rel="noopener noreferrer"
+                      className="font-inter text-sm inline-flex items-center gap-2"
+                      style={{ color: "var(--color-muted)" }}>
+                      <Youtube size={13} /> Watch Demo
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
+
     </section>
   );
 }
 
-function Row({ project, onEnter }: { project: Project; onEnter: () => void }) {
-  const [hovered, setHovered] = useState(false);
-
+/**
+ * Some projects have no deployed page to screenshot (Cue, gimly). Saying
+ * so beats shipping a stock image that reads as a broken screenshot — and
+ * an empty src string makes next/image refetch the whole page.
+ */
+function NoPreview() {
   return (
-    <article
-      className="w-row"
-      style={{ borderTop: "1px solid var(--rule)" }}
-      onMouseEnter={() => {
-        setHovered(true);
-        onEnter();
+    <div
+      className="w-full h-full grid place-items-center"
+      style={{
+        background:
+          "repeating-linear-gradient(135deg, var(--color-surface) 0 10px, var(--color-bg) 10px 20px)",
       }}
-      onMouseLeave={() => setHovered(false)}
     >
-      <Link
-        href={project.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="spine items-baseline py-6 group"
-        style={{ textDecoration: "none" }}
+      <span
+        className="font-code text-[11px] tracking-[0.2em] uppercase"
+        style={{ color: "var(--color-muted)" }}
       >
-        <span className="label tnum" style={{ color: "var(--ink-3)" }}>
-          {project.index}
-        </span>
-
-        <span className="grid gap-x-10 gap-y-2 md:grid-cols-[minmax(0,1fr)_auto] items-baseline">
-          <span>
-            <span
-              className="font-display block"
-              style={{
-                fontSize: "var(--t-xl)",
-                fontWeight: 400,
-                color: hovered ? "var(--accent)" : "var(--ink)",
-                transition: "color 0.2s ease",
-              }}
-            >
-              {project.title}
-            </span>
-            <span
-              className="block mt-1.5 measure"
-              style={{ fontSize: "var(--t-sm)", color: "var(--ink-3)" }}
-            >
-              {project.description[0]}
-            </span>
-          </span>
-
-          <span className="flex items-baseline gap-6 flex-shrink-0">
-            <span style={{ fontSize: "var(--t-sm)", color: "var(--ink-3)" }}>
-              {project.tags.slice(0, 2).join(", ")}
-            </span>
-            <span className="label tnum" style={{ color: "var(--ink-3)" }}>
-              {project.year}
-            </span>
-          </span>
-        </span>
-      </Link>
-    </article>
-  );
-}
-
-function MobileEntry({ project }: { project: Project }) {
-  return (
-    <article className="w-row py-7" style={{ borderTop: "1px solid var(--rule)" }}>
-      <div className="flex items-baseline gap-4 mb-2">
-        <span className="label tnum" style={{ color: "var(--ink-3)" }}>
-          {project.index}
-        </span>
-        <h3
-          className="font-display"
-          style={{ fontSize: "var(--t-xl)", fontWeight: 400, color: "var(--ink)" }}
-        >
-          {project.title}
-        </h3>
-      </div>
-
-      {project.image && (
-        <div className="mb-4 mt-3" style={{ border: "1px solid var(--rule)" }}>
-          <Image
-            src={project.image}
-            alt={`${project.title} screenshot`}
-            width={680}
-            height={425}
-            className="w-full object-cover object-top"
-            style={{ aspectRatio: "16/10" }}
-          />
-        </div>
-      )}
-
-      <ul className="space-y-2 mb-3">
-        {project.description.map((point, i) => (
-          <li key={i} style={{ fontSize: "var(--t-sm)", color: "var(--ink-2)" }}>
-            {point}
-          </li>
-        ))}
-      </ul>
-
-      <p className="label" style={{ color: "var(--ink-3)" }}>
-        {project.tags.join(" · ")} — {project.year}
-      </p>
-
-      <p className="mt-3" style={{ fontSize: "var(--t-sm)" }}>
-        <Link href={project.link} target="_blank" rel="noopener noreferrer" className="link">
-          Open {project.title}
-        </Link>
-        {project.video && (
-          <>
-            {" · "}
-            <Link href={project.video} target="_blank" rel="noopener noreferrer" className="link">
-              Watch the demo
-            </Link>
-          </>
-        )}
-      </p>
-    </article>
+        no preview
+      </span>
+    </div>
   );
 }

@@ -5,6 +5,8 @@ import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Certificates from "@/components/Certificates";
 import Connect from "@/components/Connect";
+import CursorLight from "@/components/CursorLight";
+import DeferredMount from "@/components/DeferredMount";
 import ScrollProgress from "@/components/ScrollProgress";
 
 export default function Page() {
@@ -15,9 +17,13 @@ export default function Page() {
       </a>
 
       <ScrollProgress />
+
+      <DeferredMount>
+        <CursorLight />
+      </DeferredMount>
       <Nav />
 
-      <main id="main-content">
+      <main id="main-content" style={{ background: "var(--color-bg)", minHeight: "100dvh" }}>
         <Hero />
         <About />
         <Experience />

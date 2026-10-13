@@ -1,142 +1,273 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
-import { gsap, useGSAP, MQ, EASE } from "@/lib/gsap";
+import { Github, Linkedin } from "lucide-react";
+import { useReducedMotion, motion } from "framer-motion";
+import { useRef } from "react";
+import { gsap, useGSAP, MQ } from "@/lib/gsap";
+import FloatingIcons from "@/components/FloatingIcons";
+import DeferredMount from "@/components/DeferredMount";
 
-/** Masthead facts. A definition list, because that is what they are. */
-const FACTS: [string, string][] = [
-  ["Position", "Full stack engineer, LegiCycle"],
-  ["Reading", "B.S. Computer Science, Georgia Tech"],
-  ["Based", "Atlanta, Georgia"],
-  ["Seeking", "SWE and AI/ML internships"],
-];
+const WORDS = ["Girmachew", "Samson"];
+const FULL_NAME = WORDS.join(" ");
+const CHARS = FULL_NAME.split("");
 
 export default function Hero() {
-  const root = useRef<HTMLElement>(null);
+  const shouldReduce = useReducedMotion();
+  const hero = useRef<HTMLElement>(null);
 
+  // Depth on the way out: glow, icons and copy leave at three rates.
+  // Desktop only — a phone viewport is short enough that the hero is
+  // gone before parallax reads, and skipping it keeps scrolling cheap.
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
-      mm.add(MQ.isMotionOk, () => {
-        gsap.set(".h-line", { yPercent: 105 });
-        gsap.set(".h-fade", { autoAlpha: 0, y: 14 });
-        gsap.set(".h-rule", { scaleX: 0 });
+      mm.add(MQ.isDesktop, () => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: hero.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.5,
+          },
+        });
 
-        const tl = gsap.timeline({ delay: 0.15 });
-        tl.to(".h-rule", { scaleX: 1, duration: 0.9, ease: EASE })
-          .to(".h-line", { yPercent: 0, duration: 1, stagger: 0.07, ease: "power3.out" }, "<0.05")
-          .to(".h-fade", { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.06, ease: EASE }, "<0.4");
+        tl.to(".hero-glow", { yPercent: 26, scale: 1.1, ease: "none" }, 0)
+          .to(".hero-icons", { yPercent: 15, ease: "none" }, 0)
+          .to(".hero-copy", { yPercent: -12, autoAlpha: 0.2, ease: "none" }, 0);
 
-        return () => tl.kill();
+        return () => tl.scrollTrigger?.kill();
       });
 
       return () => mm.revert();
     },
-    { scope: root },
+    { scope: hero },
   );
+
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <section
       id="hero"
-      ref={root}
-      className="relative min-h-[88svh] flex flex-col justify-center"
+      ref={hero}
+      className="relative min-h-[100dvh] flex items-center overflow-hidden"
       aria-labelledby="hero-heading"
     >
-      <div className="container-site w-full pt-28 pb-16 md:pt-36 md:pb-24">
-        <p className="h-fade label mb-10" style={{ color: "var(--ink-3)" }}>
-          Portfolio — Twenty&nbsp;Twenty&nbsp;Six
-        </p>
+      {/* Ambient background glow */}
+      <div
+        aria-hidden="true"
+        className="hero-glow absolute pointer-events-none"
+        style={{
+          willChange: "transform",
+          top: "-15%",
+          left: "-8%",
+          width: "700px",
+          height: "700px",
+          borderRadius: "50%",
+          background: "var(--color-accent-dim)",
+          filter: "blur(140px)",
+        }}
+      />
 
+      {/* Floating tech icons (right side) — deferred so they don't block initial paint */}
+      <div className="hero-icons" style={{ willChange: "transform" }}>
+        <DeferredMount>
+          <FloatingIcons />
+        </DeferredMount>
+      </div>
+
+      <div className="hero-copy container-site w-full min-w-0 relative z-10 pt-28 pb-28 md:pt-36 md:pb-36">
+        {/* Social icons — above name */}
+        <motion.div
+          initial={shouldReduce ? {} : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex items-center gap-4 mb-4"
+        >
+          <Link
+            href="https://linkedin.com/in/girmachew-samson"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+            className="transition-colors duration-150"
+            style={{ color: "var(--color-muted)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
+          >
+            <Linkedin size={24} aria-hidden="true" />
+          </Link>
+          <Link
+            href="https://github.com/girmmy"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile"
+            className="transition-colors duration-150"
+            style={{ color: "var(--color-muted)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
+          >
+            <Github size={24} aria-hidden="true" />
+          </Link>
+        </motion.div>
+
+        {/* Name — character stagger */}
         <h1
           id="hero-heading"
-          className="font-display mb-10"
+          className="font-clash font-bold leading-[0.95] mb-8"
           style={{
-            fontSize: "var(--t-display)",
-            lineHeight: 1.02,
-            fontWeight: 400,
-            letterSpacing: "-0.02em",
-            color: "var(--ink)",
+            fontSize: "var(--text-display)",
+            color: "var(--color-text)",
           }}
+          aria-label={FULL_NAME}
         >
-          <span className="mask block">
-            <span className="h-line block">Girmachew</span>
-          </span>
-          <span className="mask block">
-            <span className="h-line block" style={{ fontStyle: "italic", fontWeight: 300 }}>
-              Samson
-            </span>
-          </span>
+          {shouldReduce ? (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              {FULL_NAME}
+            </motion.span>
+          ) : (
+            <>
+              {WORDS.map((word, wi) => {
+                const offset = wi === 0 ? 0 : WORDS[0].length + 1;
+                return (
+                  <span
+                    key={wi}
+                    style={{ display: "inline-block", whiteSpace: "nowrap" }}
+                  >
+                    {word.split("").map((char, ci) => (
+                      <motion.span
+                        key={ci}
+                        aria-hidden="true"
+                        initial={{ opacity: 0, y: 22 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 0.4,
+                          delay: 0.15 + (offset + ci) * 0.03,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        style={{ display: "inline-block" }}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                    {wi < WORDS.length - 1 && (
+                      <motion.span
+                        aria-hidden="true"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{
+                          duration: 0.4,
+                          delay: 0.15 + (offset + word.length) * 0.03,
+                        }}
+                        style={{ display: "inline-block", whiteSpace: "pre" }}
+                      >
+                        {" "}
+                      </motion.span>
+                    )}
+                  </span>
+                );
+              })}
+            </>
+          )}
         </h1>
 
-        <div
-          className="h-rule w-full mb-10"
-          style={{ height: "1px", background: "var(--rule-strong)", transformOrigin: "0% 50%" }}
-          aria-hidden="true"
-        />
+        {/* Subtitle — Inter, bigger */}
+        <motion.p
+          initial={shouldReduce ? {} : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: shouldReduce ? 0.1 : 0.75 }}
+          className="font-inter mb-12 flex items-center gap-3 flex-wrap"
+          style={{
+            fontSize: "clamp(1rem, 2.5vw, 1.35rem)",
+            color: "var(--color-body)",
+          }}
+        >
+          <span>CS @ Georgia Tech</span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: shouldReduce ? 0.1 : 1.1 }}
+            style={{ color: "var(--color-accent)", fontWeight: "bold" }}
+          >
+            ·
+          </motion.span>
+          <span>Full Stack Engineer, LegiCycle</span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: shouldReduce ? 0.1 : 1.2 }}
+            style={{ color: "var(--color-accent)", fontWeight: "bold" }}
+          >
+            ·
+          </motion.span>
+          <span>AI Enthusiast</span>
+        </motion.p>
 
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-20 items-start">
-          <div className="h-fade">
-            <p
-              className="measure mb-8"
-              style={{ fontSize: "var(--t-lg)", lineHeight: 1.6, color: "var(--ink-2)" }}
-            >
-              I build agent infrastructure and full-stack products — an MCP server
-              published to npm, a RAG research assistant that reads state and
-              federal law, and the security work that keeps a live platform
-              standing up for the people who depend on it.
-            </p>
-
-            {/* Navigation as a sentence. The underline is the affordance,
-                so none of these need an icon to announce themselves. */}
-            <p className="measure" style={{ color: "var(--ink-2)" }}>
-              Read{" "}
-              <button
-                onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" })}
-                className="link"
-                style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: "pointer" }}
-              >
-                what I&rsquo;ve shipped
-              </button>
-              , download{" "}
-              <a href="/Girmachew_Samson.pdf" download className="link">
-                my résumé
-              </a>
-              , or find me on{" "}
-              <Link href="https://github.com/girmmy" target="_blank" rel="noopener noreferrer" className="link">
-                GitHub
-              </Link>{" "}
-              and{" "}
-              <Link
-                href="https://linkedin.com/in/girmachew-samson"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link"
-              >
-                LinkedIn
-              </Link>
-              .
-            </p>
-          </div>
-
-          <dl className="h-fade lg:min-w-[19rem]">
-            {FACTS.map(([term, value], i) => (
-              <div
-                key={term}
-                className="flex items-baseline justify-between gap-8 py-3"
-                style={{ borderTop: i === 0 ? "none" : "1px solid var(--rule)" }}
-              >
-                <dt className="label flex-shrink-0" style={{ color: "var(--ink-3)" }}>
-                  {term}
-                </dt>
-                <dd className="text-right" style={{ fontSize: "var(--t-sm)", color: "var(--ink-2)" }}>
-                  {value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        {/* CTAs */}
+        <motion.div
+          initial={shouldReduce ? {} : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: shouldReduce ? 0.2 : 0.9 }}
+          className="flex items-center gap-6 flex-wrap"
+        >
+          <button
+            onClick={() => scrollTo("work")}
+            className="font-inter font-medium text-base px-8 py-3 rounded-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              border: "1.5px solid var(--color-accent)",
+              color: "var(--color-accent)",
+              background: "transparent",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--color-accent)";
+              e.currentTarget.style.color = "var(--color-bg)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--color-accent)";
+            }}
+          >
+            View Work
+          </button>
+          <a
+            href="/Girmachew_Samson.pdf"
+            download
+            className="font-inter font-medium text-base px-8 py-3 rounded-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              background: "var(--color-accent)",
+              color: "var(--color-bg)",
+              border: "1.5px solid var(--color-accent)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--color-accent)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--color-accent)";
+              e.currentTarget.style.color = "var(--color-bg)";
+            }}
+          >
+            Download Resume
+          </a>
+          <button
+            onClick={() => scrollTo("connect")}
+            className="font-inter text-base transition-colors duration-150"
+            style={{ color: "var(--color-muted)" }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = "var(--color-text)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = "var(--color-muted)")
+            }
+          >
+            Get In Touch →
+          </button>
+        </motion.div>
       </div>
     </section>
   );

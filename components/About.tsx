@@ -1,155 +1,132 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { gsap, ScrollTrigger, useGSAP, MQ, EASE } from "@/lib/gsap";
-import SectionHeading from "@/components/SectionHeading";
-import Stats from "@/components/Stats";
+import { Download } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import WordReveal from "@/components/WordReveal";
+import { useState } from "react";
 
-/** Set as prose lines rather than a four-column grid of chips. */
-const STACK: [string, string][] = [
-  ["Languages", "Python, TypeScript, JavaScript, Java, SQL"],
-  ["Frameworks", "React, React Native, Next.js, Node.js, Django/DRF, Electron"],
-  ["Data and cloud", "PostgreSQL, Redis, Supabase, AWS (ECS, Cognito, RDS), Terraform, Docker"],
-  ["AI and security", "Claude API, OpenAI API, RAG, Model Context Protocol, NIST 800-53, OWASP"],
+const skills = [
+  {
+    label: "Languages",
+    items: ["Python", "TypeScript", "JavaScript", "Java", "SQL"],
+  },
+  {
+    label: "Frameworks & Tools",
+    items: ["React", "React Native", "Next.js", "Node.js", "Django / DRF", "PostgreSQL", "Redis", "Supabase"],
+  },
+  {
+    label: "Cloud & Infrastructure",
+    items: ["AWS (ECS, Cognito, RDS)", "Terraform", "Docker", "Doppler", "Vercel"],
+  },
+  {
+    label: "AI/ML & Security",
+    items: ["Claude API", "OpenAI API", "RAG", "Model Context Protocol", "NIST 800-53", "OWASP"],
+  },
 ];
 
 export default function About() {
-  const root = useRef<HTMLElement>(null);
+  const shouldReduce = useReducedMotion();
+  const [imgHovered, setImgHovered] = useState(false);
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add(MQ.isMotionOk, () => {
-        const items = gsap.utils.toArray<HTMLElement>(".reveal");
-        gsap.set(items, { autoAlpha: 0, y: 16 });
-        const triggers = ScrollTrigger.batch(items, {
-          start: "top 90%",
-          onEnter: (b) =>
-            gsap.to(b, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.07, ease: EASE, overwrite: true }),
-        });
-        return () => {
-          triggers.forEach((t) => t.kill());
-          gsap.set(items, { clearProps: "all" });
-        };
-      });
-      return () => mm.revert();
-    },
-    { scope: root },
-  );
+  const fadeUp = (delay = 0) =>
+    shouldReduce
+      ? {}
+      : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] } };
 
   return (
-    <section id="about" ref={root} className="py-20 md:py-28">
+    <section id="about" className="section-divider py-24 md:py-32">
       <div className="container-site">
-        <SectionHeading index="01" className="mb-14 md:mb-20">
-          A short account
-        </SectionHeading>
+        <motion.p {...fadeUp()} className="font-code text-xs tracking-[0.2em] uppercase mb-3" style={{ color: "var(--color-accent)" }}>
+          about
+        </motion.p>
+        <motion.h2 {...fadeUp(0.05)} className="font-clash font-bold mb-14 md:mb-20" style={{ fontSize: "var(--text-h1)", color: "var(--color-text)" }}>
+          Who I Am
+        </motion.h2>
 
-        <div className="spine mb-20">
-          <div />
-          <div>
-            <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-16 items-start">
-              <div className="measure">
-                {/* Opening line set larger — a standfirst, as a printed
-                    piece would do, rather than a uniform wall of text. */}
-                <p
-                  className="reveal mb-7"
-                  style={{ fontSize: "var(--t-xl)", lineHeight: 1.45, color: "var(--ink)" }}
-                >
-                  I&rsquo;m a computer science student at Georgia Tech and a full
-                  stack engineer at{" "}
-                  <Link
-                    href="https://legicycle.ai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link"
-                  >
-                    LegiCycle
-                  </Link>
-                  , where I work on the platform legislators use to research,
-                  draft, and stress-test bills.
-                </p>
-
-                <p className="reveal mb-6" style={{ color: "var(--ink-2)" }}>
-                  Day to day that means hardening a live AWS deployment against
-                  NIST&nbsp;800-53 and OWASP, and expanding a RAG research
-                  assistant from Georgia-only coverage out to Delaware and
-                  federal law. The work I&rsquo;m proudest of there is
-                  unglamorous: a bug across twenty-nine Django routes that had
-                  been quietly locking invited collaborators out of their own
-                  projects.
-                </p>
-
-                <p className="reveal mb-6" style={{ color: "var(--ink-2)" }}>
-                  Before LegiCycle I founded{" "}
-                  <Link
-                    href="https://bantr.online"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link"
-                  >
-                    Bantr
-                  </Link>
-                  , a live debating platform that reached 250&nbsp;users in open
-                  beta, and spent a semester at Sonaara shipping
-                  identity-verification and messaging into a React Native app
-                  used by 600&nbsp;people.
-                </p>
-
-                <p className="reveal" style={{ color: "var(--ink-2)" }}>
-                  Outside of that I build agent infrastructure — an MCP server
-                  for Google Tasks published to npm and the official registry, a
-                  self-hosted opportunity tracker an agent keeps up to date, and
-                  a lectionary app that serves Ge&rsquo;ez and Amharic readings
-                  offline.
-                </p>
-              </div>
-
-              <figure className="reveal">
-                <div style={{ border: "1px solid var(--rule)" }}>
-                  <Image
-                    src="/gimmy-headshot.png"
-                    alt="Girmachew Samson"
-                    width={240}
-                    height={300}
-                    className="w-full object-cover object-[center_15%]"
-                    style={{ aspectRatio: "4/5" }}
-                    priority
-                  />
-                </div>
-                <figcaption className="label mt-3" style={{ color: "var(--ink-3)" }}>
-                  Atlanta, Georgia
-                </figcaption>
-              </figure>
+        <div className="grid md:grid-cols-[220px_1fr] gap-12 lg:gap-24">
+          {/* Headshot */}
+          <motion.div {...fadeUp(0.1)} className="flex justify-center md:justify-start md:pt-2">
+            <div
+              className="relative w-[200px] h-[200px] md:w-[220px] md:h-[220px] rounded-full overflow-hidden cursor-default flex-shrink-0"
+              style={{
+                boxShadow: imgHovered
+                  ? "0 0 0 3px var(--color-accent), 0 0 30px var(--color-accent-dim)"
+                  : "0 0 0 2px var(--color-border)",
+                transition: "box-shadow 0.25s ease",
+              }}
+              onMouseEnter={() => setImgHovered(true)}
+              onMouseLeave={() => setImgHovered(false)}
+            >
+              <Image
+                src="/gimmy-headshot.png"
+                alt="Girmachew Samson"
+                width={220}
+                height={220}
+                className="w-full h-full object-cover object-[center_15%]"
+                priority
+              />
             </div>
+          </motion.div>
+
+          {/* Bio + skills */}
+          <div>
+            {/* Scroll-inked: GSAP drives this one, so it is deliberately
+                not a motion.p — two engines must never share an element. */}
+            <WordReveal
+              className="font-inter text-lg leading-relaxed mb-12"
+              style={{ color: "var(--color-body)" }}
+              text="Hi, I'm Girmachew — Gimmy for short. I'm a CS student at Georgia Tech and a full stack engineer at LegiCycle, where I work on the AI platform legislators use to research, draft, and stress-test bills — hardening a live AWS deployment and expanding its RAG research assistant across state and federal law. Before that I founded Bantr, a live debating platform that grew to 250+ users in open beta. I build things."
+            />
+
+            {/* Skills — bigger */}
+            <motion.div {...fadeUp(0.18)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+              {skills.map((group) => (
+                <div key={group.label}>
+                  <p className="font-code text-[11px] tracking-[0.25em] uppercase mb-4" style={{ color: "var(--color-muted)" }}>
+                    {group.label}
+                  </p>
+                  <ul className="space-y-2.5">
+                    {group.items.map((item) => (
+                      <li
+                        key={item}
+                        className="font-inter text-base flex items-center gap-2.5 group cursor-default transition-colors duration-150"
+                        style={{ color: "var(--color-body)" }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-body)")}
+                      >
+                        <span className="text-sm flex-shrink-0 transition-colors" style={{ color: "var(--color-accent)" }}>·</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Resume */}
+            <motion.div {...fadeUp(0.22)}>
+              <a
+                href="/Girmachew_Samson.pdf"
+                download
+                className="inline-flex items-center gap-2.5 font-inter text-sm px-6 py-3 rounded transition-all duration-150"
+                style={{ border: "1px solid var(--color-border)", color: "var(--color-muted)" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--color-accent)";
+                  e.currentTarget.style.color = "var(--color-accent)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--color-border)";
+                  e.currentTarget.style.color = "var(--color-muted)";
+                }}
+                aria-label="Download resume PDF"
+              >
+                <Download size={15} aria-hidden="true" />
+                Download Resume
+              </a>
+            </motion.div>
           </div>
         </div>
-
-        {/* Stack as a definition list, not a grid of equal cards. */}
-        <dl className="spine">
-          <span className="label" style={{ color: "var(--ink-3)" }}>
-            Tools
-          </span>
-          <div>
-            {STACK.map(([term, value], i) => (
-              <div
-                key={term}
-                className="reveal grid gap-1 md:grid-cols-[11rem_minmax(0,1fr)] gap-x-8 py-4"
-                style={{ borderTop: i === 0 ? "1px solid var(--rule)" : "1px solid var(--rule)" }}
-              >
-                <dt className="label" style={{ color: "var(--ink-3)" }}>
-                  {term}
-                </dt>
-                <dd style={{ fontSize: "var(--t-sm)", color: "var(--ink-2)" }}>{value}</dd>
-              </div>
-            ))}
-          </div>
-        </dl>
-      </div>
-
-      <div className="mt-20 md:mt-28">
-        <Stats />
       </div>
     </section>
   );

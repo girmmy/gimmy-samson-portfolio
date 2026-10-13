@@ -11,14 +11,18 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
-        text: ["var(--font-text)", "Georgia", "serif"],
+        clash: ["var(--font-clash)", "Clash Display", "sans-serif"],
+        inter: ["var(--font-inter)", "sans-serif"],
+        code: ["var(--font-mono)", "DM Mono", "monospace"],
       },
       colors: {
-        paper:  "var(--paper)",
-        ink:    "var(--ink)",
-        accent: "var(--accent)",
-        rule:   "var(--rule)",
+        "gs-bg":      "var(--color-bg)",
+        "gs-surface": "var(--color-surface)",
+        "gs-border":  "var(--color-border)",
+        "gs-text":    "var(--color-text)",
+        "gs-body":    "var(--color-body)",
+        "gs-muted":   "var(--color-muted)",
+        "gs-amber":   "var(--color-accent)",
         background:   "hsl(var(--background))",
         foreground:   "hsl(var(--foreground))",
         border:       "hsl(var(--border))",

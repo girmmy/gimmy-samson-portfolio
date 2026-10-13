@@ -2,201 +2,202 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ═══════════════════════════════════════════════════════════════
-   WARM EDITORIAL
-   A printed essay, not a dashboard. Paper ground, two serifs, one
-   ink accent, hairline rules. No icon family — every affordance is
-   set in type.
-   ═══════════════════════════════════════════════════════════════ */
-
+/* ─── Design tokens — light mode default ──────────────────── */
 :root {
-  /* Paper, warm and slightly off-white. Pure #fff reads as screen;
-     this reads as stock. */
-  --paper:        #FBF8F2;
-  --paper-2:      #F4F0E7;
-  --paper-3:      #EAE4D8;
-  --ink:          #1B1714;
-  --ink-2:        #4A433C;
-  --ink-3:        #7D746A;
-  --rule:         #DBD3C4;
-  --rule-strong:  #C3B9A6;
-  /* One accent. Oxblood reads as printed ink rather than as a UI
-     colour, and it only ever marks a link or a primary action. */
-  --accent:       #8A2B20;
-  --accent-ink:   #FBF8F2;
+  --color-bg:         #F8F8F6;
+  --color-surface:    #F0F0EE;
+  --color-border:     #DEDEDE;
+  --color-text:       #111111;
+  --color-body:       #444444;
+  --color-muted:      #777777;
+  --color-accent:     #C47B0C;
+  --color-accent-dim: rgba(196, 123, 12, 0.08);
+  --color-glow:       rgba(196, 123, 12, 0.12);
+  --color-nav-scrolled-bg: rgba(248, 248, 246, 0.97);
 
-  --measure: 64ch;
+  --text-display: clamp(2.8rem, 8vw, 7rem);
+  --text-h1:      clamp(2rem, 4vw, 3.5rem);
+  --text-h2:      clamp(1.25rem, 2vw, 1.875rem);
+  --text-body:    1.0625rem;
+  --text-small:   0.9375rem;
+  --text-mono:    0.875rem;
 
-  --t-xs:   0.8125rem;
-  --t-sm:   0.9375rem;
-  --t-base: 1.0625rem;
-  --t-lg:   1.1875rem;
-  --t-xl:   clamp(1.35rem, 2vw, 1.75rem);
-  --t-2xl:  clamp(1.75rem, 3.2vw, 2.75rem);
-  --t-3xl:  clamp(2.25rem, 5vw, 4rem);
-  --t-display: clamp(2.6rem, 6.2vw, 5.75rem);
-
-  --radius: 0;
-
-  /* shadcn/ui primitives */
-  --background: 40 43% 96%;
-  --foreground: 24 14% 9%;
-  --border: 40 27% 81%;
-  --card: 40 33% 93%;
-  --card-foreground: 24 14% 9%;
-  --primary: 6 62% 33%;
-  --primary-foreground: 40 43% 96%;
-  --secondary: 40 30% 88%;
-  --secondary-foreground: 24 14% 9%;
-  --muted: 40 30% 88%;
-  --muted-foreground: 30 8% 45%;
-  --accent: 6 62% 33%;
-  --accent-foreground: 40 43% 96%;
-  --destructive: 0 65% 38%;
-  --destructive-foreground: 40 43% 96%;
-  --input: 40 27% 81%;
-  --ring: 6 62% 33%;
+  --radius: 0.5rem;
+  --background: 0 0% 97%;
+  --foreground: 0 0% 7%;
+  --border: 0 0% 87%;
+  --card: 0 0% 94%;
+  --card-foreground: 0 0% 7%;
+  --primary: 0 0% 9%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 0 0% 92%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 92%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 92%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --input: 0 0% 87%;
+  --ring: 0 0% 9%;
 }
 
-/* Dark is warm near-black with cream ink — the same paper under a
-   lamp, not a cold inversion. */
+/* ─── Dark mode ────────────────────────────────────────────── */
 .dark {
-  --paper:        #15120F;
-  --paper-2:      #1C1813;
-  --paper-3:      #262019;
-  --ink:          #F2EADC;
-  --ink-2:        #BCB1A2;
-  --ink-3:        #8A8075;
-  --rule:         #312A22;
-  --rule-strong:  #473D32;
-  --accent:       #D4705F;
-  --accent-ink:   #15120F;
+  --color-bg:         #0A0A0A;
+  --color-surface:    #111111;
+  --color-border:     #222222;
+  --color-text:       #F0F0F0;
+  --color-body:       #AAAAAA;
+  --color-muted:      #666666;
+  --color-accent:     #F5A623;
+  --color-accent-dim: rgba(245, 166, 35, 0.1);
+  --color-glow:       rgba(245, 166, 35, 0.15);
+  --color-nav-scrolled-bg: rgba(10, 10, 10, 0.97);
 
-  --background: 30 17% 7%;
-  --foreground: 38 38% 91%;
-  --border: 30 19% 16%;
-  --card: 30 18% 9%;
-  --card-foreground: 38 38% 91%;
-  --primary: 10 56% 60%;
-  --primary-foreground: 30 17% 7%;
-  --secondary: 30 18% 12%;
-  --secondary-foreground: 38 38% 91%;
-  --muted: 30 18% 12%;
-  --muted-foreground: 35 9% 55%;
-  --accent: 10 56% 60%;
-  --accent-foreground: 30 17% 7%;
-  --destructive: 0 55% 45%;
-  --destructive-foreground: 38 38% 91%;
-  --input: 30 19% 16%;
-  --ring: 10 56% 60%;
+  --background: 0 0% 4%;
+  --foreground: 0 0% 94%;
+  --border: 0 0% 13%;
+  --card: 0 0% 7%;
+  --card-foreground: 0 0% 94%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 63%;
+  --accent: 0 0% 15%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 98%;
+  --input: 0 0% 15%;
+  --ring: 0 0% 83%;
 }
 
+/* Very narrow phones (≤360px): the display clamp's 2.8rem floor makes
+   "Girmachew" wider than the padded viewport, so scale it with the screen. */
+@media (max-width: 360px) {
+  :root { --text-display: 11vw; }
+}
+
+/* ─── Base ─────────────────────────────────────────────────── */
 @layer base {
   * { box-sizing: border-box; }
   html, body {
     overflow-x: hidden;
     max-width: 100vw;
+    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   body {
-    background-color: var(--paper);
-    color: var(--ink);
-    font-family: var(--font-text), Georgia, serif;
-    font-size: var(--t-base);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-inter), system-ui, sans-serif;
+    font-size: var(--text-body);
     line-height: 1.65;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
-  h1, h2, h3 {
-    font-family: var(--font-display), Georgia, serif;
-    text-wrap: balance;
-  }
-  p { text-wrap: pretty; }
   img { max-width: 100%; height: auto; }
-  ::selection { background: var(--accent); color: var(--accent-ink); }
   *:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 }
 
-/* ─── Type roles ───────────────────────────────────────────────── */
-.font-display { font-family: var(--font-display), Georgia, serif; }
-.font-text    { font-family: var(--font-text), Georgia, serif; }
+/* ─── Typography utilities ──────────────────────────────────── */
+.font-clash { font-family: var(--font-clash), 'Clash Display', sans-serif; }
+.font-code  { font-family: var(--font-mono), 'DM Mono', monospace; }
+.font-inter { font-family: var(--font-inter), Inter, sans-serif; }
 
-/* The only label style. Small caps rather than a third typeface —
-   the same logic as one icon family or none: don't add a face to
-   say a small thing. */
-.label {
-  font-family: var(--font-text), Georgia, serif;
-  font-size: var(--t-xs);
-  font-variant-caps: all-small-caps;
-  letter-spacing: 0.1em;
-  font-variant-numeric: lining-nums tabular-nums;
-}
-
-/* Figures that sit in columns have to align. */
-.tnum { font-variant-numeric: lining-nums tabular-nums; }
-
-/* 64ch keeps running text inside the 45–75 character band. */
-.measure { max-width: var(--measure); }
-
+/* ─── Layout ─────────────────────────────────────────────────── */
 .container-site {
-  max-width: 1180px;
-  margin-inline: auto;
-  padding-inline: clamp(1.25rem, 5vw, 4rem);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.5rem, 5vw, 4rem);
+  padding-right: clamp(1.5rem, 5vw, 4rem);
 }
+.section-divider { border-top: 1px solid var(--color-border); }
 
-/* The editorial spine: a narrow marginal column for numbers and
-   labels, a wide column for prose. Collapses under 900px. */
-.spine {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem 3rem;
-}
-@media (min-width: 900px) {
-  .spine { grid-template-columns: 7rem minmax(0, 1fr); }
-}
-
-.rule-top { border-top: 1px solid var(--rule); }
-
-/* In running prose the underline is the affordance, so a link needs
-   no icon to announce itself. */
-.link {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
-  transition: text-decoration-color 0.15s ease;
-}
-.link:hover { text-decoration-color: transparent; }
-
-.mask { overflow: hidden; padding-bottom: 0.1em; }
-
+/* ─── Skip link ─────────────────────────────────────────────── */
 .skip-link {
   position: absolute;
   top: -100%;
   left: 1rem;
   z-index: 9999;
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--color-accent);
+  color: var(--color-bg);
   padding: 0.5rem 1rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 600;
   transition: top 0.2s;
 }
 .skip-link:focus { top: 0; }
 
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: var(--paper-2); }
-::-webkit-scrollbar-thumb { background: var(--rule-strong); }
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-dim);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-accent); opacity: 0.3; }
 
+/* ─── Touch targets ─────────────────────────────────────────── */
 @media (max-width: 640px) {
-  button, a { min-height: 44px; }
+  button, a { min-height: 44px; min-width: 44px; }
 }
 
-/* Motion is opt-out at the CSS level too; GSAP branches separately. */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
+/* ─── Cursor glow overlay ───────────────────────────────────── */
+.cursor-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9997;
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    var(--color-glow) 0%,
+    rgba(245, 166, 35, 0.04) 40%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+  mix-blend-mode: screen;
+  transition: opacity 0.5s ease;
+}
+.dark .cursor-glow { mix-blend-mode: screen; }
+html:not(.dark) .cursor-glow { mix-blend-mode: multiply; opacity: 0.35; }
+
+/* ─── Keyframes ─────────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes accordion-down {
+  from { height: 0; } to { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); } to { height: 0; }
+}
+
+/* ─── Experience timeline dots ──────────────────────────────── */
+/* Default, scroll-passed, and hovered states. Kept in CSS so the
+   scroll trigger and the hover handler are not both writing inline
+   styles to the same element. */
+.exp-dot {
+  background: var(--color-bg);
+  border-color: var(--color-muted);
+}
+.exp-dot[data-passed="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.exp-dot[data-hovered="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: scale(1.5);
 }

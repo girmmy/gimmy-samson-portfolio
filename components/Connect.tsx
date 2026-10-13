@@ -1,154 +1,118 @@
 "use client";
 
-import { useRef, useState } from "react";
 import Link from "next/link";
-import { gsap, useGSAP, MQ, EASE } from "@/lib/gsap";
+import { Linkedin, Github, Mail, Check } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 
 const EMAIL = "gimmys943@gmail.com";
 
-const CHANNELS: [string, string, string][] = [
-  ["GitHub", "github.com/girmmy", "https://github.com/girmmy"],
-  ["LinkedIn", "girmachew-samson", "https://linkedin.com/in/girmachew-samson"],
-  ["Résumé", "Girmachew_Samson.pdf", "/Girmachew_Samson.pdf"],
-];
-
 export default function Connect() {
-  const root = useRef<HTMLElement>(null);
+  const shouldReduce = useReducedMotion();
   const [copied, setCopied] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  const fadeUp = (delay = 0) =>
+    shouldReduce
+      ? {}
+      : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] } };
 
   const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Clipboard access can be refused; the address is written out in
-      // full either way, so nothing is lost.
-    }
+    await navigator.clipboard.writeText(EMAIL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add(MQ.isMotionOk, () => {
-        gsap.set(".c-line", { yPercent: 105 });
-        gsap.set(".c-fade", { autoAlpha: 0, y: 14 });
-
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: root.current, start: "top 75%", once: true },
-        });
-        tl.to(".c-line", { yPercent: 0, duration: 0.95, stagger: 0.07, ease: "power3.out" }).to(
-          ".c-fade",
-          { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.07, ease: EASE },
-          "<0.35",
-        );
-
-        return () => tl.scrollTrigger?.kill();
-      });
-      return () => mm.revert();
-    },
-    { scope: root },
-  );
-
   return (
-    <section id="connect" ref={root} className="pt-20 md:pt-28">
-      <div className="container-site">
-        <div className="w-full mb-10" style={{ height: "1px", background: "var(--rule-strong)" }} />
+    <section id="connect" className="section-divider py-28 md:py-40">
+      <div className="container-site flex flex-col items-center text-center">
+        <motion.p {...fadeUp()} className="font-code text-xs tracking-[0.2em] uppercase mb-4" style={{ color: "var(--color-accent)" }}>
+          connect
+        </motion.p>
 
-        <h2
-          className="font-display mb-8"
-          style={{
-            fontSize: "var(--t-3xl)",
-            lineHeight: 1.05,
-            fontWeight: 400,
-            letterSpacing: "-0.015em",
-            color: "var(--ink)",
-          }}
+        <motion.h2
+          {...fadeUp(0.06)}
+          className="font-clash font-bold leading-tight mb-6 max-w-2xl"
+          style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", color: "var(--color-text)" }}
         >
-          <span className="mask block">
-            <span className="c-line block">Say hello.</span>
-          </span>
-        </h2>
+          Let&apos;s build<br />something.
+        </motion.h2>
 
-        <div className="spine pb-16 md:pb-24">
-          <span className="c-fade label" style={{ color: "var(--ink-3)" }}>
-            Contact
-          </span>
+        <motion.p {...fadeUp(0.1)} className="font-inter text-lg mb-10 max-w-md" style={{ color: "var(--color-muted)" }}>
+          Have a project in mind? I&apos;d love to hear about it.
+        </motion.p>
 
-          <div>
-            <p className="c-fade measure mb-8" style={{ fontSize: "var(--t-lg)", color: "var(--ink-2)" }}>
-              I&rsquo;m looking for software engineering and AI/ML internships, and
-              I&rsquo;m glad to talk about anything on this page — the agent
-              tooling especially.
-            </p>
+        {/* Email CTA — click to copy */}
+        <motion.div {...fadeUp(0.14)} className="mb-12">
+          <div className="relative inline-flex flex-col items-center">
+            {/* Tooltip */}
+            <div
+              className="absolute font-code text-xs tracking-wide px-3 py-1.5 rounded pointer-events-none whitespace-nowrap transition-all duration-150"
+              style={{
+                bottom: "calc(100% + 8px)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-border)",
+                color: copied ? "var(--color-accent)" : "var(--color-muted)",
+                opacity: hovered ? 1 : 0,
+              }}
+            >
+              {copied ? "copied!" : "click to copy"}
+            </div>
 
-            <dl className="c-fade">
-              <div
-                className="grid gap-x-8 gap-y-1 md:grid-cols-[7rem_minmax(0,1fr)] items-baseline py-4"
-                style={{ borderTop: "1px solid var(--rule)" }}
-              >
-                <dt className="label" style={{ color: "var(--ink-3)" }}>
-                  Email
-                </dt>
-                <dd className="flex flex-wrap items-baseline gap-x-4">
-                  <a href={`mailto:${EMAIL}`} className="link">
-                    {EMAIL}
-                  </a>
-                  <button
-                    onClick={copyEmail}
-                    className="label"
-                    style={{
-                      color: copied ? "var(--accent)" : "var(--ink-3)",
-                      background: "none",
-                      border: "none",
-                      padding: 0,
-                      cursor: "pointer",
-                    }}
-                  >
-                    {copied ? "Copied" : "Copy address"}
-                  </button>
-                  {/* Announced politely, so the confirmation is not silent
-                      for screen reader users. */}
-                  <span aria-live="polite" className="sr-only">
-                    {copied ? "Email address copied to clipboard" : ""}
-                  </span>
-                </dd>
-              </div>
-
-              {CHANNELS.map(([term, text, href]) => (
-                <div
-                  key={term}
-                  className="grid gap-x-8 gap-y-1 md:grid-cols-[7rem_minmax(0,1fr)] items-baseline py-4"
-                  style={{ borderTop: "1px solid var(--rule)" }}
-                >
-                  <dt className="label" style={{ color: "var(--ink-3)" }}>
-                    {term}
-                  </dt>
-                  <dd>
-                    <Link
-                      href={href}
-                      target={href.startsWith("http") ? "_blank" : undefined}
-                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="link"
-                    >
-                      {text}
-                    </Link>
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <button
+              onClick={copyEmail}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              aria-label="Copy email address"
+              className="inline-flex items-center gap-3 font-inter font-medium transition-all duration-150"
+              style={{
+                fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
+                color: copied ? "var(--color-accent)" : hovered ? "var(--color-accent)" : "var(--color-body)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              {copied ? <Check size={22} aria-hidden="true" /> : <Mail size={22} aria-hidden="true" />}
+              {copied ? "Copied!" : EMAIL}
+            </button>
           </div>
-        </div>
+        </motion.div>
 
-        <div
-          className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 py-6"
-          style={{ borderTop: "1px solid var(--rule)" }}
-        >
-          <p className="label" style={{ color: "var(--ink-3)" }}>
-            © Twenty Twenty-Six, Girmachew Samson
-          </p>
-          <p className="label" style={{ color: "var(--ink-3)" }}>
-            Set in Fraunces and Newsreader
+        {/* Social links — centered, bigger icons */}
+        <motion.div {...fadeUp(0.18)} className="flex items-center justify-center gap-8 mb-20">
+          <Link
+            href="https://linkedin.com/in/girmachew-samson"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-2 transition-all duration-150 group"
+            style={{ color: "var(--color-muted)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
+            aria-label="LinkedIn profile"
+          >
+            <Linkedin size={28} aria-hidden="true" />
+            <span className="font-inter text-sm">LinkedIn</span>
+          </Link>
+          <Link
+            href="https://github.com/girmmy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-2 transition-all duration-150 group"
+            style={{ color: "var(--color-muted)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
+            aria-label="GitHub profile"
+          >
+            <Github size={28} aria-hidden="true" />
+            <span className="font-inter text-sm">GitHub</span>
+          </Link>
+        </motion.div>
+
+        <div className="w-full" style={{ borderTop: "1px solid var(--color-border)", paddingTop: "1.5rem" }}>
+          <p className="font-code text-xs" style={{ color: "var(--color-muted)" }}>
+            © 2026 Girmachew Samson
           </p>
         </div>
       </div>
