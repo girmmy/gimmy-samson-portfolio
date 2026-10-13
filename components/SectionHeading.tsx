@@ -4,18 +4,18 @@ import { useRef } from "react";
 import { gsap, useGSAP, MQ, EASE } from "@/lib/gsap";
 
 type Props = {
-  /** Two-digit section index, e.g. "02". */
   index: string;
-  label: string;
   children: React.ReactNode;
+  /** Optional standfirst set under the heading. */
+  standfirst?: string;
   className?: string;
 };
 
 /**
- * Full-width header bar: index and label sit on a rule that draws itself,
- * then the title rises from behind a mask.
+ * A section opener set like a chapter: the number sits out in the
+ * margin, the title in the text column, a hairline above both.
  */
-export default function SectionHeading({ index, label, children, className = "" }: Props) {
+export default function SectionHeading({ index, children, standfirst, className = "" }: Props) {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -23,19 +23,20 @@ export default function SectionHeading({ index, label, children, className = "" 
       const mm = gsap.matchMedia();
 
       mm.add(MQ.isMotionOk, () => {
-        // Hidden state lives here, not in markup, so a visitor without JS
-        // still gets a readable page.
+        // Hidden state is applied here, never in markup, so the page is
+        // complete without JS and under reduced motion.
         gsap.set(".sh-rule", { scaleX: 0 });
-        gsap.set(".sh-meta", { autoAlpha: 0 });
-        gsap.set(".sh-title", { yPercent: 110 });
+        gsap.set(".sh-num", { autoAlpha: 0 });
+        gsap.set(".sh-title", { yPercent: 105 });
+        gsap.set(".sh-stand", { autoAlpha: 0, y: 10 });
 
         const tl = gsap.timeline({
           scrollTrigger: { trigger: root.current, start: "top 85%", once: true },
         });
-
-        tl.to(".sh-rule", { scaleX: 1, duration: 0.7, ease: EASE })
-          .to(".sh-meta", { autoAlpha: 1, duration: 0.4 }, "<0.15")
-          .to(".sh-title", { yPercent: 0, duration: 0.9, ease: "power4.out" }, "<0.05");
+        tl.to(".sh-rule", { scaleX: 1, duration: 0.9, ease: EASE })
+          .to(".sh-num", { autoAlpha: 1, duration: 0.5 }, "<0.15")
+          .to(".sh-title", { yPercent: 0, duration: 0.9, ease: "power3.out" }, "<0.05")
+          .to(".sh-stand", { autoAlpha: 1, y: 0, duration: 0.6, ease: EASE }, "<0.3");
 
         return () => tl.scrollTrigger?.kill();
       });
@@ -48,31 +49,38 @@ export default function SectionHeading({ index, label, children, className = "" 
   return (
     <div ref={root} className={className}>
       <div
-        className="sh-rule w-full mb-5"
-        style={{ height: "1px", background: "var(--color-accent)", transformOrigin: "0% 50%" }}
+        className="sh-rule w-full mb-6"
+        style={{ height: "1px", background: "var(--rule-strong)", transformOrigin: "0% 50%" }}
         aria-hidden="true"
       />
-      <div className="sh-meta flex items-baseline justify-between mb-6">
-        <span className="kicker" style={{ color: "var(--color-accent)" }}>
-          {label}
-        </span>
-        <span className="kicker" style={{ color: "var(--color-muted)" }}>
+      <div className="spine">
+        <span className="sh-num label tnum" style={{ color: "var(--ink-3)" }}>
           {index}
         </span>
-      </div>
-      {/* Mask; the padding keeps descenders from being shaved. */}
-      <div className="mask">
-        <h2
-          className="sh-title font-display"
-          style={{
-            fontSize: "var(--text-h1)",
-            lineHeight: 0.92,
-            fontWeight: 700,
-            color: "var(--color-text)",
-          }}
-        >
-          {children}
-        </h2>
+        <div>
+          <div className="mask">
+            <h2
+              className="sh-title"
+              style={{
+                fontSize: "var(--t-3xl)",
+                lineHeight: 1.05,
+                fontWeight: 400,
+                letterSpacing: "-0.015em",
+                color: "var(--ink)",
+              }}
+            >
+              {children}
+            </h2>
+          </div>
+          {standfirst && (
+            <p
+              className="sh-stand measure mt-4"
+              style={{ fontSize: "var(--t-lg)", color: "var(--ink-3)", fontStyle: "italic" }}
+            >
+              {standfirst}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

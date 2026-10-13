@@ -11,19 +11,14 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["var(--font-display)", "Bricolage Grotesque", "sans-serif"],
-        body: ["var(--font-body)", "Instrument Sans", "sans-serif"],
-        code: ["var(--font-mono)", "JetBrains Mono", "monospace"],
+        display: ["var(--font-display)", "Georgia", "serif"],
+        text: ["var(--font-text)", "Georgia", "serif"],
       },
       colors: {
-        "gs-bg":      "var(--color-bg)",
-        "gs-surface": "var(--color-surface)",
-        "gs-border":  "var(--color-border)",
-        "gs-text":    "var(--color-text)",
-        "gs-body":    "var(--color-body)",
-        "gs-muted":   "var(--color-muted)",
-        "gs-accent":  "var(--color-accent)",
-        "gs-rule":    "var(--color-rule)",
+        paper:  "var(--paper)",
+        ink:    "var(--ink)",
+        accent: "var(--accent)",
+        rule:   "var(--rule)",
         background:   "hsl(var(--background))",
         foreground:   "hsl(var(--foreground))",
         border:       "hsl(var(--border))",

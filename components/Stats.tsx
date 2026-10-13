@@ -3,14 +3,18 @@
 import { useRef } from "react";
 import { gsap, ScrollTrigger, useGSAP, MQ, EASE } from "@/lib/gsap";
 
-/** Every figure here is one that appears on the résumé. */
-const STATS = [
-  { value: 30, suffix: "+", label: "high-severity vulns closed", sub: "legicycle · nist 800-53 / owasp" },
-  { value: 250, suffix: "+", label: "users on bantr in open beta", sub: "founded, built, and scaled" },
-  { value: 600, suffix: "+", label: "users served at sonaara", sub: "react native · 22% faster load" },
-  { value: 20, suffix: "+", label: "freelance sites shipped", sub: "avg. 17% engagement lift" },
+/** Each figure appears on the résumé; none is invented for effect. */
+const FIGURES = [
+  { value: 30, suffix: "+", unit: "high-severity vulnerabilities", note: "closed at LegiCycle, against NIST 800-53 and OWASP" },
+  { value: 250, suffix: "+", unit: "people in Bantr's open beta", note: "a platform I founded, designed, and built end to end" },
+  { value: 600, suffix: "+", unit: "users served at Sonaara", note: "React Native, with load time cut by 22 per cent" },
+  { value: 20, suffix: "+", unit: "freelance sites delivered", note: "averaging a 17 per cent lift in engagement" },
 ];
 
+/**
+ * Figures set as a table of record rather than four identical cards —
+ * the content is heterogeneous, so a uniform grid would flatten it.
+ */
 export default function Stats() {
   const root = useRef<HTMLDivElement>(null);
 
@@ -19,17 +23,19 @@ export default function Stats() {
       const mm = gsap.matchMedia();
 
       mm.add(MQ.isMotionOk, () => {
-        const triggers = gsap.utils.toArray<HTMLElement>(".stat").map((cell) => {
-          const out = cell.querySelector<HTMLElement>(".stat-num");
+        const rows = gsap.utils.toArray<HTMLElement>(".figure");
+
+        const made = rows.map((row) => {
+          const out = row.querySelector<HTMLElement>(".figure-num");
           if (!out) return null;
 
-          const target = Number(cell.dataset.value ?? 0);
-          const suffix = cell.dataset.suffix ?? "";
+          const target = Number(row.dataset.value ?? 0);
+          const suffix = row.dataset.suffix ?? "";
           const obj = { v: 0 };
 
           const tween = gsap.to(obj, {
             v: target,
-            duration: 1.5,
+            duration: 1.4,
             ease: EASE,
             paused: true,
             onUpdate: () => {
@@ -38,21 +44,21 @@ export default function Stats() {
           });
 
           const st = ScrollTrigger.create({
-            trigger: cell,
+            trigger: row,
             start: "top 88%",
             once: true,
             onEnter: () => tween.play(),
           });
+
           return { tween, st };
         });
 
-        return () => {
-          triggers.forEach((t) => {
-            if (!t) return;
-            t.tween.kill();
-            t.st.kill();
+        return () =>
+          made.forEach((m) => {
+            if (!m) return;
+            m.tween.kill();
+            m.st.kill();
           });
-        };
       });
 
       return () => mm.revert();
@@ -61,34 +67,46 @@ export default function Stats() {
   );
 
   return (
-    <div ref={root} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-      {STATS.map((s) => (
-        <div
-          key={s.label}
-          className="stat px-6 py-10 md:py-14"
-          data-value={s.value}
-          data-suffix={s.suffix}
-          style={{ borderTop: "1px solid var(--color-border)", borderRight: "1px solid var(--color-border)" }}
-        >
-          <span
-            className="stat-num font-display block mb-3"
-            style={{
-              fontSize: "clamp(2.75rem, 5vw, 4.25rem)",
-              lineHeight: 1,
-              fontWeight: 800,
-              color: "var(--color-accent)",
-            }}
-          >
-            0{s.suffix}
-          </span>
-          <span className="font-body block text-[15px] mb-1" style={{ color: "var(--color-text)" }}>
-            {s.label}
-          </span>
-          <span className="kicker block" style={{ color: "var(--color-muted)" }}>
-            {s.sub}
-          </span>
-        </div>
-      ))}
+    <div className="container-site" ref={root}>
+      <div className="spine">
+        <span className="label" style={{ color: "var(--ink-3)" }}>
+          By the numbers
+        </span>
+        <dl>
+          {FIGURES.map((f) => (
+            <div
+              key={f.unit}
+              className="figure grid gap-x-8 gap-y-1 md:grid-cols-[7.5rem_minmax(0,1fr)] items-baseline py-6"
+              data-value={f.value}
+              data-suffix={f.suffix}
+              style={{ borderTop: "1px solid var(--rule)" }}
+            >
+              <dd
+                className="figure-num font-display tnum"
+                style={{
+                  fontSize: "var(--t-2xl)",
+                  lineHeight: 1,
+                  fontWeight: 400,
+                  color: "var(--accent)",
+                }}
+              >
+                0{f.suffix}
+              </dd>
+              <dt>
+                <span className="block" style={{ color: "var(--ink)" }}>
+                  {f.unit}
+                </span>
+                <span
+                  className="block mt-0.5"
+                  style={{ fontSize: "var(--t-sm)", color: "var(--ink-3)" }}
+                >
+                  {f.note}
+                </span>
+              </dt>
+            </div>
+          ))}
+        </dl>
+      </div>
     </div>
   );
 }

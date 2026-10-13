@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { FileText } from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP, MQ, EASE } from "@/lib/gsap";
 import { certificates } from "@/data/certificates";
 import { awards } from "@/data/awards";
@@ -14,81 +13,94 @@ export default function Certificates() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-
       mm.add(MQ.isMotionOk, () => {
         const items = gsap.utils.toArray<HTMLElement>(".cred");
-        gsap.set(items, { autoAlpha: 0, y: 20 });
+        gsap.set(items, { autoAlpha: 0, y: 14 });
         const triggers = ScrollTrigger.batch(items, {
-          start: "top 92%",
+          start: "top 93%",
           onEnter: (b) =>
-            gsap.to(b, { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.06, ease: EASE, overwrite: true }),
+            gsap.to(b, { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.05, ease: EASE, overwrite: true }),
         });
         return () => {
           triggers.forEach((t) => t.kill());
           gsap.set(items, { clearProps: "all" });
         };
       });
-
       return () => mm.revert();
     },
     { scope: root },
   );
 
   return (
-    <section id="certificates" ref={root} className="py-20 md:py-28">
+    <section id="credentials" ref={root} className="py-20 md:py-28">
       <div className="container-site">
-        <SectionHeading index="04" label="credentials" className="mb-14 md:mb-20">
-          Proof of Work
+        <SectionHeading index="04" className="mb-14 md:mb-20">
+          Honours and credentials
         </SectionHeading>
 
-        {/* Awards first — they carry more weight than the certificates. */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-0 mb-16">
-          {awards.map((award) => (
-            <div
-              key={award.name}
-              className="cred py-6"
-              style={{ borderTop: "1px solid var(--color-border)" }}
-            >
-              <div className="flex items-baseline justify-between gap-4 mb-1.5">
-                <h3 className="font-body font-medium text-[16px]" style={{ color: "var(--color-text)" }}>
-                  {award.name}
-                </h3>
-                <span className="kicker flex-shrink-0" style={{ color: "var(--color-muted)" }}>
+        <dl className="spine mb-16">
+          <span className="label" style={{ color: "var(--ink-3)" }}>
+            Awards
+          </span>
+          <div>
+            {awards.map((award) => (
+              <div
+                key={award.name}
+                className="cred grid gap-x-8 gap-y-1 md:grid-cols-[minmax(0,1fr)_8rem] items-baseline py-5"
+                style={{ borderTop: "1px solid var(--rule)" }}
+              >
+                <dt>
+                  <span className="block" style={{ color: "var(--ink)" }}>
+                    {award.name}
+                  </span>
+                  <span
+                    className="block mt-0.5 measure"
+                    style={{ fontSize: "var(--t-sm)", color: "var(--ink-3)" }}
+                  >
+                    {award.issuer}
+                    {award.description ? ` — ${award.description}` : ""}
+                  </span>
+                </dt>
+                <dd className="label tnum md:text-right" style={{ color: "var(--ink-3)" }}>
                   {award.date}
-                </span>
+                </dd>
               </div>
-              <p className="font-code text-[12px] mb-2" style={{ color: "var(--color-accent)" }}>
-                {award.issuer}
-              </p>
-              {award.description && (
-                <p className="font-body text-[14px]" style={{ color: "var(--color-body)" }}>
-                  {award.description}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </dl>
 
-        <div className="flex flex-wrap gap-3">
-          {certificates.map((cert) => (
-            <Link
-              key={cert.name}
-              href={cert.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cred group inline-flex items-center gap-3 px-5 py-4 transition-colors duration-200"
-              style={{ border: "1px solid var(--color-border)" }}
-            >
-              <FileText size={15} aria-hidden="true" style={{ color: "var(--color-accent)" }} />
-              <span className="font-body text-[14px]" style={{ color: "var(--color-text)" }}>
-                {cert.name}
-              </span>
-              <span className="kicker" style={{ color: "var(--color-muted)" }}>
-                {cert.issuer}
-              </span>
-            </Link>
-          ))}
-        </div>
+        <dl className="spine">
+          <span className="label" style={{ color: "var(--ink-3)" }}>
+            Certificates
+          </span>
+          <div>
+            {certificates.map((cert) => (
+              <div
+                key={cert.name}
+                className="cred grid gap-x-8 gap-y-1 md:grid-cols-[minmax(0,1fr)_8rem] items-baseline py-5"
+                style={{ borderTop: "1px solid var(--rule)" }}
+              >
+                <dt>
+                  <Link
+                    href={cert.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link"
+                    style={{ color: "var(--ink)" }}
+                  >
+                    {cert.name}
+                  </Link>
+                  <span className="block mt-0.5" style={{ fontSize: "var(--t-sm)", color: "var(--ink-3)" }}>
+                    {cert.issuer}
+                  </span>
+                </dt>
+                <dd className="label tnum md:text-right" style={{ color: "var(--ink-3)" }}>
+                  {cert.date}
+                </dd>
+              </div>
+            ))}
+          </div>
+        </dl>
       </div>
     </section>
   );

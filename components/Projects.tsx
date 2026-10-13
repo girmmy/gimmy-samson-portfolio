@@ -1,100 +1,52 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Youtube } from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP, MQ, EASE } from "@/lib/gsap";
 import { projects, type Project } from "@/data/projects";
 import SectionHeading from "@/components/SectionHeading";
 
 export default function Projects() {
-  const root = useRef<HTMLDivElement>(null);
-  const track = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLElement>(null);
+  const preview = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState<Project | null>(null);
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
-      /* ── Desktop: pin the section and run the rail sideways ──
-         This is the one place pinning earns its cost. It is desktop-only:
-         pinned horizontal scroll on a phone fights the browser's own
-         gesture handling and is the usual source of scroll-jacking bugs. */
-      mm.add(MQ.isDesktop, () => {
-        const rail = track.current;
-        const section = root.current;
-        if (!rail || !section) return;
-
-        const distance = () => rail.scrollWidth - window.innerWidth + 120;
-
-        const tween = gsap.to(rail, {
-          x: () => -distance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            // The rail moves faster than the page scrolls. At 1:1 this
-            // section held the viewport for ~4,400px, which reads as being
-            // trapped; 0.72 keeps it substantial without the slog.
-            end: () => "+=" + distance() * 0.72,
-            pin: true,
-            scrub: 0.6,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
+      mm.add(MQ.isMotionOk, () => {
+        const rows = gsap.utils.toArray<HTMLElement>(".w-row");
+        gsap.set(rows, { autoAlpha: 0, y: 18 });
+        const triggers = ScrollTrigger.batch(rows, {
+          start: "top 92%",
+          onEnter: (b) =>
+            gsap.to(b, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.06, ease: EASE, overwrite: true }),
         });
-
-        // Cards tilt toward their direction of travel — a small amount of
-        // depth that makes the rail feel physical rather than like a slider.
-        const cards = gsap.utils.toArray<HTMLElement>(".pcard");
-        const tilts = cards.map((card) =>
-          gsap.fromTo(
-            card,
-            { rotateY: 6, scale: 0.97 },
-            {
-              rotateY: -6,
-              scale: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: card,
-                containerAnimation: tween,
-                start: "left right",
-                end: "right left",
-                scrub: true,
-              },
-            },
-          ),
-        );
-
         return () => {
-          tilts.forEach((t) => t.scrollTrigger?.kill());
-          tween.scrollTrigger?.kill();
-          tween.kill();
+          triggers.forEach((t) => t.kill());
+          gsap.set(rows, { clearProps: "all" });
         };
       });
 
-      /* ── Mobile: ordinary vertical stack with a batch reveal ── */
-      mm.add(MQ.isMobile, () => {
-        const cards = gsap.utils.toArray<HTMLElement>(".pcard");
-        gsap.set(cards, { autoAlpha: 0, y: 24 });
+      /* The preview plate trails the cursor across the index. It is not
+         decoration — it is how you see the work without leaving the list.
+         Pointer-driven, so it is desktop-only by nature. */
+      mm.add(MQ.isDesktop, () => {
+        const plate = preview.current;
+        if (!plate) return;
 
-        const triggers = ScrollTrigger.batch(cards, {
-          start: "top 90%",
-          onEnter: (batch) =>
-            gsap.to(batch, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.6,
-              stagger: 0.08,
-              ease: EASE,
-              overwrite: true,
-            }),
-        });
+        const xTo = gsap.quickTo(plate, "x", { duration: 0.55, ease: "power3.out" });
+        const yTo = gsap.quickTo(plate, "y", { duration: 0.55, ease: "power3.out" });
 
-        return () => {
-          triggers.forEach((t) => t.kill());
-          gsap.set(cards, { clearProps: "all" });
+        const onMove = (e: PointerEvent) => {
+          xTo(e.clientX + 28);
+          yTo(e.clientY - 110);
         };
+
+        window.addEventListener("pointermove", onMove, { passive: true });
+        return () => window.removeEventListener("pointermove", onMove);
       });
 
       return () => mm.revert();
@@ -102,170 +54,206 @@ export default function Projects() {
     { scope: root },
   );
 
+  // Fade the plate in and out as the hovered row changes.
+  useGSAP(
+    () => {
+      if (!preview.current) return;
+      gsap.to(preview.current, {
+        autoAlpha: active ? 1 : 0,
+        scale: active ? 1 : 0.96,
+        duration: 0.35,
+        ease: EASE,
+      });
+    },
+    { dependencies: [active] },
+  );
+
   return (
-    <section id="work" ref={root} className="relative overflow-hidden">
-      {/* Desktop rail */}
-      <div className="hidden md:flex h-[100svh] flex-col justify-center">
-        <div className="container-site w-full">
-          <SectionHeading index="03" label="selected work" className="mb-10">
-            Things I&apos;ve Shipped
-          </SectionHeading>
+    <section id="work" ref={root} className="py-20 md:py-28">
+      <div className="container-site">
+        <SectionHeading
+          index="03"
+          standfirst="Eleven things, newest first. Hover a title to see it."
+          className="mb-14 md:mb-20"
+        >
+          Selected work
+        </SectionHeading>
+
+        {/* Desktop: the index */}
+        <div className="hidden md:block" onMouseLeave={() => setActive(null)}>
+          {projects.map((p) => (
+            <Row key={p.index} project={p} onEnter={() => setActive(p)} />
+          ))}
+          <div style={{ borderTop: "1px solid var(--rule)" }} />
+          <p className="label mt-8" style={{ color: "var(--ink-3)" }}>
+            More at{" "}
+            <Link href="https://github.com/girmmy" target="_blank" rel="noopener noreferrer" className="link">
+              github.com/girmmy
+            </Link>
+          </p>
         </div>
 
-        <div
-          ref={track}
-          className="flex gap-6 pl-[clamp(1.25rem,4vw,3.5rem)] pr-20"
-          style={{ perspective: "1400px", willChange: "transform" }}
-        >
+        {/* Mobile: the same content, read rather than hovered */}
+        <div className="md:hidden">
           {projects.map((p) => (
-            <Card key={p.index} project={p} />
+            <MobileEntry key={p.index} project={p} />
           ))}
-          <EndCap />
+          <p className="label mt-10" style={{ color: "var(--ink-3)" }}>
+            More at{" "}
+            <Link href="https://github.com/girmmy" target="_blank" rel="noopener noreferrer" className="link">
+              github.com/girmmy
+            </Link>
+          </p>
         </div>
       </div>
 
-      {/* Mobile stack */}
-      <div className="md:hidden container-site py-20">
-        <SectionHeading index="03" label="selected work" className="mb-10">
-          Things I&apos;ve Shipped
-        </SectionHeading>
-        <div className="flex flex-col gap-5">
-          {projects.map((p) => (
-            <Card key={p.index} project={p} />
-          ))}
+      {/* The trailing plate. aria-hidden: everything in it is already in
+          the list, and a cursor-follower is meaningless to a screen reader. */}
+      <div
+        ref={preview}
+        aria-hidden="true"
+        className="hidden md:block fixed top-0 left-0 pointer-events-none"
+        style={{ zIndex: 30, width: "340px", opacity: 0, willChange: "transform" }}
+      >
+        <div style={{ border: "1px solid var(--rule-strong)", background: "var(--paper-2)" }}>
+          <div style={{ aspectRatio: "16/10", overflow: "hidden" }}>
+            {active?.image ? (
+              <Image
+                src={active.image}
+                alt=""
+                width={680}
+                height={425}
+                className="w-full h-full object-cover object-top"
+              />
+            ) : (
+              <div
+                className="w-full h-full grid place-items-center"
+                style={{ background: "var(--paper-3)" }}
+              >
+                <span className="label" style={{ color: "var(--ink-3)" }}>
+                  No preview
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function Card({ project }: { project: Project }) {
+function Row({ project, onEnter }: { project: Project; onEnter: () => void }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
     <article
-      className="pcard flex-shrink-0 w-full md:w-[clamp(340px,34vw,460px)] flex flex-col"
-      style={{
-        background: "var(--color-surface)",
-        border: "1px solid var(--color-border)",
-        transformStyle: "preserve-3d",
+      className="w-row"
+      style={{ borderTop: "1px solid var(--rule)" }}
+      onMouseEnter={() => {
+        setHovered(true);
+        onEnter();
       }}
+      onMouseLeave={() => setHovered(false)}
     >
-      <div
-        className="relative overflow-hidden"
-        style={{ aspectRatio: "16/10", borderBottom: "1px solid var(--color-border)" }}
+      <Link
+        href={project.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="spine items-baseline py-6 group"
+        style={{ textDecoration: "none" }}
       >
-        {project.image ? (
-          <Image
-            src={project.image}
-            alt={`${project.title} screenshot`}
-            width={640}
-            height={400}
-            className="w-full h-full object-cover object-top"
-          />
-        ) : (
-          /* No deployed page to screenshot — say so rather than faking one. */
-          <div
-            className="w-full h-full grid place-items-center"
-            style={{
-              background:
-                "repeating-linear-gradient(135deg, var(--color-surface-2) 0 10px, var(--color-surface) 10px 20px)",
-            }}
-          >
-            <span className="kicker" style={{ color: "var(--color-muted)" }}>
-              no preview
-            </span>
-          </div>
-        )}
-        <span
-          className="absolute top-0 left-0 kicker px-3 py-1.5"
-          style={{ background: "var(--color-accent)", color: "var(--color-accent-ink)" }}
-        >
+        <span className="label tnum" style={{ color: "var(--ink-3)" }}>
           {project.index}
         </span>
-      </div>
 
-      <div className="p-6 flex flex-col flex-1">
-        <div className="flex items-baseline justify-between gap-3 mb-4">
-          <h3
-            className="font-display"
-            style={{ fontSize: "var(--text-h2)", fontWeight: 700, color: "var(--color-text)" }}
-          >
-            {project.title}
-          </h3>
-          <span className="kicker flex-shrink-0" style={{ color: "var(--color-muted)" }}>
-            {project.year}
-          </span>
-        </div>
-
-        <ul className="space-y-2.5 mb-6 flex-1">
-          {project.description.map((point, i) => (
-            <li
-              key={i}
-              className="font-body text-[14.5px] leading-relaxed flex gap-2.5"
-              style={{ color: "var(--color-body)" }}
-            >
-              <span aria-hidden="true" style={{ color: "var(--color-accent)" }}>
-                —
-              </span>
-              {point}
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex flex-wrap gap-1.5 mb-5">
-          {project.tags.map((tag) => (
+        <span className="grid gap-x-10 gap-y-2 md:grid-cols-[minmax(0,1fr)_auto] items-baseline">
+          <span>
             <span
-              key={tag}
-              className="font-code text-[11px] px-2.5 py-1"
-              style={{ border: "1px solid var(--color-border)", color: "var(--color-muted)" }}
+              className="font-display block"
+              style={{
+                fontSize: "var(--t-xl)",
+                fontWeight: 400,
+                color: hovered ? "var(--accent)" : "var(--ink)",
+                transition: "color 0.2s ease",
+              }}
             >
-              {tag}
+              {project.title}
             </span>
-          ))}
-        </div>
-
-        <div
-          className="flex items-center gap-5 pt-4"
-          style={{ borderTop: "1px solid var(--color-border)" }}
-        >
-          <Link
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-code text-[12px] inline-flex items-center gap-2"
-            style={{ color: "var(--color-accent)" }}
-          >
-            <ExternalLink size={13} aria-hidden="true" /> VIEW
-          </Link>
-          {project.video && (
-            <Link
-              href={project.video}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-code text-[12px] inline-flex items-center gap-2"
-              style={{ color: "var(--color-muted)" }}
+            <span
+              className="block mt-1.5 measure"
+              style={{ fontSize: "var(--t-sm)", color: "var(--ink-3)" }}
             >
-              <Youtube size={13} aria-hidden="true" /> DEMO
-            </Link>
-          )}
-        </div>
-      </div>
+              {project.description[0]}
+            </span>
+          </span>
+
+          <span className="flex items-baseline gap-6 flex-shrink-0">
+            <span style={{ fontSize: "var(--t-sm)", color: "var(--ink-3)" }}>
+              {project.tags.slice(0, 2).join(", ")}
+            </span>
+            <span className="label tnum" style={{ color: "var(--ink-3)" }}>
+              {project.year}
+            </span>
+          </span>
+        </span>
+      </Link>
     </article>
   );
 }
 
-/** Closes the rail so the last card is not flush against the viewport edge. */
-function EndCap() {
+function MobileEntry({ project }: { project: Project }) {
   return (
-    <div
-      aria-hidden="true"
-      className="pcard flex-shrink-0 w-[clamp(240px,22vw,320px)] grid place-items-center"
-      style={{ border: "1px dashed var(--color-border)" }}
-    >
-      <span className="kicker text-center px-6" style={{ color: "var(--color-muted)" }}>
-        more on
-        <br />
-        <span style={{ color: "var(--color-accent)" }}>github.com/girmmy</span>
-      </span>
-    </div>
+    <article className="w-row py-7" style={{ borderTop: "1px solid var(--rule)" }}>
+      <div className="flex items-baseline gap-4 mb-2">
+        <span className="label tnum" style={{ color: "var(--ink-3)" }}>
+          {project.index}
+        </span>
+        <h3
+          className="font-display"
+          style={{ fontSize: "var(--t-xl)", fontWeight: 400, color: "var(--ink)" }}
+        >
+          {project.title}
+        </h3>
+      </div>
+
+      {project.image && (
+        <div className="mb-4 mt-3" style={{ border: "1px solid var(--rule)" }}>
+          <Image
+            src={project.image}
+            alt={`${project.title} screenshot`}
+            width={680}
+            height={425}
+            className="w-full object-cover object-top"
+            style={{ aspectRatio: "16/10" }}
+          />
+        </div>
+      )}
+
+      <ul className="space-y-2 mb-3">
+        {project.description.map((point, i) => (
+          <li key={i} style={{ fontSize: "var(--t-sm)", color: "var(--ink-2)" }}>
+            {point}
+          </li>
+        ))}
+      </ul>
+
+      <p className="label" style={{ color: "var(--ink-3)" }}>
+        {project.tags.join(" · ")} — {project.year}
+      </p>
+
+      <p className="mt-3" style={{ fontSize: "var(--t-sm)" }}>
+        <Link href={project.link} target="_blank" rel="noopener noreferrer" className="link">
+          Open {project.title}
+        </Link>
+        {project.video && (
+          <>
+            {" · "}
+            <Link href={project.video} target="_blank" rel="noopener noreferrer" className="link">
+              Watch the demo
+            </Link>
+          </>
+        )}
+      </p>
+    </article>
   );
 }

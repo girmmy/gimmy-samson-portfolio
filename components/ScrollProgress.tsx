@@ -50,7 +50,7 @@ export default function ScrollProgress() {
         ref={bar}
         className="w-full h-full"
         style={{
-          background: "var(--color-accent)",
+          background: "var(--accent)",
           transform: "scaleX(0)",
           transformOrigin: "0% 50%",
           willChange: "transform",

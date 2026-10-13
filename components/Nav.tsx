@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { gsap, useGSAP, MQ } from "@/lib/gsap";
 
 const LINKS = [
-  { id: "about", label: "01 / profile" },
-  { id: "experience", label: "02 / experience" },
-  { id: "work", label: "03 / work" },
-  { id: "certificates", label: "04 / credentials" },
-  { id: "connect", label: "05 / connect" },
+  { id: "about", label: "Profile" },
+  { id: "experience", label: "Experience" },
+  { id: "work", label: "Work" },
+  { id: "credentials", label: "Credentials" },
+  { id: "connect", label: "Contact" },
 ];
 
 export default function Nav() {
@@ -19,13 +18,12 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 32);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the sheet on Escape, and lock the page behind it.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -43,7 +41,7 @@ export default function Nav() {
       const mm = gsap.matchMedia();
       mm.add(MQ.isMotionOk, () => {
         const tl = gsap.timeline();
-        tl.fromTo(".sheet-link", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.05 });
+        tl.fromTo(".sheet-item", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05 });
         return () => tl.kill();
       });
       return () => mm.revert();
@@ -60,48 +58,56 @@ export default function Nav() {
     <>
       <header
         ref={root}
-        className="fixed top-0 inset-x-0 z-50 transition-colors duration-300"
+        className="fixed top-0 inset-x-0 z-50"
         style={{
-          background: scrolled ? "color-mix(in srgb, var(--color-bg) 88%, transparent)" : "transparent",
-          backdropFilter: scrolled ? "blur(10px)" : "none",
-          borderBottom: scrolled ? "1px solid var(--color-border)" : "1px solid transparent",
+          background: scrolled ? "color-mix(in srgb, var(--paper) 92%, transparent)" : "transparent",
+          backdropFilter: scrolled ? "blur(8px)" : "none",
+          borderBottom: `1px solid ${scrolled ? "var(--rule)" : "transparent"}`,
+          transition: "background-color 0.25s ease, border-color 0.25s ease",
         }}
       >
-        <div className="container-site flex items-center justify-between h-16 md:h-[72px]">
+        <div className="container-site flex items-center justify-between h-16">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-code text-[13px] tracking-wider"
-            style={{ color: "var(--color-text)", fontWeight: 500 }}
+            className="font-display"
+            style={{
+              fontSize: "var(--t-base)",
+              color: "var(--ink)",
+              background: "none",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+            }}
             aria-label="Back to top"
           >
-            G<span style={{ color: "var(--color-accent)" }}>.</span>SAMSON
+            G.&nbsp;Samson
           </button>
 
-          <nav className="hidden md:flex items-center gap-7" aria-label="Sections">
+          <nav className="hidden md:flex items-center gap-8" aria-label="Sections">
             {LINKS.map((l) => (
               <button
                 key={l.id}
                 onClick={() => go(l.id)}
-                className="kicker transition-colors duration-150"
-                style={{ color: "var(--color-muted)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
+                className="label"
+                style={{ color: "var(--ink-3)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-3)")}
               >
                 {l.label}
               </button>
             ))}
+            <ThemeToggle />
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex md:hidden items-center gap-6">
             <ThemeToggle />
             <button
-              className="md:hidden grid place-items-center"
-              style={{ width: "44px", height: "44px", color: "var(--color-text)" }}
+              className="label"
+              style={{ color: "var(--ink)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
               onClick={() => setOpen((v) => !v)}
-              aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
             >
-              {open ? <X size={20} /> : <Menu size={20} />}
+              {open ? "Close" : "Menu"}
             </button>
           </div>
         </div>
@@ -110,20 +116,27 @@ export default function Nav() {
       {open && (
         <div
           className="fixed inset-0 z-40 md:hidden flex flex-col justify-center px-6"
-          style={{ background: "var(--color-bg)" }}
+          style={{ background: "var(--paper)" }}
         >
-          <nav className="flex flex-col gap-2" aria-label="Sections">
-            {LINKS.map((l) => (
+          <nav className="flex flex-col" aria-label="Sections">
+            {LINKS.map((l, i) => (
               <button
                 key={l.id}
                 onClick={() => go(l.id)}
-                className="sheet-link font-display text-left py-2"
-                style={{ fontSize: "clamp(2rem, 9vw, 3rem)", fontWeight: 700, color: "var(--color-text)" }}
+                className="sheet-item font-display text-left py-4 flex items-baseline gap-5"
+                style={{
+                  fontSize: "var(--t-2xl)",
+                  color: "var(--ink)",
+                  background: "none",
+                  border: "none",
+                  borderTop: i === 0 ? "none" : "1px solid var(--rule)",
+                  cursor: "pointer",
+                }}
               >
-                {l.label.split(" / ")[1]}
-                <span className="kicker ml-3" style={{ color: "var(--color-accent)" }}>
-                  {l.label.split(" / ")[0]}
+                <span className="label tnum" style={{ color: "var(--ink-3)" }}>
+                  {String(i + 1).padStart(2, "0")}
                 </span>
+                {l.label}
               </button>
             ))}
           </nav>

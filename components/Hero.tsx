@@ -2,78 +2,34 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { Github, Linkedin, ArrowDownRight } from "lucide-react";
 import { gsap, useGSAP, MQ, EASE } from "@/lib/gsap";
 
-const META = [
-  ["role", "full stack engineer @ legicycle"],
-  ["study", "b.s. computer science · georgia tech"],
-  ["focus", "agent infrastructure · mcp · appsec"],
-  ["status", "open to swe / ai-ml internships"],
+/** Masthead facts. A definition list, because that is what they are. */
+const FACTS: [string, string][] = [
+  ["Position", "Full stack engineer, LegiCycle"],
+  ["Reading", "B.S. Computer Science, Georgia Tech"],
+  ["Based", "Atlanta, Georgia"],
+  ["Seeking", "SWE and AI/ML internships"],
 ];
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
-
-  const scrollTo = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
       mm.add(MQ.isMotionOk, () => {
-        gsap.set([".hero-rise", ".hero-meta-row"], { autoAlpha: 0, y: 26 });
-        gsap.set(".hero-word", { yPercent: 115 });
-        gsap.set(".hero-hr", { scaleX: 0 });
+        gsap.set(".h-line", { yPercent: 105 });
+        gsap.set(".h-fade", { autoAlpha: 0, y: 14 });
+        gsap.set(".h-rule", { scaleX: 0 });
 
-        // Boot overlay owns the first ~2.4s; start under it so the name is
-        // already moving as the panel splits.
-        let delay = 2.15;
-        try {
-          if (sessionStorage.getItem("gs-boot") === "1") delay = 0.1;
-        } catch {
-          /* non-fatal */
-        }
-
-        const tl = gsap.timeline({ delay });
-
-        tl.to(".hero-hr", { scaleX: 1, duration: 0.8, ease: EASE })
-          .to(
-            ".hero-word",
-            { yPercent: 0, duration: 1.05, stagger: 0.09, ease: "power4.out" },
-            "<0.1",
-          )
-          .to(
-            ".hero-rise",
-            { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.08, ease: EASE },
-            "<0.45",
-          )
-          .to(
-            ".hero-meta-row",
-            { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.06, ease: EASE },
-            "<0.1",
-          );
+        const tl = gsap.timeline({ delay: 0.15 });
+        tl.to(".h-rule", { scaleX: 1, duration: 0.9, ease: EASE })
+          .to(".h-line", { yPercent: 0, duration: 1, stagger: 0.07, ease: "power3.out" }, "<0.05")
+          .to(".h-fade", { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.06, ease: EASE }, "<0.4");
 
         return () => tl.kill();
-      });
-
-      // Parallax on the way out — desktop only.
-      mm.add(MQ.isDesktop, () => {
-        const out = gsap.timeline({
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.5,
-          },
-        });
-        out
-          .to(".hero-name", { yPercent: -18, ease: "none" }, 0)
-          .to(".hero-side", { yPercent: -45, ease: "none" }, 0)
-          .to(".hero-grid", { yPercent: 12, ease: "none" }, 0);
-
-        return () => out.scrollTrigger?.kill();
       });
 
       return () => mm.revert();
@@ -85,125 +41,101 @@ export default function Hero() {
     <section
       id="hero"
       ref={root}
-      className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden"
+      className="relative min-h-[88svh] flex flex-col justify-center"
       aria-labelledby="hero-heading"
     >
-      {/* Exposed measuring grid */}
-      <div
-        aria-hidden="true"
-        className="hero-grid bg-grid bg-grid-fade absolute inset-0 pointer-events-none"
-        style={{ willChange: "transform" }}
-      />
-      {/* Accent bloom, bottom-left */}
-      <div
-        aria-hidden="true"
-        className="absolute pointer-events-none"
-        style={{
-          bottom: "-20%",
-          left: "-10%",
-          width: "60vw",
-          height: "60vw",
-          maxWidth: "820px",
-          maxHeight: "820px",
-          background: "var(--color-glow)",
-          filter: "blur(130px)",
-        }}
-      />
+      <div className="container-site w-full pt-28 pb-16 md:pt-36 md:pb-24">
+        <p className="h-fade label mb-10" style={{ color: "var(--ink-3)" }}>
+          Portfolio — Twenty&nbsp;Twenty&nbsp;Six
+        </p>
 
-      <div className="container-site relative z-10 w-full pt-28 pb-10 md:pb-14">
-        {/* Top meta strip */}
-        <div className="hero-side grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3 mb-10 md:mb-14">
-          {META.map(([k, v]) => (
-            <div key={k} className="hero-meta-row">
-              <span className="kicker block mb-1" style={{ color: "var(--color-muted)" }}>
-                {k}
-              </span>
-              <span className="font-code text-[13px]" style={{ color: "var(--color-body)" }}>
-                {v}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div
-          className="hero-hr w-full mb-6 md:mb-8"
-          style={{
-            height: "1px",
-            background: "var(--color-accent)",
-            transformOrigin: "0% 50%",
-          }}
-          aria-hidden="true"
-        />
-
-        {/* The name, as large as the viewport will take */}
         <h1
           id="hero-heading"
-          className="hero-name font-display mb-6 md:mb-9"
+          className="font-display mb-10"
           style={{
-            fontSize: "var(--text-display)",
-            lineHeight: 0.86,
-            fontWeight: 800,
-            color: "var(--color-text)",
-            willChange: "transform",
+            fontSize: "var(--t-display)",
+            lineHeight: 1.02,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--ink)",
           }}
         >
           <span className="mask block">
-            <span className="hero-word block">GIRMACHEW</span>
+            <span className="h-line block">Girmachew</span>
           </span>
           <span className="mask block">
-            <span className="hero-word block" style={{ color: "var(--color-accent)" }}>
-              SAMSON
+            <span className="h-line block" style={{ fontStyle: "italic", fontWeight: 300 }}>
+              Samson
             </span>
           </span>
         </h1>
 
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-          <p
-            className="hero-rise font-body max-w-xl"
-            style={{ fontSize: "clamp(1rem, 1.5vw, 1.2rem)", color: "var(--color-body)" }}
-          >
-            I build agent infrastructure and full-stack products — MCP servers,
-            RAG systems, and the security work that keeps them standing up.
-          </p>
+        <div
+          className="h-rule w-full mb-10"
+          style={{ height: "1px", background: "var(--rule-strong)", transformOrigin: "0% 50%" }}
+          aria-hidden="true"
+        />
 
-          <div className="hero-rise flex items-center gap-3 flex-wrap">
-            <button
-              onClick={() => scrollTo("work")}
-              className="group font-code text-[13px] inline-flex items-center gap-2 px-6 py-3.5 transition-colors duration-200"
-              style={{ background: "var(--color-accent)", color: "var(--color-accent-ink)", fontWeight: 500 }}
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-20 items-start">
+          <div className="h-fade">
+            <p
+              className="measure mb-8"
+              style={{ fontSize: "var(--t-lg)", lineHeight: 1.6, color: "var(--ink-2)" }}
             >
-              SELECTED WORK
-              <ArrowDownRight size={15} aria-hidden="true" />
-            </button>
-            <a
-              href="/Girmachew_Samson.pdf"
-              download
-              className="font-code text-[13px] px-6 py-3.5 transition-colors duration-200 hover:border-[var(--color-accent)]"
-              style={{ border: "1px solid var(--color-border)", color: "var(--color-text)" }}
-            >
-              RÉSUMÉ
-            </a>
-            <Link
-              href="https://github.com/girmmy"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub profile"
-              className="grid place-items-center transition-colors duration-200"
-              style={{ width: "48px", height: "48px", border: "1px solid var(--color-border)", color: "var(--color-body)" }}
-            >
-              <Github size={17} aria-hidden="true" />
-            </Link>
-            <Link
-              href="https://linkedin.com/in/girmachew-samson"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn profile"
-              className="grid place-items-center transition-colors duration-200"
-              style={{ width: "48px", height: "48px", border: "1px solid var(--color-border)", color: "var(--color-body)" }}
-            >
-              <Linkedin size={17} aria-hidden="true" />
-            </Link>
+              I build agent infrastructure and full-stack products — an MCP server
+              published to npm, a RAG research assistant that reads state and
+              federal law, and the security work that keeps a live platform
+              standing up for the people who depend on it.
+            </p>
+
+            {/* Navigation as a sentence. The underline is the affordance,
+                so none of these need an icon to announce themselves. */}
+            <p className="measure" style={{ color: "var(--ink-2)" }}>
+              Read{" "}
+              <button
+                onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" })}
+                className="link"
+                style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: "pointer" }}
+              >
+                what I&rsquo;ve shipped
+              </button>
+              , download{" "}
+              <a href="/Girmachew_Samson.pdf" download className="link">
+                my résumé
+              </a>
+              , or find me on{" "}
+              <Link href="https://github.com/girmmy" target="_blank" rel="noopener noreferrer" className="link">
+                GitHub
+              </Link>{" "}
+              and{" "}
+              <Link
+                href="https://linkedin.com/in/girmachew-samson"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link"
+              >
+                LinkedIn
+              </Link>
+              .
+            </p>
           </div>
+
+          <dl className="h-fade lg:min-w-[19rem]">
+            {FACTS.map(([term, value], i) => (
+              <div
+                key={term}
+                className="flex items-baseline justify-between gap-8 py-3"
+                style={{ borderTop: i === 0 ? "none" : "1px solid var(--rule)" }}
+              >
+                <dt className="label flex-shrink-0" style={{ color: "var(--ink-3)" }}>
+                  {term}
+                </dt>
+                <dd className="text-right" style={{ fontSize: "var(--t-sm)", color: "var(--ink-2)" }}>
+                  {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>

@@ -1,26 +1,23 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import { Fraunces, Newsreader } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
-const display = Bricolage_Grotesque({
+// Two faces, both serif, doing different jobs: Fraunces is a display
+// face with optical-size and "wonk" axes that give the headings some
+// character; Newsreader is a text face built to be read at length.
+const display = Fraunces({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["400", "600", "700", "800"],
+  axes: ["SOFT", "WONK", "opsz"],
   display: "swap",
 });
 
-const body = Instrument_Sans({
+const text = Newsreader({
   subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "500"],
+  variable: "--font-text",
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -75,7 +72,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <meta name="theme-color" content="#07080A" />
+        <meta name="theme-color" content="#FBF8F2" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#15120F" media="(prefers-color-scheme: dark)" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -107,8 +105,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className={`${display.variable} ${body.variable} ${mono.variable} font-body grain`} suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange={false}>
+      <body className={`${display.variable} ${text.variable} font-text`} suppressHydrationWarning>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange={false}>
           {children}
         </ThemeProvider>
       </body>
