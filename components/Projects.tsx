@@ -1,53 +1,120 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { gsap, ScrollTrigger, useGSAP, MQ, EASE } from "@/lib/gsap";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ExternalLink, Youtube } from "lucide-react";
 import { projects } from "@/data/projects";
+import SectionHeading from "@/components/SectionHeading";
 
 export default function Projects() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const shouldReduce = useReducedMotion();
+  const root = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      const rows = () => gsap.utils.toArray<HTMLElement>(".project-row");
+
+      // Entrance. ScrollTrigger.batch staggers whatever happens to enter the
+      // viewport together, so a fast scroll does not fire ten separate tweens.
+      mm.add(MQ.isMotionOk, () => {
+        const items = rows();
+        gsap.set(items, { autoAlpha: 0, y: 18 });
+
+        const triggers = ScrollTrigger.batch(items, {
+          start: "top 90%",
+          onEnter: (batch) =>
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.6,
+              stagger: 0.08,
+              ease: EASE,
+              overwrite: true,
+            }),
+        });
+
+        return () => {
+          triggers.forEach((t) => t.kill());
+          gsap.set(items, { clearProps: "all" });
+        };
+      });
+
+      // Magnetic hover, desktop only. quickTo reuses one tween per property
+      // instead of allocating a new one per mousemove, which is what keeps this
+      // smooth rather than stuttery.
+      mm.add(MQ.isDesktop, () => {
+        const disposers = rows().map((row) => {
+          const title = row.querySelector<HTMLElement>(".project-title");
+          const bar = row.querySelector<HTMLElement>(".project-bar");
+          if (!title || !bar) return () => {};
+
+          const slide = gsap.quickTo(title, "x", { duration: 0.45, ease: EASE });
+          const grow = gsap.quickTo(bar, "scaleY", { duration: 0.35, ease: EASE });
+
+          const enter = () => {
+            slide(12);
+            grow(1);
+          };
+          const leave = () => {
+            slide(0);
+            grow(0);
+          };
+
+          row.addEventListener("mouseenter", enter);
+          row.addEventListener("mouseleave", leave);
+          // Keyboard users get the same affordance.
+          row.addEventListener("focusin", enter);
+          row.addEventListener("focusout", leave);
+
+          return () => {
+            row.removeEventListener("mouseenter", enter);
+            row.removeEventListener("mouseleave", leave);
+            row.removeEventListener("focusin", enter);
+            row.removeEventListener("focusout", leave);
+          };
+        });
+
+        return () => disposers.forEach((d) => d());
+      });
+
+      return () => mm.revert();
+    },
+    { scope: root },
+  );
 
   const toggle = (i: number) => setActiveIndex((prev) => (prev === i ? null : i));
 
   return (
     <section id="work" className="section-divider py-24 md:py-32">
-      <div className="container-site">
-        <motion.p
-          initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="font-code text-xs tracking-[0.2em] uppercase mb-3"
-          style={{ color: "var(--color-accent)" }}
-        >
-          work
-        </motion.p>
-        <motion.h2
-          initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-          className="font-clash font-bold mb-10 md:mb-14"
-          style={{ fontSize: "var(--text-h1)", color: "var(--color-text)" }}
-        >
+      <div className="container-site" ref={root}>
+        <SectionHeading label="work" className="mb-10 md:mb-14">
           Selected Work
-        </motion.h2>
+        </SectionHeading>
 
         {/* Desktop: editorial rows */}
         <div className="hidden md:block" style={{ borderTop: "1px solid var(--color-border)" }}>
           {projects.map((project, i) => (
-            <motion.div
+            <div
               key={project.index}
-              initial={shouldReduce ? {} : { opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.06 }}
+              className="project-row relative"
               style={{ borderBottom: "1px solid var(--color-border)" }}
             >
+              {/* Accent edge that grows on hover/focus */}
+              <span
+                aria-hidden="true"
+                className="project-bar absolute left-0 top-0 bottom-0"
+                style={{
+                  width: "2px",
+                  background: "var(--color-accent)",
+                  transform: "scaleY(0)",
+                  transformOrigin: "50% 50%",
+                }}
+              />
               <button
                 className="w-full flex items-center gap-6 py-6 px-3 group text-left transition-colors duration-200"
                 style={{ background: activeIndex === i ? "var(--color-surface)" : "transparent" }}
@@ -58,7 +125,7 @@ export default function Projects() {
                   {project.index}
                 </span>
                 <span
-                  className="font-clash font-medium flex-1 text-left transition-colors duration-150 group-hover:opacity-80"
+                  className="project-title font-clash font-medium flex-1 text-left transition-colors duration-150 group-hover:opacity-80"
                   style={{ fontSize: "var(--text-h2)", color: activeIndex === i ? "var(--color-accent)" : "var(--color-text)" }}
                 >
                   {project.title}
@@ -153,20 +220,16 @@ export default function Projects() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Mobile: stacked cards */}
         <div className="md:hidden space-y-4">
           {projects.map((project, i) => (
-            <motion.div
+            <div
               key={project.index}
-              initial={shouldReduce ? {} : { opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.06 }}
-              className="rounded overflow-hidden"
+              className="project-row rounded overflow-hidden"
               style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
             >
               {/* Screenshot */}
@@ -221,7 +284,7 @@ export default function Projects() {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -2,40 +2,71 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { gsap, useGSAP, MQ } from "@/lib/gsap";
 import { experiences } from "@/data/experience";
+import SectionHeading from "@/components/SectionHeading";
 
 export default function Experience() {
   const shouldReduce = useReducedMotion();
+  const timeline = useRef<HTMLDivElement>(null);
+
+  // The accent line draws down the timeline as you scroll past it. Pure scaleY,
+  // so it is as cheap as the progress bar and runs on phones too.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add(MQ.isMotionOk, () => {
+        const tween = gsap.fromTo(
+          ".exp-line-fill",
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: timeline.current,
+              start: "top 75%",
+              end: "bottom 75%",
+              scrub: 0.4,
+            },
+          },
+        );
+        return () => tween.scrollTrigger?.kill();
+      });
+
+      mm.add(MQ.reduced, () => {
+        gsap.set(".exp-line-fill", { scaleY: 1 });
+      });
+
+      return () => mm.revert();
+    },
+    { scope: timeline },
+  );
 
   return (
     <section className="section-divider py-24 md:py-32">
       <div className="container-site">
-        <motion.p
-          initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="font-code text-xs tracking-[0.2em] uppercase mb-3"
-          style={{ color: "var(--color-accent)" }}
-        >
-          experience
-        </motion.p>
-        <motion.h2
-          initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-          className="font-clash font-bold mb-14 md:mb-20"
-          style={{ fontSize: "var(--text-h1)", color: "var(--color-text)" }}
-        >
+        <SectionHeading label="experience" className="mb-14 md:mb-20">
           What I&apos;ve Done
-        </motion.h2>
+        </SectionHeading>
 
-        <div className="relative">
+        <div className="relative" ref={timeline}>
+          {/* Track */}
           <div
             className="absolute left-[3px] top-0 bottom-0 w-px"
             style={{ background: "var(--color-border)" }}
+            aria-hidden="true"
+          />
+          {/* Accent fill that draws on scroll */}
+          <div
+            className="exp-line-fill absolute left-[3px] top-0 bottom-0 w-px"
+            style={{
+              background: "var(--color-accent)",
+              transform: "scaleY(0)",
+              transformOrigin: "50% 0%",
+              willChange: "transform",
+            }}
             aria-hidden="true"
           />
           <div className="space-y-0">

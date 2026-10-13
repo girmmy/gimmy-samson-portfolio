@@ -6,6 +6,7 @@ import { useState } from "react";
 import { FileText } from "lucide-react";
 import { certificates } from "@/data/certificates";
 import { awards } from "@/data/awards";
+import SectionHeading from "@/components/SectionHeading";
 
 export default function Certificates() {
   const shouldReduce = useReducedMotion();
@@ -13,26 +14,9 @@ export default function Certificates() {
   return (
     <section id="certificates" className="section-divider py-24 md:py-32">
       <div className="container-site">
-        <motion.p
-          initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="font-code text-xs tracking-[0.2em] uppercase mb-3"
-          style={{ color: "var(--color-accent)" }}
-        >
-          certificates
-        </motion.p>
-        <motion.h2
-          initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-          className="font-clash font-bold mb-10 md:mb-14"
-          style={{ fontSize: "var(--text-h1)", color: "var(--color-text)" }}
-        >
+        <SectionHeading label="certificates" className="mb-10 md:mb-14">
           Credentials
-        </motion.h2>
+        </SectionHeading>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {certificates.map((cert, i) => (

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Download } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import SectionHeading from "@/components/SectionHeading";
 import { useState } from "react";
 
 const skills = [
@@ -36,12 +37,9 @@ export default function About() {
   return (
     <section id="about" className="section-divider py-24 md:py-32">
       <div className="container-site">
-        <motion.p {...fadeUp()} className="font-code text-xs tracking-[0.2em] uppercase mb-3" style={{ color: "var(--color-accent)" }}>
-          about
-        </motion.p>
-        <motion.h2 {...fadeUp(0.05)} className="font-clash font-bold mb-14 md:mb-20" style={{ fontSize: "var(--text-h1)", color: "var(--color-text)" }}>
+        <SectionHeading label="about" className="mb-14 md:mb-20">
           Who I Am
-        </motion.h2>
+        </SectionHeading>
 
         <div className="grid md:grid-cols-[220px_1fr] gap-12 lg:gap-24">
           {/* Headshot */}

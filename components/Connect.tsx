@@ -3,12 +3,44 @@
 import Link from "next/link";
 import { Linkedin, Github, Mail, Check } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { gsap, useGSAP, MQ } from "@/lib/gsap";
 
 const EMAIL = "gimmys943@gmail.com";
 
 export default function Connect() {
   const shouldReduce = useReducedMotion();
+  const root = useRef<HTMLDivElement>(null);
+
+  // The closing line rises into place as you reach the end of the page.
+  // Scrubbed so it tracks the scroll rather than firing once and finishing.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add(MQ.isDesktop, () => {
+        const tween = gsap.fromTo(
+          ".connect-heading",
+          { yPercent: 45, autoAlpha: 0 },
+          {
+            yPercent: 0,
+            autoAlpha: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: root.current,
+              start: "top 85%",
+              end: "top 35%",
+              scrub: 0.5,
+            },
+          },
+        );
+        return () => tween.scrollTrigger?.kill();
+      });
+
+      return () => mm.revert();
+    },
+    { scope: root },
+  );
   const [copied, setCopied] = useState(false);
   const [hovered, setHovered] = useState(false);
 
@@ -25,18 +57,19 @@ export default function Connect() {
 
   return (
     <section id="connect" className="section-divider py-28 md:py-40">
-      <div className="container-site flex flex-col items-center text-center">
+      <div className="container-site flex flex-col items-center text-center" ref={root}>
         <motion.p {...fadeUp()} className="font-code text-xs tracking-[0.2em] uppercase mb-4" style={{ color: "var(--color-accent)" }}>
           connect
         </motion.p>
 
-        <motion.h2
-          {...fadeUp(0.06)}
-          className="font-clash font-bold leading-tight mb-6 max-w-2xl"
+        {/* GSAP-driven (see useGSAP above) — deliberately not a motion.h2, so
+            only one engine ever writes to its transform. */}
+        <h2
+          className="connect-heading font-clash font-bold leading-tight mb-6 max-w-2xl"
           style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", color: "var(--color-text)" }}
         >
           Let&apos;s build<br />something.
-        </motion.h2>
+        </h2>
 
         <motion.p {...fadeUp(0.1)} className="font-inter text-lg mb-10 max-w-md" style={{ color: "var(--color-muted)" }}>
           Have a project in mind? I&apos;d love to hear about it.
