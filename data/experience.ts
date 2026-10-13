@@ -13,10 +13,10 @@ export const experiences: Experience[] = [
     url: 'https://legicycle.ai',
     period: 'Aug 2026 – Present',
     bullets: [
-      'Audit a live platform on AWS against NIST 800-53 and OWASP standards, identifying and closing 30+ high-severity vulnerabilities',
-      'Migrate hardcoded secrets into Doppler across Dockerized services, closing the largest standing exposure of user data',
-      'Expand the platform\'s RAG research assistant, backed by PostgreSQL and Redis, from Georgia-only to Georgia, Delaware, and federal law — fixing a bug that cited the wrong state\'s laws to users',
-      'Fix a bug across 29 Django/DRF routes that silently locked invited collaborators out of shared bill-drafting projects, restoring access to every affected project',
+      'Hardened a live platform serving 20+ clients on AWS against NIST 800-53 and OWASP standards, identifying and remediating 30+ high-severity vulnerabilities',
+      'Migrated hardcoded secrets into Doppler across Dockerized services, closing the largest standing exposure of user data',
+      'Expanded the platform\'s RAG research assistant, backed by PostgreSQL and Redis, from Georgia-only coverage to Georgia, Delaware, and federal law — fixing a bug that cited the wrong state\'s laws to users',
+      'Diagnosed and resolved a bug across 29 Django/DRF routes that silently locked invited collaborators out of shared bill-drafting projects, restoring access across all 20+ client accounts',
     ],
   },
   {
@@ -41,7 +41,7 @@ export const experiences: Experience[] = [
     role: 'Founder & CEO',
     company: 'Bantr',
     url: 'https://bantr.online',
-    period: 'Feb 2026 – Aug 2026',
+    period: 'Feb 2026 – June 2026',
     bullets: [
       'Founded and launched a live debating platform, scaling to 250+ users in open beta',
       'Built the entire product from scratch — design, frontend, and backend — with real-time audio/video over WebRTC and live data on Supabase',
@@ -54,9 +54,9 @@ export const experiences: Experience[] = [
     url: 'https://sonaara.com/',
     period: 'Aug 2025 – Dec 2025',
     bullets: [
-      'Shipped React Native features to a production mobile app with 600+ users, improving load performance via lazy loading and component optimization',
-      'Integrated identity verification with Persona, replacing manual ID review with automated facial matching',
-      'Architected the backend schema for a real-time messaging feature, contributing to a 73% userbase increase',
+      'Shipped identity-verification and messaging features to a production React Native app serving 600+ users, improving load performance by 22% via lazy loading and component optimization',
+      'Integrated an identity-verification API (TruFace) to onboard 90+ verified users, replacing manual ID review with automated facial matching that cut 8 minutes from each verification',
+      'Architected the Firebase backend schema for a real-time messaging feature, contributing to a 73% userbase increase over 3 months',
     ],
   },
   {
