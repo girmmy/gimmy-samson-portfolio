@@ -12,7 +12,7 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="w-10 h-10 rounded-full" style={{ background: "var(--color-border)" }} />
+      <div className="w-11 h-11" style={{ border: "1px solid var(--color-border)" }} />
     );
   }
 
@@ -21,9 +21,9 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+      className="relative w-11 h-11 grid place-items-center transition-colors duration-200"
       style={{
-        background: "var(--color-surface)",
+        background: "transparent",
         border: "1px solid var(--color-border)",
         color: "var(--color-accent)",
       }}

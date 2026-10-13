@@ -1,134 +1,137 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
-import { Download } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { gsap, ScrollTrigger, useGSAP, MQ, EASE } from "@/lib/gsap";
 import SectionHeading from "@/components/SectionHeading";
-import { useState } from "react";
+import Stats from "@/components/Stats";
 
-const skills = [
+const STACK = [
+  { label: "languages", items: ["Python", "TypeScript", "JavaScript", "Java", "SQL"] },
   {
-    label: "Languages",
-    items: ["Python", "TypeScript", "JavaScript", "Java", "SQL"],
+    label: "frameworks",
+    items: ["React", "React Native", "Next.js", "Node.js", "Django / DRF", "Electron"],
   },
-  {
-    label: "Frameworks & Tools",
-    items: ["React", "React Native", "Next.js", "Node.js", "Django / DRF", "PostgreSQL", "Redis", "Supabase"],
-  },
-  {
-    label: "Cloud & Infrastructure",
-    items: ["AWS (ECS, Cognito, RDS)", "Terraform", "Docker", "Doppler", "Vercel"],
-  },
-  {
-    label: "AI/ML & Security",
-    items: ["Claude API", "OpenAI API", "RAG", "Model Context Protocol", "NIST 800-53", "OWASP"],
-  },
+  { label: "data & cloud", items: ["PostgreSQL", "Redis", "Supabase", "AWS", "Terraform", "Docker"] },
+  { label: "ai & security", items: ["Claude API", "OpenAI API", "RAG", "MCP", "NIST 800-53", "OWASP"] },
 ];
 
 export default function About() {
-  const shouldReduce = useReducedMotion();
-  const [imgHovered, setImgHovered] = useState(false);
+  const root = useRef<HTMLElement>(null);
 
-  const fadeUp = (delay = 0) =>
-    shouldReduce
-      ? {}
-      : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] } };
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add(MQ.isMotionOk, () => {
+        const items = gsap.utils.toArray<HTMLElement>(".reveal");
+        gsap.set(items, { autoAlpha: 0, y: 22 });
+
+        const triggers = ScrollTrigger.batch(items, {
+          start: "top 90%",
+          onEnter: (b) =>
+            gsap.to(b, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.07, ease: EASE, overwrite: true }),
+        });
+
+        return () => {
+          triggers.forEach((t) => t.kill());
+          gsap.set(items, { clearProps: "all" });
+        };
+      });
+
+      return () => mm.revert();
+    },
+    { scope: root },
+  );
 
   return (
-    <section id="about" className="section-divider py-24 md:py-32">
+    <section id="about" ref={root} className="py-20 md:py-28">
       <div className="container-site">
-        <SectionHeading label="about" className="mb-14 md:mb-20">
+        <SectionHeading index="01" label="profile" className="mb-14 md:mb-20">
           Who I Am
         </SectionHeading>
 
-        <div className="grid md:grid-cols-[220px_1fr] gap-12 lg:gap-24">
-          {/* Headshot */}
-          <motion.div {...fadeUp(0.1)} className="flex justify-center md:justify-start md:pt-2">
+        <div className="grid lg:grid-cols-[1fr_320px] gap-12 lg:gap-20 items-start mb-20">
+          <div>
+            <p
+              className="reveal font-body mb-8"
+              style={{ fontSize: "clamp(1.1rem, 1.9vw, 1.5rem)", lineHeight: 1.5, color: "var(--color-text)" }}
+            >
+              I&apos;m a CS student at Georgia Tech and a full stack engineer at
+              LegiCycle, where I work on the AI platform legislators use to
+              research, draft, and stress-test bills.
+            </p>
+            <p className="reveal font-body text-[16px] mb-8" style={{ color: "var(--color-body)" }}>
+              Day to day that means hardening a live AWS deployment against NIST
+              800-53 and OWASP, and expanding a RAG research assistant from
+              Georgia-only coverage out to Delaware and federal law. Before
+              LegiCycle I founded Bantr, a live debating platform that reached
+              250+ users in open beta, and I spent a semester at Sonaara shipping
+              identity-verification and messaging into a React Native app with
+              600+ users.
+            </p>
+            <p className="reveal font-body text-[16px]" style={{ color: "var(--color-body)" }}>
+              Outside of work I build agent infrastructure — an MCP server for
+              Google Tasks that&apos;s published to npm and the official registry,
+              a self-hosted opportunity tracker a Claude agent keeps up to date,
+              and a lectionary app that serves Ge&apos;ez and Amharic readings
+              offline. Currently looking for SWE and AI/ML internships.
+            </p>
+          </div>
+
+          <div className="reveal">
             <div
-              className="relative w-[200px] h-[200px] md:w-[220px] md:h-[220px] rounded-full overflow-hidden cursor-default flex-shrink-0"
-              style={{
-                boxShadow: imgHovered
-                  ? "0 0 0 3px var(--color-accent), 0 0 30px var(--color-accent-dim)"
-                  : "0 0 0 2px var(--color-border)",
-                transition: "box-shadow 0.25s ease",
-              }}
-              onMouseEnter={() => setImgHovered(true)}
-              onMouseLeave={() => setImgHovered(false)}
+              className="relative w-full max-w-[320px]"
+              style={{ aspectRatio: "1", border: "1px solid var(--color-border)" }}
             >
               <Image
                 src="/gimmy-headshot.png"
                 alt="Girmachew Samson"
-                width={220}
-                height={220}
+                width={320}
+                height={320}
                 className="w-full h-full object-cover object-[center_15%]"
                 priority
               />
-            </div>
-          </motion.div>
-
-          {/* Bio + skills */}
-          <div>
-            <motion.p
-              {...fadeUp(0.12)}
-              className="font-inter text-lg leading-relaxed mb-12"
-              style={{ color: "var(--color-body)" }}
-            >
-              Hi, I&apos;m Girmachew — Gimmy for short. I&apos;m a CS student at Georgia Tech
-              and a full stack engineer at LegiCycle, where I work on the AI platform legislators
-              use to research, draft, and stress-test bills — hardening a live AWS deployment and
-              expanding its RAG research assistant across state and federal law. Before that I
-              founded Bantr, a live debating platform that grew to 250+ users in open beta.
-              I build things.
-            </motion.p>
-
-            {/* Skills — bigger */}
-            <motion.div {...fadeUp(0.18)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-              {skills.map((group) => (
-                <div key={group.label}>
-                  <p className="font-code text-[11px] tracking-[0.25em] uppercase mb-4" style={{ color: "var(--color-muted)" }}>
-                    {group.label}
-                  </p>
-                  <ul className="space-y-2.5">
-                    {group.items.map((item) => (
-                      <li
-                        key={item}
-                        className="font-inter text-base flex items-center gap-2.5 group cursor-default transition-colors duration-150"
-                        style={{ color: "var(--color-body)" }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-body)")}
-                      >
-                        <span className="text-sm flex-shrink-0 transition-colors" style={{ color: "var(--color-accent)" }}>·</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* Resume */}
-            <motion.div {...fadeUp(0.22)}>
-              <a
-                href="/Girmachew_Samson.pdf"
-                download
-                className="inline-flex items-center gap-2.5 font-inter text-sm px-6 py-3 rounded transition-all duration-150"
-                style={{ border: "1px solid var(--color-border)", color: "var(--color-muted)" }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--color-accent)";
-                  e.currentTarget.style.color = "var(--color-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--color-border)";
-                  e.currentTarget.style.color = "var(--color-muted)";
-                }}
-                aria-label="Download resume PDF"
+              <span
+                className="absolute bottom-0 left-0 kicker px-3 py-1.5"
+                style={{ background: "var(--color-accent)", color: "var(--color-accent-ink)" }}
               >
-                <Download size={15} aria-hidden="true" />
-                Download Resume
-              </a>
-            </motion.div>
+                atlanta, ga
+              </span>
+            </div>
           </div>
         </div>
+
+        {/* Stack table */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+          {STACK.map((group) => (
+            <div key={group.label} className="reveal">
+              <div
+                className="flex items-center justify-between pb-2 mb-4"
+                style={{ borderBottom: "1px solid var(--color-accent)" }}
+              >
+                <span className="kicker" style={{ color: "var(--color-accent)" }}>
+                  {group.label}
+                </span>
+              </div>
+              <ul className="space-y-2">
+                {group.items.map((item) => (
+                  <li
+                    key={item}
+                    className="font-code text-[13px]"
+                    style={{ color: "var(--color-body)" }}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-20 md:mt-28">
+        <Stats />
       </div>
     </section>
   );

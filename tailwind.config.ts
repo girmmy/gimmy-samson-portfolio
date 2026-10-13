@@ -11,9 +11,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        clash: ["var(--font-clash)", "Clash Display", "sans-serif"],
-        inter: ["var(--font-inter)", "sans-serif"],
-        code: ["var(--font-mono)", "DM Mono", "monospace"],
+        display: ["var(--font-display)", "Bricolage Grotesque", "sans-serif"],
+        body: ["var(--font-body)", "Instrument Sans", "sans-serif"],
+        code: ["var(--font-mono)", "JetBrains Mono", "monospace"],
       },
       colors: {
         "gs-bg":      "var(--color-bg)",
@@ -22,7 +22,8 @@ const config: Config = {
         "gs-text":    "var(--color-text)",
         "gs-body":    "var(--color-body)",
         "gs-muted":   "var(--color-muted)",
-        "gs-amber":   "var(--color-accent)",
+        "gs-accent":  "var(--color-accent)",
+        "gs-rule":    "var(--color-rule)",
         background:   "hsl(var(--background))",
         foreground:   "hsl(var(--foreground))",
         border:       "hsl(var(--border))",

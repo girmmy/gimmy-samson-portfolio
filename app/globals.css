@@ -2,82 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Design tokens — light mode default ──────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   TERMINAL BRUTALISM
+   Near-black canvas, exposed grid, one acid accent. The site should
+   read as instrumentation, not as a brochure.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Dark is the primary surface ──────────────────────────── */
 :root {
-  --color-bg:         #F8F8F6;
-  --color-surface:    #F0F0EE;
-  --color-border:     #DEDEDE;
-  --color-text:       #111111;
-  --color-body:       #444444;
-  --color-muted:      #777777;
-  --color-accent:     #C47B0C;
-  --color-accent-dim: rgba(196, 123, 12, 0.08);
-  --color-glow:       rgba(196, 123, 12, 0.12);
-  --color-nav-scrolled-bg: rgba(248, 248, 246, 0.97);
+  --color-bg:         #07080A;
+  --color-surface:    #0D0F12;
+  --color-surface-2:  #131619;
+  --color-border:     #1E2228;
+  --color-rule:       rgba(255, 255, 255, 0.055);
+  --color-text:       #F4F6F4;
+  --color-body:       #989EA3;
+  --color-muted:      #5A6166;
+  --color-accent:     #D7FF3E;
+  --color-accent-ink: #07080A;
+  --color-accent-dim: rgba(215, 255, 62, 0.10);
+  --color-glow:       rgba(215, 255, 62, 0.14);
 
-  --text-display: clamp(2.8rem, 8vw, 7rem);
-  --text-h1:      clamp(2rem, 4vw, 3.5rem);
-  --text-h2:      clamp(1.25rem, 2vw, 1.875rem);
+  /* Type scale — deliberately extreme at the top end. */
+  --text-display: clamp(2.5rem, 10.6vw, 9.25rem);
+  --text-h1:      clamp(2.2rem, 7vw, 5.5rem);
+  --text-h2:      clamp(1.15rem, 2.1vw, 1.75rem);
   --text-body:    1.0625rem;
-  --text-small:   0.9375rem;
-  --text-mono:    0.875rem;
+  --text-mono:    0.8125rem;
 
-  --radius: 0.5rem;
-  --background: 0 0% 97%;
-  --foreground: 0 0% 7%;
-  --border: 0 0% 87%;
-  --card: 0 0% 94%;
-  --card-foreground: 0 0% 7%;
-  --primary: 0 0% 9%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 92%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 92%;
-  --muted-foreground: 0 0% 45%;
-  --accent: 0 0% 92%;
-  --accent-foreground: 0 0% 9%;
-  --destructive: 0 84% 60%;
+  --grid-size: 72px;
+  --radius: 0;
+
+  /* shadcn/ui primitives, kept in sync with the surfaces above. */
+  --background: 220 14% 4%;
+  --foreground: 140 5% 96%;
+  --border: 220 12% 14%;
+  --card: 220 13% 6%;
+  --card-foreground: 140 5% 96%;
+  --primary: 72 100% 62%;
+  --primary-foreground: 220 14% 4%;
+  --secondary: 220 12% 11%;
+  --secondary-foreground: 140 5% 96%;
+  --muted: 220 12% 11%;
+  --muted-foreground: 215 6% 60%;
+  --accent: 72 100% 62%;
+  --accent-foreground: 220 14% 4%;
+  --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 98%;
-  --input: 0 0% 87%;
-  --ring: 0 0% 9%;
+  --input: 220 12% 14%;
+  --ring: 72 100% 62%;
 }
 
-/* ─── Dark mode ────────────────────────────────────────────── */
-.dark {
-  --color-bg:         #0A0A0A;
-  --color-surface:    #111111;
-  --color-border:     #222222;
-  --color-text:       #F0F0F0;
-  --color-body:       #AAAAAA;
-  --color-muted:      #666666;
-  --color-accent:     #F5A623;
-  --color-accent-dim: rgba(245, 166, 35, 0.1);
-  --color-glow:       rgba(245, 166, 35, 0.15);
-  --color-nav-scrolled-bg: rgba(10, 10, 10, 0.97);
+/* ─── Light = "paper". A hard inversion, not a pastel softening. ── */
+.light {
+  --color-bg:         #EFEFEA;
+  --color-surface:    #FFFFFF;
+  --color-surface-2:  #E6E6E0;
+  --color-border:     #CFCFC7;
+  --color-rule:       rgba(0, 0, 0, 0.07);
+  --color-text:       #0A0B0D;
+  --color-body:       #43464A;
+  --color-muted:      #76797E;
+  /* Acid lime is unreadable on paper, so the accent darkens to an
+     olive that holds the same hue but passes contrast on light. */
+  --color-accent:     #476100;
+  --color-accent-ink: #FFFFFF;
+  --color-accent-dim: rgba(71, 97, 0, 0.10);
+  --color-glow:       rgba(71, 97, 0, 0.10);
 
-  --background: 0 0% 4%;
-  --foreground: 0 0% 94%;
-  --border: 0 0% 13%;
-  --card: 0 0% 7%;
-  --card-foreground: 0 0% 94%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 0 0% 9%;
-  --secondary: 0 0% 15%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 15%;
-  --muted-foreground: 0 0% 63%;
-  --accent: 0 0% 15%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 0 0% 98%;
-  --input: 0 0% 15%;
-  --ring: 0 0% 83%;
+  --background: 60 9% 93%;
+  --foreground: 220 11% 5%;
+  --border: 55 7% 80%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 11% 5%;
+  --primary: 79 100% 19%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 55 8% 89%;
+  --secondary-foreground: 220 11% 5%;
+  --muted: 55 8% 89%;
+  --muted-foreground: 220 4% 48%;
+  --accent: 79 100% 19%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 42%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 55 7% 80%;
+  --ring: 79 100% 19%;
 }
 
-/* Very narrow phones (≤360px): the display clamp's 2.8rem floor makes
-   "Girmachew" wider than the padded viewport, so scale it with the screen. */
-@media (max-width: 360px) {
-  :root { --text-display: 11vw; }
+@media (max-width: 380px) {
+  :root { --text-display: 13.5vw; }
 }
 
 /* ─── Base ─────────────────────────────────────────────────── */
@@ -86,100 +99,124 @@
   html, body {
     overflow-x: hidden;
     max-width: 100vw;
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
+  /* No smooth-scroll: ScrollTrigger drives the scroll-linked work and
+     native smooth scrolling fights it. */
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family: var(--font-inter), system-ui, sans-serif;
+    font-family: var(--font-body), system-ui, sans-serif;
     font-size: var(--text-body);
-    line-height: 1.65;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    line-height: 1.6;
   }
   img { max-width: 100%; height: auto; }
+  ::selection { background: var(--color-accent); color: var(--color-accent-ink); }
   *:focus-visible {
     outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 }
 
-/* ─── Typography utilities ──────────────────────────────────── */
-.font-clash { font-family: var(--font-clash), 'Clash Display', sans-serif; }
-.font-code  { font-family: var(--font-mono), 'DM Mono', monospace; }
-.font-inter { font-family: var(--font-inter), Inter, sans-serif; }
-
-/* ─── Layout ─────────────────────────────────────────────────── */
-.container-site {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: clamp(1.5rem, 5vw, 4rem);
-  padding-right: clamp(1.5rem, 5vw, 4rem);
+/* ─── Type ─────────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display), 'Bricolage Grotesque', sans-serif;
+  font-variation-settings: 'wdth' 100, 'opsz' 48;
+  letter-spacing: -0.035em;
 }
-.section-divider { border-top: 1px solid var(--color-border); }
+.font-body { font-family: var(--font-body), system-ui, sans-serif; }
+.font-code { font-family: var(--font-mono), ui-monospace, monospace; }
 
-/* ─── Skip link ─────────────────────────────────────────────── */
+/* The small monospace kickers that label everything. */
+.kicker {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: var(--text-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ─── Layout ───────────────────────────────────────────────── */
+.container-site {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+.rule-top { border-top: 1px solid var(--color-border); }
+
+/* ─── Exposed grid ─────────────────────────────────────────── */
+/* The structural motif: the page's measuring grid is visible rather
+   than hidden, which is where the "instrument" reading comes from. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--color-rule) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-rule) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+.bg-grid-fade {
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 100%);
+}
+
+/* Film grain. Static, cheap, and it stops the flat black from
+   looking like an empty div. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── Type mask ────────────────────────────────────────────── */
+/* Wraps a line that rises from behind a clip. The padding/negative-margin
+   pair gives the glyphs room inside the clip without adding layout space —
+   without it a sub-1 line-height gets its descenders shaved off. */
+/* The padding deliberately occupies layout space: at display sizes the
+   glyph overflow would otherwise collide with whatever follows. */
+.mask {
+  overflow: hidden;
+  padding-bottom: 0.12em;
+}
+
+/* ─── Marquee ──────────────────────────────────────────────── */
+.marquee { overflow: hidden; white-space: nowrap; display: flex; }
+.marquee__track { display: flex; flex: 0 0 auto; will-change: transform; }
+
+/* ─── Skip link ────────────────────────────────────────────── */
 .skip-link {
   position: absolute;
   top: -100%;
   left: 1rem;
   z-index: 9999;
   background: var(--color-accent);
-  color: var(--color-bg);
+  color: var(--color-accent-ink);
   padding: 0.5rem 1rem;
-  border-radius: 0 0 0.5rem 0.5rem;
   font-weight: 600;
   transition: top 0.2s;
 }
 .skip-link:focus { top: 0; }
 
-/* ─── Scrollbar ─────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
+/* ─── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-bg); }
-::-webkit-scrollbar-thumb {
-  background: var(--color-accent-dim);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover { background: var(--color-accent); opacity: 0.3; }
+::-webkit-scrollbar-thumb { background: var(--color-border); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
 
-/* ─── Touch targets ─────────────────────────────────────────── */
 @media (max-width: 640px) {
-  button, a { min-height: 44px; min-width: 44px; }
+  button, a { min-height: 44px; }
 }
 
-/* ─── Cursor glow overlay ───────────────────────────────────── */
-.cursor-glow {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9997;
-  width: 650px;
-  height: 650px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    var(--color-glow) 0%,
-    rgba(245, 166, 35, 0.04) 40%,
-    transparent 70%
-  );
-  transform: translate(-50%, -50%);
-  will-change: left, top;
-  mix-blend-mode: screen;
-  transition: opacity 0.5s ease;
-}
-.dark .cursor-glow { mix-blend-mode: screen; }
-html:not(.dark) .cursor-glow { mix-blend-mode: multiply; opacity: 0.35; }
-
-/* ─── Keyframes ─────────────────────────────────────────────── */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-@keyframes accordion-down {
-  from { height: 0; } to { height: var(--radix-accordion-content-height); }
-}
-@keyframes accordion-up {
-  from { height: var(--radix-accordion-content-height); } to { height: 0; }
+/* ─── Reduced motion ───────────────────────────────────────── */
+/* GSAP handles its own reduced-motion branches; this covers the
+   CSS-driven marquees and transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

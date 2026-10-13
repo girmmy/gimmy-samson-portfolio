@@ -1,274 +1,210 @@
 "use client";
 
-import Link from "next/link";
-import { Github, Linkedin } from "lucide-react";
-import { useReducedMotion, motion } from "framer-motion";
 import { useRef } from "react";
-import { gsap, useGSAP, MQ } from "@/lib/gsap";
-import FloatingIcons from "@/components/FloatingIcons";
-import DeferredMount from "@/components/DeferredMount";
+import Link from "next/link";
+import { Github, Linkedin, ArrowDownRight } from "lucide-react";
+import { gsap, useGSAP, MQ, EASE } from "@/lib/gsap";
 
-const WORDS = ["Girmachew", "Samson"];
-const FULL_NAME = WORDS.join(" ");
-const CHARS = FULL_NAME.split("");
+const META = [
+  ["role", "full stack engineer @ legicycle"],
+  ["study", "b.s. computer science · georgia tech"],
+  ["focus", "agent infrastructure · mcp · appsec"],
+  ["status", "open to swe / ai-ml internships"],
+];
 
 export default function Hero() {
-  const shouldReduce = useReducedMotion();
-  const hero = useRef<HTMLElement>(null);
+  const root = useRef<HTMLElement>(null);
 
-  // Depth on scroll-out: the glow, the floating icons and the copy leave at
-  // three different rates. Desktop only — on a phone the viewport is short
-  // enough that the hero is gone before parallax reads, and skipping it keeps
-  // scrolling cheap.
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
+      mm.add(MQ.isMotionOk, () => {
+        gsap.set([".hero-rise", ".hero-meta-row"], { autoAlpha: 0, y: 26 });
+        gsap.set(".hero-word", { yPercent: 115 });
+        gsap.set(".hero-hr", { scaleX: 0 });
+
+        // Boot overlay owns the first ~2.4s; start under it so the name is
+        // already moving as the panel splits.
+        let delay = 2.15;
+        try {
+          if (sessionStorage.getItem("gs-boot") === "1") delay = 0.1;
+        } catch {
+          /* non-fatal */
+        }
+
+        const tl = gsap.timeline({ delay });
+
+        tl.to(".hero-hr", { scaleX: 1, duration: 0.8, ease: EASE })
+          .to(
+            ".hero-word",
+            { yPercent: 0, duration: 1.05, stagger: 0.09, ease: "power4.out" },
+            "<0.1",
+          )
+          .to(
+            ".hero-rise",
+            { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.08, ease: EASE },
+            "<0.45",
+          )
+          .to(
+            ".hero-meta-row",
+            { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.06, ease: EASE },
+            "<0.1",
+          );
+
+        return () => tl.kill();
+      });
+
+      // Parallax on the way out — desktop only.
       mm.add(MQ.isDesktop, () => {
-        const tl = gsap.timeline({
+        const out = gsap.timeline({
           scrollTrigger: {
-            trigger: hero.current,
+            trigger: root.current,
             start: "top top",
             end: "bottom top",
             scrub: 0.5,
           },
         });
+        out
+          .to(".hero-name", { yPercent: -18, ease: "none" }, 0)
+          .to(".hero-side", { yPercent: -45, ease: "none" }, 0)
+          .to(".hero-grid", { yPercent: 12, ease: "none" }, 0);
 
-        tl.to(".hero-glow", { yPercent: 28, scale: 1.12, ease: "none" }, 0)
-          .to(".hero-icons", { yPercent: 16, ease: "none" }, 0)
-          .to(".hero-copy", { yPercent: -14, autoAlpha: 0.15, ease: "none" }, 0);
-
-        return () => tl.scrollTrigger?.kill();
+        return () => out.scrollTrigger?.kill();
       });
 
       return () => mm.revert();
     },
-    { scope: hero },
+    { scope: root },
   );
-
-  const scrollTo = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <section
       id="hero"
-      ref={hero}
-      className="relative min-h-[100dvh] flex items-center overflow-hidden"
+      ref={root}
+      className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden"
       aria-labelledby="hero-heading"
     >
-      {/* Ambient background glow */}
+      {/* Exposed measuring grid */}
       <div
         aria-hidden="true"
-        className="hero-glow absolute pointer-events-none"
+        className="hero-grid bg-grid bg-grid-fade absolute inset-0 pointer-events-none"
+        style={{ willChange: "transform" }}
+      />
+      {/* Accent bloom, bottom-left */}
+      <div
+        aria-hidden="true"
+        className="absolute pointer-events-none"
         style={{
-          willChange: "transform",
-          top: "-15%",
-          left: "-8%",
-          width: "700px",
-          height: "700px",
-          borderRadius: "50%",
-          background: "var(--color-accent-dim)",
-          filter: "blur(140px)",
+          bottom: "-20%",
+          left: "-10%",
+          width: "60vw",
+          height: "60vw",
+          maxWidth: "820px",
+          maxHeight: "820px",
+          background: "var(--color-glow)",
+          filter: "blur(130px)",
         }}
       />
 
-      {/* Floating tech icons (right side) — deferred so they don't block initial paint */}
-      <div className="hero-icons" style={{ willChange: "transform" }}>
-        <DeferredMount>
-          <FloatingIcons />
-        </DeferredMount>
-      </div>
+      <div className="container-site relative z-10 w-full pt-28 pb-10 md:pb-14">
+        {/* Top meta strip */}
+        <div className="hero-side grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3 mb-10 md:mb-14">
+          {META.map(([k, v]) => (
+            <div key={k} className="hero-meta-row">
+              <span className="kicker block mb-1" style={{ color: "var(--color-muted)" }}>
+                {k}
+              </span>
+              <span className="font-code text-[13px]" style={{ color: "var(--color-body)" }}>
+                {v}
+              </span>
+            </div>
+          ))}
+        </div>
 
-      <div className="hero-copy container-site w-full min-w-0 relative z-10 pt-28 pb-28 md:pt-36 md:pb-36">
-        {/* Social icons — above name */}
-        <motion.div
-          initial={shouldReduce ? {} : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex items-center gap-4 mb-4"
-        >
-          <Link
-            href="https://linkedin.com/in/girmachew-samson"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn profile"
-            className="transition-colors duration-150"
-            style={{ color: "var(--color-muted)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
-          >
-            <Linkedin size={24} aria-hidden="true" />
-          </Link>
-          <Link
-            href="https://github.com/girmmy"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub profile"
-            className="transition-colors duration-150"
-            style={{ color: "var(--color-muted)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
-          >
-            <Github size={24} aria-hidden="true" />
-          </Link>
-        </motion.div>
+        <div
+          className="hero-hr w-full mb-6 md:mb-8"
+          style={{
+            height: "1px",
+            background: "var(--color-accent)",
+            transformOrigin: "0% 50%",
+          }}
+          aria-hidden="true"
+        />
 
-        {/* Name — character stagger */}
+        {/* The name, as large as the viewport will take */}
         <h1
           id="hero-heading"
-          className="font-clash font-bold leading-[0.95] mb-8"
+          className="hero-name font-display mb-6 md:mb-9"
           style={{
             fontSize: "var(--text-display)",
+            lineHeight: 0.86,
+            fontWeight: 800,
             color: "var(--color-text)",
+            willChange: "transform",
           }}
-          aria-label={FULL_NAME}
         >
-          {shouldReduce ? (
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              {FULL_NAME}
-            </motion.span>
-          ) : (
-            <>
-              {WORDS.map((word, wi) => {
-                const offset = wi === 0 ? 0 : WORDS[0].length + 1;
-                return (
-                  <span
-                    key={wi}
-                    style={{ display: "inline-block", whiteSpace: "nowrap" }}
-                  >
-                    {word.split("").map((char, ci) => (
-                      <motion.span
-                        key={ci}
-                        aria-hidden="true"
-                        initial={{ opacity: 0, y: 22 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          duration: 0.4,
-                          delay: 0.15 + (offset + ci) * 0.03,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        style={{ display: "inline-block" }}
-                      >
-                        {char}
-                      </motion.span>
-                    ))}
-                    {wi < WORDS.length - 1 && (
-                      <motion.span
-                        aria-hidden="true"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{
-                          duration: 0.4,
-                          delay: 0.15 + (offset + word.length) * 0.03,
-                        }}
-                        style={{ display: "inline-block", whiteSpace: "pre" }}
-                      >
-                        {" "}
-                      </motion.span>
-                    )}
-                  </span>
-                );
-              })}
-            </>
-          )}
+          <span className="mask block">
+            <span className="hero-word block">GIRMACHEW</span>
+          </span>
+          <span className="mask block">
+            <span className="hero-word block" style={{ color: "var(--color-accent)" }}>
+              SAMSON
+            </span>
+          </span>
         </h1>
 
-        {/* Subtitle — Inter, bigger */}
-        <motion.p
-          initial={shouldReduce ? {} : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: shouldReduce ? 0.1 : 0.75 }}
-          className="font-inter mb-12 flex items-center gap-3 flex-wrap"
-          style={{
-            fontSize: "clamp(1rem, 2.5vw, 1.35rem)",
-            color: "var(--color-body)",
-          }}
-        >
-          <span>CS @ Georgia Tech</span>
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: shouldReduce ? 0.1 : 1.1 }}
-            style={{ color: "var(--color-accent)", fontWeight: "bold" }}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+          <p
+            className="hero-rise font-body max-w-xl"
+            style={{ fontSize: "clamp(1rem, 1.5vw, 1.2rem)", color: "var(--color-body)" }}
           >
-            ·
-          </motion.span>
-          <span>Full Stack Engineer, LegiCycle</span>
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: shouldReduce ? 0.1 : 1.2 }}
-            style={{ color: "var(--color-accent)", fontWeight: "bold" }}
-          >
-            ·
-          </motion.span>
-          <span>AI Enthusiast</span>
-        </motion.p>
+            I build agent infrastructure and full-stack products — MCP servers,
+            RAG systems, and the security work that keeps them standing up.
+          </p>
 
-        {/* CTAs */}
-        <motion.div
-          initial={shouldReduce ? {} : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: shouldReduce ? 0.2 : 0.9 }}
-          className="flex items-center gap-6 flex-wrap"
-        >
-          <button
-            onClick={() => scrollTo("work")}
-            className="font-inter font-medium text-base px-8 py-3 rounded-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
-            style={{
-              border: "1.5px solid var(--color-accent)",
-              color: "var(--color-accent)",
-              background: "transparent",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--color-accent)";
-              e.currentTarget.style.color = "var(--color-bg)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "var(--color-accent)";
-            }}
-          >
-            View Work
-          </button>
-          <a
-            href="/Girmachew_Samson.pdf"
-            download
-            className="font-inter font-medium text-base px-8 py-3 rounded-sm transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
-            style={{
-              background: "var(--color-accent)",
-              color: "var(--color-bg)",
-              border: "1.5px solid var(--color-accent)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "var(--color-accent)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "var(--color-accent)";
-              e.currentTarget.style.color = "var(--color-bg)";
-            }}
-          >
-            Download Resume
-          </a>
-          <button
-            onClick={() => scrollTo("connect")}
-            className="font-inter text-base transition-colors duration-150"
-            style={{ color: "var(--color-muted)" }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = "var(--color-text)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "var(--color-muted)")
-            }
-          >
-            Get In Touch →
-          </button>
-        </motion.div>
+          <div className="hero-rise flex items-center gap-3 flex-wrap">
+            <button
+              onClick={() => scrollTo("work")}
+              className="group font-code text-[13px] inline-flex items-center gap-2 px-6 py-3.5 transition-colors duration-200"
+              style={{ background: "var(--color-accent)", color: "var(--color-accent-ink)", fontWeight: 500 }}
+            >
+              SELECTED WORK
+              <ArrowDownRight size={15} aria-hidden="true" />
+            </button>
+            <a
+              href="/Girmachew_Samson.pdf"
+              download
+              className="font-code text-[13px] px-6 py-3.5 transition-colors duration-200 hover:border-[var(--color-accent)]"
+              style={{ border: "1px solid var(--color-border)", color: "var(--color-text)" }}
+            >
+              RÉSUMÉ
+            </a>
+            <Link
+              href="https://github.com/girmmy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile"
+              className="grid place-items-center transition-colors duration-200"
+              style={{ width: "48px", height: "48px", border: "1px solid var(--color-border)", color: "var(--color-body)" }}
+            >
+              <Github size={17} aria-hidden="true" />
+            </Link>
+            <Link
+              href="https://linkedin.com/in/girmachew-samson"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
+              className="grid place-items-center transition-colors duration-200"
+              style={{ width: "48px", height: "48px", border: "1px solid var(--color-border)", color: "var(--color-body)" }}
+            >
+              <Linkedin size={17} aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -1,109 +1,95 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
 import { FileText } from "lucide-react";
+import { gsap, ScrollTrigger, useGSAP, MQ, EASE } from "@/lib/gsap";
 import { certificates } from "@/data/certificates";
 import { awards } from "@/data/awards";
 import SectionHeading from "@/components/SectionHeading";
 
 export default function Certificates() {
-  const shouldReduce = useReducedMotion();
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add(MQ.isMotionOk, () => {
+        const items = gsap.utils.toArray<HTMLElement>(".cred");
+        gsap.set(items, { autoAlpha: 0, y: 20 });
+        const triggers = ScrollTrigger.batch(items, {
+          start: "top 92%",
+          onEnter: (b) =>
+            gsap.to(b, { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.06, ease: EASE, overwrite: true }),
+        });
+        return () => {
+          triggers.forEach((t) => t.kill());
+          gsap.set(items, { clearProps: "all" });
+        };
+      });
+
+      return () => mm.revert();
+    },
+    { scope: root },
+  );
 
   return (
-    <section id="certificates" className="section-divider py-24 md:py-32">
+    <section id="certificates" ref={root} className="py-20 md:py-28">
       <div className="container-site">
-        <SectionHeading label="certificates" className="mb-10 md:mb-14">
-          Credentials
+        <SectionHeading index="04" label="credentials" className="mb-14 md:mb-20">
+          Proof of Work
         </SectionHeading>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {certificates.map((cert, i) => (
-            <CertCard key={cert.name} cert={cert} index={i} shouldReduce={shouldReduce ?? false} />
+        {/* Awards first — they carry more weight than the certificates. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-0 mb-16">
+          {awards.map((award) => (
+            <div
+              key={award.name}
+              className="cred py-6"
+              style={{ borderTop: "1px solid var(--color-border)" }}
+            >
+              <div className="flex items-baseline justify-between gap-4 mb-1.5">
+                <h3 className="font-body font-medium text-[16px]" style={{ color: "var(--color-text)" }}>
+                  {award.name}
+                </h3>
+                <span className="kicker flex-shrink-0" style={{ color: "var(--color-muted)" }}>
+                  {award.date}
+                </span>
+              </div>
+              <p className="font-code text-[12px] mb-2" style={{ color: "var(--color-accent)" }}>
+                {award.issuer}
+              </p>
+              {award.description && (
+                <p className="font-body text-[14px]" style={{ color: "var(--color-body)" }}>
+                  {award.description}
+                </p>
+              )}
+            </div>
           ))}
         </div>
 
-        {/* Awards — compact, understated */}
-        <div className="mt-16 pt-10" style={{ borderTop: "1px solid var(--color-border)" }}>
-          <p
-            className="font-code text-xs tracking-[0.2em] uppercase mb-6"
-            style={{ color: "var(--color-accent)" }}
-          >
-            awards &amp; honors
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
-            {awards.map((award, i) => (
-              <motion.div
-                key={i}
-                initial={shouldReduce ? {} : { opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.06 }}
-              >
-                <p className="font-inter font-medium text-sm" style={{ color: "var(--color-text)" }}>
-                  {award.name}
-                </p>
-                <p className="font-inter text-xs mt-0.5" style={{ color: "var(--color-muted)" }}>
-                  {award.issuer} · {award.date}
-                </p>
-                {award.description && (
-                  <p className="font-inter text-xs mt-1" style={{ color: "var(--color-muted)", opacity: 0.75 }}>
-                    {award.description}
-                  </p>
-                )}
-              </motion.div>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-3">
+          {certificates.map((cert) => (
+            <Link
+              key={cert.name}
+              href={cert.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cred group inline-flex items-center gap-3 px-5 py-4 transition-colors duration-200"
+              style={{ border: "1px solid var(--color-border)" }}
+            >
+              <FileText size={15} aria-hidden="true" style={{ color: "var(--color-accent)" }} />
+              <span className="font-body text-[14px]" style={{ color: "var(--color-text)" }}>
+                {cert.name}
+              </span>
+              <span className="kicker" style={{ color: "var(--color-muted)" }}>
+                {cert.issuer}
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
-  );
-}
-
-type CertType = { name: string; issuer: string; date: string; url: string };
-
-function CertCard({ cert, index, shouldReduce }: { cert: CertType; index: number; shouldReduce: boolean }) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <motion.div
-      initial={shouldReduce ? {} : { opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: index * 0.08 }}
-      className="p-7 rounded-lg flex flex-col gap-2 relative overflow-hidden"
-      style={{
-        background: "var(--color-surface)",
-        border: `1.5px solid ${hovered ? "var(--color-accent)" : "var(--color-border)"}`,
-        transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-        boxShadow: hovered ? "0 4px 24px var(--color-accent-dim)" : "none",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Icon */}
-      <div className="mb-2">
-        <FileText size={22} style={{ color: hovered ? "var(--color-accent)" : "var(--color-muted)", transition: "color 0.2s" }} />
-      </div>
-
-      <h3 className="font-inter font-semibold leading-snug" style={{ fontSize: "var(--text-h2)", color: "var(--color-text)" }}>
-        {cert.name}
-      </h3>
-      <p className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>{cert.issuer}</p>
-      <p className="font-inter text-xs mb-3" style={{ color: "var(--color-muted)" }}>{cert.date}</p>
-
-      <Link
-        href={cert.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="font-inter text-sm mt-auto inline-flex items-center gap-2 transition-all duration-200"
-        style={{ color: "var(--color-accent)", opacity: hovered ? 1 : 0.5 }}
-        aria-label={`Verify ${cert.name} credential`}
-        tabIndex={0}
-      >
-        Verify Credential →
-      </Link>
-    </motion.div>
   );
 }

@@ -74,7 +74,7 @@ export const projects: Project[] = [
       'Shipped a Chrome MV3 extension talking to a FastAPI backend, with Claude interpreting spoken intent into page actions',
       'Gated checkout behind WebAuthn so a voice command alone can never complete a purchase',
     ],
-    image: '/placeholder.jpg',
+    image: '',
   },
   {
     index: '06',
@@ -87,7 +87,7 @@ export const projects: Project[] = [
       'Made every model swappable — OpenAI, Gemini, and Anthropic in the cloud, or Ollama and Whisper running fully local',
       'Designed the local path so transcription and inference never leave the machine, for use on private calls and coursework',
     ],
-    image: '/placeholder.jpg',
+    image: '',
   },
   {
     index: '07',

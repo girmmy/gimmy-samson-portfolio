@@ -1,152 +1,154 @@
 "use client";
 
-import Link from "next/link";
-import { Linkedin, Github, Mail, Check } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
 import { useRef, useState } from "react";
-import { gsap, useGSAP, MQ } from "@/lib/gsap";
+import Link from "next/link";
+import { Linkedin, Github, Check, Copy } from "lucide-react";
+import { gsap, useGSAP, MQ, EASE } from "@/lib/gsap";
 
 const EMAIL = "gimmys943@gmail.com";
 
 export default function Connect() {
-  const shouldReduce = useReducedMotion();
-  const root = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLElement>(null);
+  const [copied, setCopied] = useState(false);
 
-  // The closing line rises into place as you reach the end of the page.
-  // Scrubbed so it tracks the scroll rather than firing once and finishing.
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard can be blocked; the address is visible either way.
+    }
+  };
+
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
-      mm.add(MQ.isDesktop, () => {
-        const tween = gsap.fromTo(
-          ".connect-heading",
-          { yPercent: 45, autoAlpha: 0 },
-          {
-            yPercent: 0,
-            autoAlpha: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: root.current,
-              start: "top 85%",
-              end: "top 35%",
-              scrub: 0.5,
-            },
-          },
+      mm.add(MQ.isMotionOk, () => {
+        gsap.set(".cta-word", { yPercent: 110 });
+        gsap.set(".cta-rise", { autoAlpha: 0, y: 20 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: root.current, start: "top 70%", once: true },
+        });
+        tl.to(".cta-word", { yPercent: 0, duration: 1, stagger: 0.08, ease: "power4.out" }).to(
+          ".cta-rise",
+          { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.08, ease: EASE },
+          "<0.3",
         );
-        return () => tween.scrollTrigger?.kill();
+
+        return () => tl.scrollTrigger?.kill();
       });
 
       return () => mm.revert();
     },
     { scope: root },
   );
-  const [copied, setCopied] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
-  const fadeUp = (delay = 0) =>
-    shouldReduce
-      ? {}
-      : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] } };
-
-  const copyEmail = async () => {
-    await navigator.clipboard.writeText(EMAIL);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
-    <section id="connect" className="section-divider py-28 md:py-40">
-      <div className="container-site flex flex-col items-center text-center" ref={root}>
-        <motion.p {...fadeUp()} className="font-code text-xs tracking-[0.2em] uppercase mb-4" style={{ color: "var(--color-accent)" }}>
-          connect
-        </motion.p>
+    <section id="connect" ref={root} className="relative pt-24 md:pt-32 overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="bg-grid absolute inset-0 pointer-events-none opacity-60"
+      />
 
-        {/* GSAP-driven (see useGSAP above) — deliberately not a motion.h2, so
-            only one engine ever writes to its transform. */}
+      <div className="container-site relative z-10">
         <h2
-          className="connect-heading font-clash font-bold leading-tight mb-6 max-w-2xl"
-          style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", color: "var(--color-text)" }}
+          className="font-display mb-10"
+          style={{
+            fontSize: "clamp(3rem, 12vw, 11rem)",
+            lineHeight: 0.88,
+            fontWeight: 800,
+            color: "var(--color-text)",
+          }}
         >
-          Let&apos;s build<br />something.
+          {["LET'S", "BUILD"].map((w) => (
+            <span key={w} className="mask block">
+              <span className="cta-word block">{w}</span>
+            </span>
+          ))}
+          <span className="mask block">
+            <span className="cta-word block" style={{ color: "var(--color-accent)" }}>
+              SOMETHING.
+            </span>
+          </span>
         </h2>
 
-        <motion.p {...fadeUp(0.1)} className="font-inter text-lg mb-10 max-w-md" style={{ color: "var(--color-muted)" }}>
-          Have a project in mind? I&apos;d love to hear about it.
-        </motion.p>
-
-        {/* Email CTA — click to copy */}
-        <motion.div {...fadeUp(0.14)} className="mb-12">
-          <div className="relative inline-flex flex-col items-center">
-            {/* Tooltip */}
-            <div
-              className="absolute font-code text-xs tracking-wide px-3 py-1.5 rounded pointer-events-none whitespace-nowrap transition-all duration-150"
-              style={{
-                bottom: "calc(100% + 8px)",
-                background: "var(--color-surface)",
-                border: "1px solid var(--color-border)",
-                color: copied ? "var(--color-accent)" : "var(--color-muted)",
-                opacity: hovered ? 1 : 0,
-              }}
-            >
-              {copied ? "copied!" : "click to copy"}
-            </div>
-
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 pb-16 md:pb-20">
+          <div className="cta-rise">
+            <span className="kicker block mb-3" style={{ color: "var(--color-muted)" }}>
+              email
+            </span>
             <button
               onClick={copyEmail}
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
               aria-label="Copy email address"
-              className="inline-flex items-center gap-3 font-inter font-medium transition-all duration-150"
+              className="group font-display inline-flex items-center gap-3 text-left"
               style={{
-                fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
-                color: copied ? "var(--color-accent)" : hovered ? "var(--color-accent)" : "var(--color-body)",
+                fontSize: "clamp(1.25rem, 3vw, 2.25rem)",
+                fontWeight: 700,
+                color: copied ? "var(--color-accent)" : "var(--color-text)",
                 background: "none",
                 border: "none",
-                cursor: "pointer",
                 padding: 0,
+                cursor: "pointer",
               }}
             >
-              {copied ? <Check size={22} aria-hidden="true" /> : <Mail size={22} aria-hidden="true" />}
-              {copied ? "Copied!" : EMAIL}
+              {EMAIL}
+              {copied ? (
+                <Check size={20} aria-hidden="true" style={{ color: "var(--color-accent)" }} />
+              ) : (
+                <Copy size={20} aria-hidden="true" style={{ color: "var(--color-muted)" }} />
+              )}
             </button>
+            <span
+              className="kicker block mt-2"
+              style={{ color: copied ? "var(--color-accent)" : "var(--color-muted)" }}
+            >
+              {copied ? "copied to clipboard" : "click to copy"}
+            </span>
           </div>
-        </motion.div>
 
-        {/* Social links — centered, bigger icons */}
-        <motion.div {...fadeUp(0.18)} className="flex items-center justify-center gap-8 mb-20">
-          <Link
-            href="https://linkedin.com/in/girmachew-samson"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-2 transition-all duration-150 group"
-            style={{ color: "var(--color-muted)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
-            aria-label="LinkedIn profile"
-          >
-            <Linkedin size={28} aria-hidden="true" />
-            <span className="font-inter text-sm">LinkedIn</span>
-          </Link>
-          <Link
-            href="https://github.com/girmmy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-2 transition-all duration-150 group"
-            style={{ color: "var(--color-muted)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-muted)")}
-            aria-label="GitHub profile"
-          >
-            <Github size={28} aria-hidden="true" />
-            <span className="font-inter text-sm">GitHub</span>
-          </Link>
-        </motion.div>
+          <div className="cta-rise flex items-center gap-3">
+            <Link
+              href="https://github.com/girmmy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-code text-[13px] inline-flex items-center gap-2.5 px-6 py-4"
+              style={{ border: "1px solid var(--color-border)", color: "var(--color-text)" }}
+            >
+              <Github size={16} aria-hidden="true" /> GITHUB
+            </Link>
+            <Link
+              href="https://linkedin.com/in/girmachew-samson"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-code text-[13px] inline-flex items-center gap-2.5 px-6 py-4"
+              style={{ border: "1px solid var(--color-border)", color: "var(--color-text)" }}
+            >
+              <Linkedin size={16} aria-hidden="true" /> LINKEDIN
+            </Link>
+            <a
+              href="/Girmachew_Samson.pdf"
+              download
+              className="font-code text-[13px] px-6 py-4"
+              style={{ background: "var(--color-accent)", color: "var(--color-accent-ink)", fontWeight: 500 }}
+            >
+              RÉSUMÉ
+            </a>
+          </div>
+        </div>
 
-        <div className="w-full" style={{ borderTop: "1px solid var(--color-border)", paddingTop: "1.5rem" }}>
-          <p className="font-code text-xs" style={{ color: "var(--color-muted)" }}>
-            © 2026 Girmachew Samson
-          </p>
+        <div
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-6"
+          style={{ borderTop: "1px solid var(--color-border)" }}
+        >
+          <span className="kicker" style={{ color: "var(--color-muted)" }}>
+            © 2026 girmachew samson
+          </span>
+          <span className="kicker" style={{ color: "var(--color-muted)" }}>
+            atlanta, ga · open to internships
+          </span>
         </div>
       </div>
     </section>
