@@ -76,7 +76,7 @@ export default function About() {
             <WordReveal
               className="font-inter text-lg leading-relaxed mb-12"
               style={{ color: "var(--color-body)" }}
-              text="Hi, I'm Girmachew — Gimmy for short. I'm a CS student at Georgia Tech and a full stack engineer at LegiCycle, where I work on the AI platform legislators use to research, draft, and stress-test bills — hardening a live AWS deployment and expanding its RAG research assistant across state and federal law. Before that I founded Bantr, a live debating platform that grew to 250+ users in open beta. I build things."
+              text="Hi, I'm Girmachew — Gimmy for short. I'm a CS student at Georgia Tech and a full stack engineer at LegiCycle, where I work on the AI platform legislators use to research, draft, and stress-test bills — scaling it from one state to four and building an adversarial research mode that has to rebut the strongest arguments against its own position. Before that I founded Bantr, a live debating platform that grew to 250+ users in open beta. I build things."
             />
 
             {/* Skills — bigger */}

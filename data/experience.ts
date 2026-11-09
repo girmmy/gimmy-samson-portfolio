@@ -13,10 +13,9 @@ export const experiences: Experience[] = [
     url: 'https://legicycle.ai',
     period: 'Aug 2026 – Present',
     bullets: [
-      'Hardened a live platform serving 20+ clients on AWS against NIST 800-53 and OWASP standards, identifying and remediating 30+ high-severity vulnerabilities',
-      'Migrated hardcoded secrets into Doppler across Dockerized services, closing the largest standing exposure of user data',
-      'Expanded the platform\'s RAG research assistant, backed by PostgreSQL and Redis, from Georgia-only coverage to Georgia, Delaware, and federal law — fixing a bug that cited the wrong state\'s laws to users',
-      'Diagnosed and resolved a bug across 29 Django/DRF routes that silently locked invited collaborators out of shared bill-drafting projects, restoring access across all 20+ client accounts',
+      'Scaled a legislation-tracking platform from 1 to 4 jurisdictions (GA, DE, MD, U.S. federal) with a config-driven design, so a new state takes one database row instead of a new scraper',
+      'Raised Maryland bill summary coverage from 0% to 100% (2,677 bills) by running a production backfill on AWS ECS, deploying manually when the CI pipeline was blocked',
+      'Built an adversarial FOR/AGAINST mode for Claude-powered research briefs that argues one side with cited sources and must rebut the 2–3 strongest counterarguments, so a one-sided brief can\'t invent evidence',
     ],
   },
   {
