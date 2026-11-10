@@ -7,6 +7,7 @@ import Certificates from "@/components/Certificates";
 import Connect from "@/components/Connect";
 import CursorLight from "@/components/CursorLight";
 import DeferredMount from "@/components/DeferredMount";
+import ScrollProgress from "@/components/ScrollProgress";
 
 export default function Page() {
   return (
@@ -14,6 +15,8 @@ export default function Page() {
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
+
+      <ScrollProgress />
 
       <DeferredMount>
         <CursorLight />

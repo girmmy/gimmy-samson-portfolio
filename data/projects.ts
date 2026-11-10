@@ -52,6 +52,45 @@ export const projects: Project[] = [
   },
   {
     index: '04',
+    title: 'Gitsawe Finder',
+    year: '2026',
+    link: 'https://github.com/girmmy/gitsawe-finder',
+    tags: ['React', 'TypeScript', 'PWA', 'Playwright'],
+    description: [
+      'Built a lectionary resolver for the Ethiopian Orthodox Tewahedo calendar that returns the correct readings for any date, in Ge\'ez and Amharic with English citations',
+      'Bundled 748 chanted recordings and made the whole app installable and offline-capable as a PWA, so it works without a connection',
+      'Covered the date-resolution logic with Playwright tests, since a wrong date silently returns the wrong readings',
+    ],
+    image: '/gitsawe-img.jpg',
+  },
+  {
+    index: '05',
+    title: 'Cue',
+    year: '2026',
+    link: 'https://github.com/TommyWuBC/cue.ai',
+    tags: ['Chrome MV3', 'FastAPI', 'Python', 'Claude API', 'WebAuthn'],
+    description: [
+      'Built a speech- and eye-tracking shopping assistant with two teammates at HackGT 13, letting users navigate and buy hands-free',
+      'Shipped a Chrome MV3 extension talking to a FastAPI backend, with Claude interpreting spoken intent into page actions',
+      'Gated checkout behind WebAuthn so a voice command alone can never complete a purchase',
+    ],
+    image: '',
+  },
+  {
+    index: '06',
+    title: 'gimly',
+    year: '2026',
+    link: 'https://github.com/girmmy/gimly',
+    tags: ['Electron', 'JavaScript', 'Ollama', 'Whisper', 'Claude API'],
+    description: [
+      'Built a desktop assistant overlay in Electron that reads the screen and listens to audio to answer in context',
+      'Made every model swappable — OpenAI, Gemini, and Anthropic in the cloud, or Ollama and Whisper running fully local',
+      'Designed the local path so transcription and inference never leave the machine, for use on private calls and coursework',
+    ],
+    image: '',
+  },
+  {
+    index: '07',
     title: 'Scholarlink',
     year: '2025',
     link: 'https://thescholarlink.netlify.app',
@@ -64,7 +103,7 @@ export const projects: Project[] = [
     image: '/scholarlink-img.png',
   },
   {
-    index: '05',
+    index: '08',
     title: 'Transvero',
     year: '2025',
     link: 'https://transvero.netlify.app/',
@@ -77,7 +116,7 @@ export const projects: Project[] = [
     image: '/transvero-img.jpg',
   },
   {
-    index: '06',
+    index: '09',
     title: 'GimmyAI',
     year: '2024',
     link: 'https://gimmyai.netlify.app',
@@ -90,7 +129,7 @@ export const projects: Project[] = [
     image: '/gimmyai-img.jpg',
   },
   {
-    index: '07',
+    index: '10',
     title: 'SymbioAI',
     year: '2024',
     link: 'https://symbioai.netlify.app',
@@ -103,7 +142,7 @@ export const projects: Project[] = [
     image: '/symbioai-img.jpg',
   },
   {
-    index: '08',
+    index: '11',
     title: 'ParkviewTSA Website',
     year: '2024',
     link: 'https://parkviewtsa.org',

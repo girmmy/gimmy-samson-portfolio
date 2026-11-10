@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { Github, Linkedin } from "lucide-react";
 import { useReducedMotion, motion } from "framer-motion";
+import { useRef } from "react";
+import { gsap, useGSAP, MQ } from "@/lib/gsap";
 import FloatingIcons from "@/components/FloatingIcons";
 import DeferredMount from "@/components/DeferredMount";
 
@@ -12,6 +14,36 @@ const CHARS = FULL_NAME.split("");
 
 export default function Hero() {
   const shouldReduce = useReducedMotion();
+  const hero = useRef<HTMLElement>(null);
+
+  // Depth on the way out: glow, icons and copy leave at three rates.
+  // Desktop only — a phone viewport is short enough that the hero is
+  // gone before parallax reads, and skipping it keeps scrolling cheap.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add(MQ.isDesktop, () => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: hero.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.5,
+          },
+        });
+
+        tl.to(".hero-glow", { yPercent: 26, scale: 1.1, ease: "none" }, 0)
+          .to(".hero-icons", { yPercent: 15, ease: "none" }, 0)
+          .to(".hero-copy", { yPercent: -12, autoAlpha: 0.2, ease: "none" }, 0);
+
+        return () => tl.scrollTrigger?.kill();
+      });
+
+      return () => mm.revert();
+    },
+    { scope: hero },
+  );
 
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -19,14 +51,16 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      ref={hero}
       className="relative min-h-[100dvh] flex items-center overflow-hidden"
       aria-labelledby="hero-heading"
     >
       {/* Ambient background glow */}
       <div
         aria-hidden="true"
-        className="absolute pointer-events-none"
+        className="hero-glow absolute pointer-events-none"
         style={{
+          willChange: "transform",
           top: "-15%",
           left: "-8%",
           width: "700px",
@@ -38,11 +72,13 @@ export default function Hero() {
       />
 
       {/* Floating tech icons (right side) — deferred so they don't block initial paint */}
-      <DeferredMount>
-        <FloatingIcons />
-      </DeferredMount>
+      <div className="hero-icons" style={{ willChange: "transform" }}>
+        <DeferredMount>
+          <FloatingIcons />
+        </DeferredMount>
+      </div>
 
-      <div className="container-site w-full min-w-0 relative z-10 pt-28 pb-28 md:pt-36 md:pb-36">
+      <div className="hero-copy container-site w-full min-w-0 relative z-10 pt-28 pb-28 md:pt-36 md:pb-36">
         {/* Social icons — above name */}
         <motion.div
           initial={shouldReduce ? {} : { opacity: 0 }}

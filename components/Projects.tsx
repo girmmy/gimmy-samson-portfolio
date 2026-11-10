@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { gsap, useGSAP, MQ, EASE } from "@/lib/gsap";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -10,12 +11,65 @@ import { projects } from "@/data/projects";
 export default function Projects() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const shouldReduce = useReducedMotion();
+  const root = useRef<HTMLDivElement>(null);
+
+  // Magnetic hover on the desktop rows. quickTo reuses one tween per
+  // property instead of allocating a new one per event, which is what
+  // keeps this smooth rather than stuttery. Framer Motion still owns the
+  // rows' entrance, and it never touches these child transforms, so the
+  // two engines stay out of each other's way.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add(MQ.isDesktop, () => {
+        const rows = gsap.utils.toArray<HTMLElement>(".project-row");
+
+        const disposers = rows.map((row) => {
+          const title = row.querySelector<HTMLElement>(".project-title");
+          const bar = row.querySelector<HTMLElement>(".project-bar");
+          if (!title || !bar) return () => {};
+
+          const slide = gsap.quickTo(title, "x", { duration: 0.45, ease: EASE });
+          const grow = gsap.quickTo(bar, "scaleY", { duration: 0.35, ease: EASE });
+
+          const enter = () => {
+            slide(12);
+            grow(1);
+          };
+          const leave = () => {
+            slide(0);
+            grow(0);
+          };
+
+          row.addEventListener("mouseenter", enter);
+          row.addEventListener("mouseleave", leave);
+          // Keyboard users get the same affordance.
+          row.addEventListener("focusin", enter);
+          row.addEventListener("focusout", leave);
+
+          return () => {
+            row.removeEventListener("mouseenter", enter);
+            row.removeEventListener("mouseleave", leave);
+            row.removeEventListener("focusin", enter);
+            row.removeEventListener("focusout", leave);
+            gsap.set([title, bar], { clearProps: "all" });
+          };
+        });
+
+        return () => disposers.forEach((d) => d());
+      });
+
+      return () => mm.revert();
+    },
+    { scope: root },
+  );
 
   const toggle = (i: number) => setActiveIndex((prev) => (prev === i ? null : i));
 
   return (
     <section id="work" className="section-divider py-24 md:py-32">
-      <div className="container-site">
+      <div className="container-site" ref={root}>
         <motion.p
           initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -46,8 +100,19 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.06 }}
+              className="project-row relative"
               style={{ borderBottom: "1px solid var(--color-border)" }}
             >
+              <span
+                aria-hidden="true"
+                className="project-bar absolute left-0 top-0 bottom-0"
+                style={{
+                  width: "2px",
+                  background: "var(--color-accent)",
+                  transform: "scaleY(0)",
+                  transformOrigin: "50% 50%",
+                }}
+              />
               <button
                 className="w-full flex items-center gap-6 py-6 px-3 group text-left transition-colors duration-200"
                 style={{ background: activeIndex === i ? "var(--color-surface)" : "transparent" }}
@@ -58,7 +123,7 @@ export default function Projects() {
                   {project.index}
                 </span>
                 <span
-                  className="font-clash font-medium flex-1 text-left transition-colors duration-150 group-hover:opacity-80"
+                  className="project-title font-clash font-medium flex-1 text-left transition-colors duration-150 group-hover:opacity-80"
                   style={{ fontSize: "var(--text-h2)", color: activeIndex === i ? "var(--color-accent)" : "var(--color-text)" }}
                 >
                   {project.title}
@@ -141,13 +206,17 @@ export default function Projects() {
                         className="hidden md:block rounded overflow-hidden mt-4"
                         style={{ border: "1px solid var(--color-border)", aspectRatio: "16/9" }}
                       >
-                        <Image
-                          src={project.image}
-                          alt={`${project.title} screenshot`}
-                          width={320}
-                          height={180}
-                          className="w-full h-full object-cover object-top"
-                        />
+                        {project.image ? (
+                          <Image
+                            src={project.image}
+                            alt={`${project.title} screenshot`}
+                            width={320}
+                            height={180}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        ) : (
+                          <NoPreview />
+                        )}
                       </div>
                     </div>
                   </motion.div>
@@ -171,13 +240,17 @@ export default function Projects() {
             >
               {/* Screenshot */}
               <div style={{ aspectRatio: "16/9", overflow: "hidden" }}>
-                <Image
-                  src={project.image}
-                  alt={`${project.title} screenshot`}
-                  width={600}
-                  height={338}
-                  className="w-full h-full object-cover object-top"
-                />
+                {project.image ? (
+                  <Image
+                    src={project.image}
+                    alt={`${project.title} screenshot`}
+                    width={600}
+                    height={338}
+                    className="w-full h-full object-cover object-top"
+                  />
+                ) : (
+                  <NoPreview />
+                )}
               </div>
               <div className="p-5">
                 <div className="flex items-start justify-between gap-3 mb-3">
@@ -227,5 +300,29 @@ export default function Projects() {
       </div>
 
     </section>
+  );
+}
+
+/**
+ * Some projects have no deployed page to screenshot (Cue, gimly). Saying
+ * so beats shipping a stock image that reads as a broken screenshot — and
+ * an empty src string makes next/image refetch the whole page.
+ */
+function NoPreview() {
+  return (
+    <div
+      className="w-full h-full grid place-items-center"
+      style={{
+        background:
+          "repeating-linear-gradient(135deg, var(--color-surface) 0 10px, var(--color-bg) 10px 20px)",
+      }}
+    >
+      <span
+        className="font-code text-[11px] tracking-[0.2em] uppercase"
+        style={{ color: "var(--color-muted)" }}
+      >
+        no preview
+      </span>
+    </div>
   );
 }

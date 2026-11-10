@@ -2,11 +2,59 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { gsap, ScrollTrigger, useGSAP, MQ } from "@/lib/gsap";
 import { experiences } from "@/data/experience";
 
 export default function Experience() {
   const shouldReduce = useReducedMotion();
+  const timeline = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add(MQ.isMotionOk, () => {
+        // The accent line draws down the rail as you read. Pure scaleY,
+        // so it stays on the compositor and is cheap enough for phones.
+        const fill = gsap.fromTo(
+          ".exp-fill",
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: timeline.current,
+              start: "top 75%",
+              end: "bottom 75%",
+              scrub: 0.4,
+            },
+          },
+        );
+
+        // Each dot fills as the line reaches it, so the rail reads as a
+        // progress indicator rather than as decoration.
+        const dots = gsap.utils.toArray<HTMLElement>(".exp-dot");
+        const marks = dots.map((dot) =>
+          ScrollTrigger.create({
+            trigger: dot,
+            start: "top 75%",
+            onEnter: () => dot.setAttribute("data-passed", "true"),
+            onLeaveBack: () => dot.removeAttribute("data-passed"),
+          }),
+        );
+
+        return () => {
+          fill.scrollTrigger?.kill();
+          marks.forEach((m) => m.kill());
+          dots.forEach((d) => d.removeAttribute("data-passed"));
+        };
+      });
+
+      return () => mm.revert();
+    },
+    { scope: timeline },
+  );
 
   return (
     <section className="section-divider py-24 md:py-32">
@@ -32,10 +80,22 @@ export default function Experience() {
           What I&apos;ve Done
         </motion.h2>
 
-        <div className="relative">
+        <div className="relative" ref={timeline}>
+          {/* Track */}
           <div
             className="absolute left-[3px] top-0 bottom-0 w-px"
             style={{ background: "var(--color-border)" }}
+            aria-hidden="true"
+          />
+          {/* Accent fill, drawn on scroll */}
+          <div
+            className="exp-fill absolute left-[3px] top-0 bottom-0 w-px"
+            style={{
+              background: "var(--color-accent)",
+              transform: "scaleY(0)",
+              transformOrigin: "50% 0%",
+              willChange: "transform",
+            }}
             aria-hidden="true"
           />
           <div className="space-y-0">
@@ -66,13 +126,12 @@ function ExperienceItem({ exp, index, shouldReduce }: { exp: ExpType; index: num
     >
       {/* Dot */}
       <div
-        className="absolute left-0 top-[1.4rem] w-[7px] h-[7px] rounded-full border"
+        className="exp-dot absolute left-0 top-[1.4rem] w-[7px] h-[7px] rounded-full border"
         style={{
-          background: hovered ? "var(--color-accent)" : "var(--color-bg)",
-          borderColor: hovered ? "var(--color-accent)" : "var(--color-muted)",
-          transition: "all 0.2s ease",
+          transition: "background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease",
           marginLeft: "-3px",
         }}
+        data-hovered={hovered ? "true" : undefined}
         aria-hidden="true"
       />
 

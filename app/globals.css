@@ -183,3 +183,21 @@ html:not(.dark) .cursor-glow { mix-blend-mode: multiply; opacity: 0.35; }
 @keyframes accordion-up {
   from { height: var(--radix-accordion-content-height); } to { height: 0; }
 }
+
+/* ─── Experience timeline dots ──────────────────────────────── */
+/* Default, scroll-passed, and hovered states. Kept in CSS so the
+   scroll trigger and the hover handler are not both writing inline
+   styles to the same element. */
+.exp-dot {
+  background: var(--color-bg);
+  border-color: var(--color-muted);
+}
+.exp-dot[data-passed="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.exp-dot[data-hovered="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: scale(1.5);
+}

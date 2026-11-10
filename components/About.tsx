@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Download } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import WordReveal from "@/components/WordReveal";
 import { useState } from "react";
 
 const skills = [
@@ -70,18 +71,13 @@ export default function About() {
 
           {/* Bio + skills */}
           <div>
-            <motion.p
-              {...fadeUp(0.12)}
+            {/* Scroll-inked: GSAP drives this one, so it is deliberately
+                not a motion.p — two engines must never share an element. */}
+            <WordReveal
               className="font-inter text-lg leading-relaxed mb-12"
               style={{ color: "var(--color-body)" }}
-            >
-              Hi, I&apos;m Girmachew — Gimmy for short. I&apos;m a CS student at Georgia Tech
-              and a full stack engineer at LegiCycle, where I work on the AI platform legislators
-              use to research, draft, and stress-test bills — hardening a live AWS deployment and
-              expanding its RAG research assistant across state and federal law. Before that I
-              founded Bantr, a live debating platform that grew to 250+ users in open beta.
-              I build things.
-            </motion.p>
+              text="Hi, I'm Girmachew — Gimmy for short. I'm a CS student at Georgia Tech and a full stack engineer at LegiCycle, where I work on the AI platform legislators use to research, draft, and stress-test bills — scaling it from one state to four and building an adversarial research mode that has to rebut the strongest arguments against its own position. Before that I founded Bantr, a live debating platform that grew to 250+ users in open beta. I build things."
+            />
 
             {/* Skills — bigger */}
             <motion.div {...fadeUp(0.18)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
